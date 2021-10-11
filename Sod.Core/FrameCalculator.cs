@@ -5,9 +5,7 @@ namespace Sod.Core
 {
     public static class FrameCalculator
     {
-        public static byte[] CreateReadFrame(ReadCommand cmd) => CreateFrame((byte) cmd);
-
-        public static byte[] CreateUpdateFrame(UpdateCommand cmd, byte[] data) => CreateFrame((byte)cmd, data);
+        public static byte[] CreateFrame(Command cmd, params byte[] data) => CreateFrame((byte)cmd, data);
         
         private static byte[] CreateFrame(byte cmd, params byte[] data)
         {

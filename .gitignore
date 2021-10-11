@@ -351,3 +351,6 @@ MigrationBackup/
 
 # jetbrains
 .idea/
+
+# other
+appsettings.local.json
