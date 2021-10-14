@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Sod.Core;
+using Sod.Core.Communication;
 
 namespace Sod.Console
 {
@@ -20,9 +21,10 @@ namespace Sod.Console
             var port = cfg.GetValue<int>("Satel:Port");
             using var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(address, port);
-            var conn = new SatelConnection(socket);
-            await conn.SendAsync(Command.OutputsState);
-            var (cmd, state) = await conn.ReceiveAsync();
+            var sender = new SatelDataSender(new SocketSender(socket));
+            var receiver = new SatelDataReceiver(new SocketReceiver(socket));
+            await sender.SendAsync(Command.OutputsState);
+            var (status, cmd, state) = await receiver.ReceiveAsync();
 
             for (int i = 0; i < state.Length; i++)
             {

@@ -36,11 +36,6 @@ namespace Sod.Core
 
         public static bool[] ToBooleanArray(byte[] binaryState)
         {
-            // if (binaryState.Length != SupportedBinaryStateArrayLength1 && binaryState.Length != SupportedBinaryStateArrayLength2)
-            // {
-            //     throw new ArgumentException($"{binaryState.Length} is not supported length", nameof(binaryState));
-            // }
-
             var logicStateLength = binaryState.Length * ByteSize;
             var logicState = new bool[logicStateLength];
             for (int i = 0; i < binaryState.Length; i++)
