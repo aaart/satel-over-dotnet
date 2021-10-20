@@ -17,16 +17,17 @@ namespace Sod.Core
         {
             var (byteCount, segment) = await _socketReceiver.ReceiveAsync();
             var data = segment.ToArray();
-            if (byteCount < 5 || data[0] != 0xFE || data[1] != 0xFE || data[byteCount - 2] != 0xFE || data[byteCount - 1] != 0x0D)
+            if (byteCount < 7 || data[0] != 0xFE || data[1] != 0xFE || data[byteCount - 2] != 0xFE || data[byteCount - 1] != 0x0D)
             {
                 return (ReceiveStatus.InvalidFrame, Command.Invalid, Array.Empty<bool>());
             }
-            if (!Enum.IsDefined(typeof(Command), (int)data[2]))
+            
+            var cmd = data[2];
+            if (!Enum.IsDefined(typeof(Command), (int)cmd))
             {
                 return (ReceiveStatus.NotSupportedCommand, Command.Invalid, Array.Empty<bool>());
             }
             
-            var cmd = data[2];
             var receivedCrcHigh = data[byteCount - 4];
             var receivedCrcLow = data[byteCount - 3];
             var binaryState = segment.Slice(3, byteCount - 7).ToArray();
@@ -36,7 +37,7 @@ namespace Sod.Core
                 return (ReceiveStatus.InvalidCrc, Command.Invalid, Array.Empty<bool>());
             }
             
-            return (ReceiveStatus.Success, (Command)cmd, StateMapping.ToBooleanArray(binaryState));
+            return (ReceiveStatus.Success, (Command)cmd, Translation.ToBooleanArray(binaryState));
         }
     }
 }
