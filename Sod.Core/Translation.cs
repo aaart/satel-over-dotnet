@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using EnsureThat;
 
 namespace Sod.Core
 {
-    public static class StateMapping
+    public static class Translation
     {
         private const int ByteSize = 8;
         public const int SupportedLogicStateArrayLength1 = 128;
@@ -11,6 +14,20 @@ namespace Sod.Core
         public const int SupportedBinaryStateArrayLength1 = SupportedLogicStateArrayLength1 / ByteSize;
         public const int SupportedBinaryStateArrayLength2 = SupportedLogicStateArrayLength2 / ByteSize;
 
+        public static byte[] CreateUserCodeBinaryRepresentation(string userCode)
+        {
+            byte GetBinaryCode(char c) => Convert.ToByte(Convert.ToByte(c) - 48); // why 48? check ASCII table
+
+            var bytes = Enumerable.Repeat((byte)0xFF, 8).ToArray();
+            userCode = userCode.Length % 2 == 0 ? userCode : "0" + userCode;
+            for (int i = 0; i < userCode.Length; i += 2)
+            {
+                bytes[i / 2] = (byte)((GetBinaryCode(userCode[i]) << 4) | GetBinaryCode(userCode[i + 1]));
+            }
+            
+            return bytes;
+        }
+        
         public static byte[] ToByteArray(bool[] logicState)
         {
             if (logicState.Length != 0 && logicState.Length != SupportedLogicStateArrayLength1 && logicState.Length != SupportedLogicStateArrayLength2)
