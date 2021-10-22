@@ -20,13 +20,14 @@ namespace Sod.Console
 
             var address = cfg.GetValue<string>("Satel:Address");
             var port = cfg.GetValue<int>("Satel:Port");
+            var userCode = cfg.GetValue<string>("Satel:UserCode");
             using var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(address, port);
-            var sender = new SatelDataSender(new SocketSender(socket), Translation.CreateUserCodeBinaryRepresentation("6384"));
+            var sender = new SatelDataSender(new SocketSender(socket), Translation.CreateUserCodeBinaryRepresentation(userCode));
             var receiver = new SatelDataReceiver(new SocketReceiver(socket));
 
             var outputs = new bool[128];
-            outputs[9] = true;
+            outputs[14] = true;
             await sender.SendAsync(Command.OutputsSwitch, outputs);
             var b = await receiver.ReceiveAsync();
             
