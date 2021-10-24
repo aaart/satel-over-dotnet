@@ -37,7 +37,7 @@ namespace Sod.Core
                 return (ReceiveStatus.InvalidCrc, Command.Invalid, Array.Empty<bool>());
             }
             
-            return (ReceiveStatus.Success, (Command)cmd, Translation.ToBooleanArray(binaryState));
+            return (ReceiveStatus.SuccessfulRead, (Command)cmd, Translation.ToBooleanArray(binaryState));
         }
     }
 }
