@@ -17,7 +17,7 @@ namespace Sod.Tests
             var socketReceiver = new MockSocketReceiver(() => Task.FromResult((frame.Length, segment)));
             var satelDataReceiver = new SatelDataReceiver(socketReceiver);
             var (receiveStatus, command, data) = await satelDataReceiver.ReceiveAsync();
-            receiveStatus.Should().Be(ReceiveStatus.Success);
+            receiveStatus.Should().Be(ReceiveStatus.SuccessfulRead);
             command.Should().Be(Command.OutputsState);
             data.Length.Should().Be(128);
         }
