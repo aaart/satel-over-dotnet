@@ -14,9 +14,6 @@
         OutputsSwitch = 0x91,
         
         // result
-        Result = 0xEF,
-        
-        // invalid
-        Invalid = 0xFF,
+        Result = 0xEF
     }
 }

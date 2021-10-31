@@ -4,6 +4,7 @@ using FluentAssertions;
 using Sod.Core;
 using Sod.Tests.Mocks;
 using Xunit;
+using static Sod.Core.Communication;
 
 namespace Sod.Tests
 {
@@ -13,8 +14,7 @@ namespace Sod.Tests
         public async void GivenStateArray_WhenAllSuccess_ThenTrue()
         {
             var socketSender = new MockSocketSender(data => Task.FromResult(7));
-            var satelDataSender = new SatelDataSender(socketSender);
-            var success = await satelDataSender.SendAsync(Command.NewData);
+            var success = await SendAsync(socketSender,Command.NewData, Array.Empty<byte>(), Array.Empty<byte>());
             success.Should().BeTrue();
         }
         
@@ -22,20 +22,18 @@ namespace Sod.Tests
         public async void GivenStateArray_WhenNotAllSuccess_ThenFalse()
         {
             var socketSender = new MockSocketSender(data => Task.FromResult(22));
-            var satelDataSender = new SatelDataSender(socketSender);
-            var success = await satelDataSender.SendAsync(Command.NewData);
+            var success = await SendAsync(socketSender, Command.NewData, Array.Empty<byte>(), Array.Empty<byte>());
             success.Should().BeFalse();
         }
-
+        
         [Theory]
         [InlineData(Command.OutputsSwitch)]
         [InlineData(Command.ArmInMode0)]
         public void GivenUpdateCommand_WhenNoUserCodeProvided_ThenException(Command cmd)
         {
             var socketSender = new MockSocketSender(data => Task.FromResult(22));
-            var satelDataSender = new SatelDataSender(socketSender);
-
-            new Func<Task<bool>>(async () => await satelDataSender.SendAsync(cmd, new bool[128]))
+        
+            new Func<Task<bool>>(async () => await SendAsync(socketSender, cmd, new byte[16], Array.Empty<byte>()))
                 .Should()
                 .ThrowAsync<InvalidOperationException>();
         }
