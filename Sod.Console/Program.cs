@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Sod.Core;
-using Sod.Core.Communication;
+using Sod.Core.Socket;
 
 namespace Sod.Console
 {
@@ -23,16 +23,9 @@ namespace Sod.Console
             var userCode = cfg.GetValue<string>("Satel:UserCode");
             using var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(address, port);
-            var sender = new SatelDataSender(new SocketSender(socket), Translation.CreateUserCodeBinaryRepresentation(userCode));
-            var receiver = new SatelDataReceiver(new SocketReceiver(socket));
+            var manipulator = new Manipulator(new SocketSender(socket), new SocketReceiver(socket), Translation.CreateUserCodeBinaryRepresentation(cfg.GetValue<string>("Satel:UserCode")));
 
-            var outputs = new bool[128];
-            outputs[14] = true;
-            await sender.SendAsync(Command.OutputsSwitch, outputs);
-            var b = await receiver.ReceiveAsync();
-            
-            await sender.SendAsync(Command.OutputsState);
-            var (_, _, logicState) = await receiver.ReceiveAsync();
+            var (status, logicState) = await manipulator.ReadOutputsState();
             for (int i = 0; i < logicState.Length; i++)
             {
                 System.Console.WriteLine($"{i + 1}: {logicState[i]}");

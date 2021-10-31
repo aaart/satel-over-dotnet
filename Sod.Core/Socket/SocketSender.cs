@@ -2,13 +2,13 @@
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Sod.Core.Communication
+namespace Sod.Core.Socket
 {
     public class SocketSender : ISocketSender
     {
-        private readonly Socket _socket;
+        private readonly System.Net.Sockets.Socket _socket;
 
-        public SocketSender(Socket socket)
+        public SocketSender(System.Net.Sockets.Socket socket)
         {
             _socket = socket;
         }
