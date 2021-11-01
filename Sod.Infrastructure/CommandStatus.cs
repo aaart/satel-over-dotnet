@@ -1,9 +1,8 @@
-﻿namespace Sod.Core
+﻿namespace Sod.Infrastructure
 {
     public enum CommandStatus
-    {
-        // Integra responses 
-        SuccessfulRead,
+    { 
+        Finished,
         NotSupportedCommand,
         InvalidFrame,
         InvalidCrc,

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Sod.Core.Socket
+namespace Sod.Infrastructure.Socket
 {
     public interface ISocketSender
     {

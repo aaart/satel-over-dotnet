@@ -1,4 +1,4 @@
-﻿namespace Sod.Core
+﻿namespace Sod.Infrastructure
 {
     public enum Command
     {

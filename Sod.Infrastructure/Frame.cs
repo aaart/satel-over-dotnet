@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Sod.Core
+namespace Sod.Infrastructure
 {
     public static class Frame
     {
