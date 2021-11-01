@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Sod.Core.Socket
+namespace Sod.Infrastructure.Socket
 {
     public class SocketReceiver : ISocketReceiver
     {

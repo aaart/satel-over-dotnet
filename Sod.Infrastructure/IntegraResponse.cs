@@ -1,4 +1,4 @@
-﻿namespace Sod.Core
+﻿namespace Sod.Infrastructure
 {
     public enum IntegraResponse
     {
@@ -15,5 +15,6 @@
         CanNotArm = 0x12,
         OtherErrors = 0x80,
         CommandAccepted = 0xFF,
+        NotApplicable = 0x100
     }
 }

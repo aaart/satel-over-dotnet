@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Sod.Core;
+using Sod.Infrastructure;
 using Sod.Tests.Mocks;
 using Xunit;
-using static Sod.Core.Communication;
+using static Sod.Infrastructure.Communication;
 
 namespace Sod.Tests
 {

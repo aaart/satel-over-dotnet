@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Sod.Core\Sod.Core.csproj" />
+      <ProjectReference Include="..\Sod.Infrastructure\Sod.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

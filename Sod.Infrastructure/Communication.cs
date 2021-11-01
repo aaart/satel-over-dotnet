@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sod.Core.Socket;
+using Sod.Infrastructure.Socket;
 
-namespace Sod.Core
+namespace Sod.Infrastructure
 {
     public static class Communication
     {
@@ -51,7 +51,7 @@ namespace Sod.Core
                 return (CommandStatus.InvalidCrc, Array.Empty<byte>());
             }
             
-            return (CommandStatus.SuccessfulRead, data);
+            return (CommandStatus.Finished, data);
         }
     }
 }

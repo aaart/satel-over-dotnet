@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Sod.Core;
+using Sod.Infrastructure;
 using Xunit;
 
 namespace Sod.Tests

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using EnsureThat;
 
-namespace Sod.Core
+namespace Sod.Infrastructure
 {
     public static class Translation
     {
