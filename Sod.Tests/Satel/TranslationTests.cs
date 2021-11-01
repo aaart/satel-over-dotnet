@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Sod.Infrastructure;
+using Sod.Infrastructure.Satel;
 using Xunit;
 
-namespace Sod.Tests
+namespace Sod.Tests.Satel
 {
     public class TranslationTests
     {

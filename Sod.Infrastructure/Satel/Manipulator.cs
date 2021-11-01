@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sod.Infrastructure.Socket;
-using static Sod.Infrastructure.Communication;
+using Sod.Infrastructure.Satel.Socket;
+using static Sod.Infrastructure.Satel.Communication;
 
-namespace Sod.Infrastructure
+namespace Sod.Infrastructure.Satel
 {
     public class Manipulator : IManipulator
     {
@@ -41,6 +41,24 @@ namespace Sod.Infrastructure
                 Translation.ToBooleanArray);
         }
 
+        public async Task<(CommandStatus status, bool[] zonesAlarm)> ReadZonesAlarm()
+        {
+            return await GenericResponse(
+                async () => await SendAsync(_socketSender, Command.ZonesAlarm, Array.Empty<byte>(), Array.Empty<byte>()),
+                Array.Empty<bool>(),
+                Command.ZonesAlarm,
+                Translation.ToBooleanArray);
+        }
+        
+        public async Task<(CommandStatus status, bool[] zonesAlarm)> ReadArmedPartitions()
+        {
+            return await GenericResponse(
+                async () => await SendAsync(_socketSender, Command.ArmedPartitionsReally, Array.Empty<byte>(), Array.Empty<byte>()),
+                Array.Empty<bool>(),
+                Command.ArmedPartitionsReally,
+                Translation.ToBooleanArray);
+        }
+
         public async Task<(CommandStatus status, IntegraResponse response)> SwitchOutputs(bool[] outputs)
         {
             return await GenericResponse(
@@ -49,7 +67,25 @@ namespace Sod.Infrastructure
                 Command.Result,
                 data => (IntegraResponse)data[0]);
         }
-
+        
+        public async Task<(CommandStatus status, IntegraResponse response)> ArmInMode0(bool[] partitions)
+        {
+            return await GenericResponse(
+                async () => await SendAsync(_socketSender, Command.ArmInMode0, Translation.ToByteArray(partitions), _userCode),
+                IntegraResponse.NotApplicable,
+                Command.Result,
+                data => (IntegraResponse)data[0]);
+        }
+        
+        public async Task<(CommandStatus status, IntegraResponse response)> DisArm(bool[] partitions)
+        {
+            return await GenericResponse(
+                async () => await SendAsync(_socketSender, Command.DisArm, Translation.ToByteArray(partitions), _userCode),
+                IntegraResponse.NotApplicable,
+                Command.Result,
+                data => (IntegraResponse)data[0]);
+        }
+        
         public async Task<(CommandStatus status, TResp)> GenericResponse<TResp>(Func<Task<bool>> request, TResp defaultResp, Command expectedCommand, Func<byte[], TResp> result)
         {
             var sent = await request();
@@ -59,12 +95,12 @@ namespace Sod.Infrastructure
             }
 
             var (status, data) = await ReceiveAsync(_socketReceiver, expectedCommand);
-            if (status != CommandStatus.Finished)
+            if (status != CommandStatus.Processed)
             {
                 return (status, defaultResp);
             }
 
-            return (CommandStatus.Finished, result(data));
+            return (CommandStatus.Processed, result(data));
         }
     }
 }

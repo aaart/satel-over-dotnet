@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Sod.Infrastructure;
-using Sod.Tests.Mocks;
+using Sod.Infrastructure.Satel;
+using Sod.Tests.Satel.Mocks;
 using Xunit;
-using static Sod.Infrastructure.Communication;
+using static Sod.Infrastructure.Satel.Communication;
 
-namespace Sod.Tests
+namespace Sod.Tests.Satel
 {
     public class SatelDataSenderTests
     {
