@@ -51,7 +51,7 @@ namespace Sod.Infrastructure.Satel
                 return (CommandStatus.InvalidCrc, Array.Empty<byte>());
             }
             
-            return (CommandStatus.Finished, data);
+            return (CommandStatus.Processed, data);
         }
     }
 }

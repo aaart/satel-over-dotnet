@@ -95,12 +95,12 @@ namespace Sod.Infrastructure.Satel
             }
 
             var (status, data) = await ReceiveAsync(_socketReceiver, expectedCommand);
-            if (status != CommandStatus.Finished)
+            if (status != CommandStatus.Processed)
             {
                 return (status, defaultResp);
             }
 
-            return (CommandStatus.Finished, result(data));
+            return (CommandStatus.Processed, result(data));
         }
     }
 }

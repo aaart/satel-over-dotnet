@@ -2,7 +2,7 @@
 {
     public enum CommandStatus
     { 
-        Finished,
+        Processed,
         NotSupportedCommand,
         InvalidFrame,
         InvalidCrc,
