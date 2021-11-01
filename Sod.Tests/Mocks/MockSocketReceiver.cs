@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sod.Core.Communication;
+using Sod.Infrastructure.Socket;
 
 namespace Sod.Tests.Mocks
 {

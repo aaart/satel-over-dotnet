@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sod.Core", "Sod.Core\Sod.Core.csproj", "{383F7721-F2FA-4A14-A74F-953FABF2E185}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sod.Infrastructure", "Sod.Infrastructure\Sod.Infrastructure.csproj", "{383F7721-F2FA-4A14-A74F-953FABF2E185}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sod.Tests", "Sod.Tests\Sod.Tests.csproj", "{40610BCD-B6D6-41CD-89C2-4F693BF32510}"
 EndProject

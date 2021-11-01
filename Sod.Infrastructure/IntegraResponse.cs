@@ -1,8 +1,7 @@
-﻿namespace Sod.Core
+﻿namespace Sod.Infrastructure
 {
-    public enum ReceiveStatus
+    public enum IntegraResponse
     {
-        // Integra responses 
         Ok = 0x00,
         RequestingUserCodeNotFound = 0x01,
         NoAccess = 0x02,
@@ -16,11 +15,6 @@
         CanNotArm = 0x12,
         OtherErrors = 0x80,
         CommandAccepted = 0xFF,
-        
-        // Custom codes
-        SuccessfulRead = 0x100,
-        NotSupportedCommand = 0x101,
-        InvalidFrame = 0x102,
-        InvalidCrc = 0x103
+        NotApplicable = 0x100
     }
 }
