@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Sod.Infrastructure;
-using Sod.Tests.Mocks;
+using Sod.Infrastructure.Satel;
+using Sod.Tests.Satel.Mocks;
 using Xunit;
-using static Sod.Infrastructure.Communication;
+using static Sod.Infrastructure.Satel.Communication;
 
-namespace Sod.Tests
+namespace Sod.Tests.Satel
 {
     public class CommunicationReceiveTests
     {
@@ -17,7 +17,7 @@ namespace Sod.Tests
             var segment = new ArraySegment<byte>(frame);
             var socketReceiver = new MockSocketReceiver(() => Task.FromResult((frame.Length, segment)));
             var (receiveStatus, data) = await ReceiveAsync(socketReceiver, Command.OutputsState);
-            receiveStatus.Should().Be(CommandStatus.Finished);
+            receiveStatus.Should().Be(CommandStatus.Processed);
             data.Length.Should().Be(16);
         }
         

@@ -1,8 +1,8 @@
-﻿namespace Sod.Infrastructure
+﻿namespace Sod.Infrastructure.Satel
 {
     public enum CommandStatus
     { 
-        Finished,
+        Processed,
         NotSupportedCommand,
         InvalidFrame,
         InvalidCrc,

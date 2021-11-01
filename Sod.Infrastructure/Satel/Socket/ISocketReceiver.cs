@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Sod.Infrastructure.Socket
+namespace Sod.Infrastructure.Satel.Socket
 {
     public interface ISocketReceiver
     {

@@ -4,7 +4,8 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Sod.Infrastructure;
-using Sod.Infrastructure.Socket;
+using Sod.Infrastructure.Satel;
+using Sod.Infrastructure.Satel.Socket;
 
 namespace Sod.Console
 {
@@ -24,9 +25,9 @@ namespace Sod.Console
             socket.Connect(address, port);
             var manipulator = new Manipulator(new SocketSender(socket), new SocketReceiver(socket), cfg.GetValue<string>("Satel:UserCode"));
 
-            var outputsToSwtch = new bool[128];
-            outputsToSwtch[9] = true;
-            await manipulator.SwitchOutputs(outputsToSwtch);
+            var outputsToSwtich = new bool[128];
+            outputsToSwtich[9] = true;
+            await manipulator.SwitchOutputs(outputsToSwtich);
             var (status, logicState) = await manipulator.ReadOutputs();
             System.Console.WriteLine($"status: {status}");
             for (int i = 0; i < logicState.Length; i++)

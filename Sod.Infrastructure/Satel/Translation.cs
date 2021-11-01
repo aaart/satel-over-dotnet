@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Sod.Infrastructure
+namespace Sod.Infrastructure.Satel
 {
     public static class Translation
     {
@@ -27,10 +27,10 @@ namespace Sod.Infrastructure
         
         public static byte[] ToByteArray(bool[] logicState)
         {
-            if (logicState.Length != 0 && logicState.Length != SupportedLogicStateArrayLength1 && logicState.Length != SupportedLogicStateArrayLength2)
-            {
-                throw new ArgumentException($"{logicState.Length} is not supported length", nameof(logicState));
-            }
+            // if (logicState.Length != 0 && logicState.Length != SupportedLogicStateArrayLength1 && logicState.Length != SupportedLogicStateArrayLength2)
+            // {
+            //     throw new ArgumentException($"{logicState.Length} is not supported length", nameof(logicState));
+            // }
 
             var binaryStateLength = logicState.Length / ByteSize;
             var binaryState = new byte[binaryStateLength];

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sod.Infrastructure.Socket;
+using Sod.Infrastructure.Satel.Socket;
 
-namespace Sod.Tests.Mocks
+namespace Sod.Tests.Satel.Mocks
 {
     public class MockSocketReceiver : ISocketReceiver
     {
