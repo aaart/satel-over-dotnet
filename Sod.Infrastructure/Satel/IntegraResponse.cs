@@ -1,4 +1,4 @@
-﻿namespace Sod.Infrastructure
+﻿namespace Sod.Infrastructure.Satel
 {
     public enum IntegraResponse
     {

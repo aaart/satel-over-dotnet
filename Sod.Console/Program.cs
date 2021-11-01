@@ -4,7 +4,8 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Sod.Infrastructure;
-using Sod.Infrastructure.Socket;
+using Sod.Infrastructure.Satel;
+using Sod.Infrastructure.Satel.Socket;
 
 namespace Sod.Console
 {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Sod.Infrastructure
+namespace Sod.Infrastructure.Satel
 {
     public interface IManipulator
     {

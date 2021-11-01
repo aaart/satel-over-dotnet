@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Sod.Infrastructure
+namespace Sod.Infrastructure.Satel
 {
     public static class Translation
     {

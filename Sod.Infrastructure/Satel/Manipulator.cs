@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sod.Infrastructure.Socket;
-using static Sod.Infrastructure.Communication;
+using Sod.Infrastructure.Satel.Socket;
+using static Sod.Infrastructure.Satel.Communication;
 
-namespace Sod.Infrastructure
+namespace Sod.Infrastructure.Satel
 {
     public class Manipulator : IManipulator
     {

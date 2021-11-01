@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sod.Infrastructure.Socket;
+using Sod.Infrastructure.Satel.Socket;
 
-namespace Sod.Infrastructure
+namespace Sod.Infrastructure.Satel
 {
     public static class Communication
     {
