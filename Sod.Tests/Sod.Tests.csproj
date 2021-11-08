@@ -26,4 +26,8 @@
       <ProjectReference Include="..\Sod.Infrastructure\Sod.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Infrastructure" />
+    </ItemGroup>
+
 </Project>

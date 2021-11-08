@@ -4,7 +4,7 @@ using FluentAssertions;
 using Sod.Infrastructure.Satel;
 using Xunit;
 
-namespace Sod.Tests.Satel
+namespace Sod.Tests.Infrastructure.Satel
 {
     public class TranslationTests
     {

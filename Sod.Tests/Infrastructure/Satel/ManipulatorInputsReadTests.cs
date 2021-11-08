@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using Sod.Infrastructure.Satel;
-using Sod.Tests.Satel.Mocks;
+using Sod.Tests.Infrastructure.Satel.Mocks;
 
-namespace Sod.Tests.Satel
+namespace Sod.Tests.Infrastructure.Satel
 {
     public class ManipulatorInputsReadTests
     {
