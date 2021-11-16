@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Sod.Service
+namespace Sod.Worker
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class Program

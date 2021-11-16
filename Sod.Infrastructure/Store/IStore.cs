@@ -5,6 +5,7 @@ namespace Sod.Infrastructure.Store
     public interface IStore
     {
         Task AddAsync(string key, object value);
-        Task GetAsync<T>(string key);
+        Task UpdateAsync(string key, object value);
+        Task<T> GetAsync<T>(string key);
     }
 }

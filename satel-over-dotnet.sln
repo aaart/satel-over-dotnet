@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_tests", "_tests", "{11A795
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "exe", "exe", "{B38D3BB7-71F2-4C4D-A452-48044610DBD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sod.Service", "Sod.Service\Sod.Service.csproj", "{5F2FA611-0714-46E5-A495-F32F83258B55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sod.Worker", "Sod.Worker\Sod.Worker.csproj", "{5F2FA611-0714-46E5-A495-F32F83258B55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
