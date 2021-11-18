@@ -28,13 +28,22 @@ namespace Sod.Infrastructure.State.Loop.StepType
             {
                 await ExecuteInternalAsync();
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine(e);
-                throw;
+                HandleException(exception, out bool shouldThrow);
+                if (shouldThrow)
+                {
+                    throw;
+                }
             }
         }
 
         protected abstract Task ExecuteInternalAsync();
+
+        protected virtual void HandleException(Exception exception, out bool shouldThrow)
+        {
+            Console.WriteLine(exception);
+            shouldThrow = true;
+        }
     }
 }
