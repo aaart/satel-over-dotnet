@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Sod.Infrastructure.Satel.Socket;
 
-namespace Sod.Tests.Satel.Mocks
+namespace Sod.Tests.Infrastructure.Satel.Mocks
 {
     public class MockSocketReceiver : ISocketReceiver
     {

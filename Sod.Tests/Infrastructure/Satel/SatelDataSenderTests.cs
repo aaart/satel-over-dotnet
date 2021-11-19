@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using Sod.Infrastructure.Satel;
-using Sod.Tests.Satel.Mocks;
+using Sod.Tests.Infrastructure.Satel.Mocks;
 using Xunit;
 using static Sod.Infrastructure.Satel.Communication;
+using static FluentAssertions.FluentActions;
 
-namespace Sod.Tests.Satel
+namespace Sod.Tests.Infrastructure.Satel
 {
     public class SatelDataSenderTests
     {
@@ -29,11 +30,11 @@ namespace Sod.Tests.Satel
         [Theory]
         [InlineData(Command.OutputsSwitch)]
         [InlineData(Command.ArmInMode0)]
-        public void GivenUpdateCommand_WhenNoUserCodeProvided_ThenException(Command cmd)
+        public async Task GivenUpdateCommand_WhenNoUserCodeProvided_ThenException(Command cmd)
         {
             var socketSender = new MockSocketSender(data => Task.FromResult(22));
         
-            new Func<Task<bool>>(async () => await SendAsync(socketSender, cmd, new byte[16], Array.Empty<byte>()))
+            await Awaiting(async () => await SendAsync(socketSender, cmd, new byte[16], Array.Empty<byte>()))
                 .Should()
                 .ThrowAsync<InvalidOperationException>();
         }
