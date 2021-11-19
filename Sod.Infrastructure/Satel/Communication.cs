@@ -8,8 +8,7 @@ namespace Sod.Infrastructure.Satel
     {
         public static async Task<bool> SendAsync(ISocketSender sender, Command cmd, byte[] binaryState, byte[] userCode)
         {
-            bool IsUpdateCommand() => (int)cmd >= (int)Command.ArmInMode0 && (int)cmd <= (int)Command.OutputsSwitch;
-            var isUpdateCommand = IsUpdateCommand();
+            var isUpdateCommand = (int)cmd >= (int)Command.ArmInMode0 && (int)cmd <= (int)Command.OutputsSwitch;
             if (isUpdateCommand && userCode.Length == 0)
             {
                 throw new InvalidOperationException("No user code was provided!");
