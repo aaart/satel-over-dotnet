@@ -7,8 +7,8 @@ namespace Sod.Infrastructure.State.Loop.StepType
 {
     public class UpdateOutputs : BaseStep
     {
-        public UpdateOutputs(IStore store, IManipulator manipulator, IEventPublisher eventPublisher) 
-            : base(store, manipulator, eventPublisher)
+        public UpdateOutputs(IStore store, IManipulator manipulator, IOutgoingChangeNotifier outgoingChangeNotifier) 
+            : base(store, manipulator, outgoingChangeNotifier)
         {
         }
 

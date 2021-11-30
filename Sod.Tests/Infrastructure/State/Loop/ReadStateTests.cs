@@ -15,7 +15,7 @@ namespace Sod.Tests.Infrastructure.State.Loop
     {
         private readonly Mock<IStore> _storeMock = new Mock<IStore>();
         private readonly Mock<IManipulator> _manipulatorMock = new Mock<IManipulator>();
-        private readonly Mock<IEventPublisher> _eventPublisherMock = new Mock<IEventPublisher>();
+        private readonly Mock<IOutgoingChangeNotifier> _eventPublisherMock = new Mock<IOutgoingChangeNotifier>();
 
         [Theory]
         [InlineData(CommandStatus.InvalidCrc)]
@@ -81,7 +81,7 @@ namespace Sod.Tests.Infrastructure.State.Loop
         {
             var storeUpdated = false;
             _storeMock.Setup(x => x.GetAsync<bool[]>(It.IsAny<string>())).Returns(Task.FromResult(state));
-            _storeMock.Setup(x => x.UpdateAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(() => Task.Run(() => storeUpdated = true));
+            _storeMock.Setup(x => x.SetAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(() => Task.Run(() => storeUpdated = true));
             
             var testReadState = new TestReadState(
                 _storeMock.Object, 
@@ -116,7 +116,7 @@ namespace Sod.Tests.Infrastructure.State.Loop
         {
             var storeUpdated = false;
             _storeMock.Setup(x => x.GetAsync<bool[]>(It.IsAny<string>())).Returns(Task.FromResult(new [] { false }));
-            _storeMock.Setup(x => x.UpdateAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(() => Task.Run(() => storeUpdated = true));
+            _storeMock.Setup(x => x.SetAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(() => Task.Run(() => storeUpdated = true));
             
             var testReadState = new TestReadState(
                 _storeMock.Object, 

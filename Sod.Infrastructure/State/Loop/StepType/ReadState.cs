@@ -13,8 +13,8 @@ namespace Sod.Infrastructure.State.Loop.StepType
         protected ReadState(
             IStore store, 
             IManipulator manipulator, 
-            IEventPublisher eventPublisher) 
-            : base(store, manipulator, eventPublisher)
+            IOutgoingChangeNotifier outgoingChangeNotifier) 
+            : base(store, manipulator, outgoingChangeNotifier)
         {
         }
 
@@ -26,7 +26,7 @@ namespace Sod.Infrastructure.State.Loop.StepType
             var persistedState = await Store.GetAsync<bool[]>(PersistedStateKey);
             ValidateState(persistedState, satelState);
 
-            var changedStates = new List<int>();
+            var changedStates = new List<(int, bool)>();
             for (int i = 0; i < persistedState.Length; i++)
             {
                 var singlePersistedState = persistedState[i];
@@ -34,13 +34,13 @@ namespace Sod.Infrastructure.State.Loop.StepType
 
                 if (singlePersistedState != singleSatelState)
                 {
-                    changedStates.Add(i);
+                    changedStates.Add((i, singleSatelState));
                 }
             }
 
             if (changedStates.Any())
             {
-                await Store.UpdateAsync(PersistedStateKey, satelState);
+                await Store.SetAsync(PersistedStateKey, satelState);
                 Notify(changedStates);
             }
         }
@@ -49,7 +49,7 @@ namespace Sod.Infrastructure.State.Loop.StepType
         
         protected abstract Task<(CommandStatus, bool[])> ManipulatorMethod();
 
-        protected abstract void Notify(IEnumerable<int> changedStates);
+        protected abstract void Notify(IEnumerable<(int reference, bool value)> changedStates);
         
         private void ValidateStatus(CommandStatus status)
         {

@@ -10,16 +10,16 @@ namespace Sod.Infrastructure.State.Loop.StepType
     {
         protected IStore Store { get; }
         protected IManipulator Manipulator { get; }
-        protected IEventPublisher EventPublisher { get; }
+        protected IOutgoingChangeNotifier OutgoingChangeNotifier { get; }
 
         protected BaseStep(
             IStore store, 
             IManipulator manipulator,
-            IEventPublisher eventPublisher)
+            IOutgoingChangeNotifier outgoingChangeNotifier)
         {
             Store = store;
             Manipulator = manipulator;
-            EventPublisher = eventPublisher;
+            OutgoingChangeNotifier = outgoingChangeNotifier;
         }
 
         public async Task ExecuteAsync()
