@@ -33,7 +33,7 @@ namespace Sod.Infrastructure.State.Events.Mqtt
                     throw new ArgumentOutOfRangeException();
             }
 
-            var mappings = _mappings.Where(x => x.Type == ioType && x.IOIndex == change.Reference).ToArray();
+            var mappings = _mappings.Where(x => x.Type == ioType && x.IOIndex == change.Reference);
             return mappings.Select(x => x.Topic);
         }
     }
