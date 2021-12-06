@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Sod.Infrastructure.Capabilities;
 using Sod.Infrastructure.Satel.Socket;
 using static Sod.Infrastructure.Satel.Communication;
 
 namespace Sod.Infrastructure.Satel
 {
-    public class Manipulator : IManipulator
+    public class Manipulator : LoggingCapability, IManipulator
     {
         private readonly ISocketSender _socketSender;
         private readonly ISocketReceiver _socketReceiver;
