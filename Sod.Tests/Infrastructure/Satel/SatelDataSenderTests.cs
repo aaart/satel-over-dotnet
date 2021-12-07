@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using Sod.Infrastructure.Satel;
+using Sod.Infrastructure.Satel.Communication;
 using Sod.Tests.Infrastructure.Satel.Mocks;
 using Xunit;
-using static Sod.Infrastructure.Satel.Communication;
+using static Sod.Infrastructure.Satel.Communication.Communication;
 using static FluentAssertions.FluentActions;
 
 namespace Sod.Tests.Infrastructure.Satel

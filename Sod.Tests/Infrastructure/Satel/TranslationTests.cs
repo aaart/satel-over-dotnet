@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using Sod.Infrastructure.Satel;
+using Sod.Infrastructure.Satel.Communication;
 using Xunit;
 
 namespace Sod.Tests.Infrastructure.Satel

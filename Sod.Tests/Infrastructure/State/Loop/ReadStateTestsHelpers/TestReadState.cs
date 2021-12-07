@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sod.Infrastructure.Satel;
-using Sod.Infrastructure.State.Events;
-using Sod.Infrastructure.State.Loop.StepType;
+using Sod.Infrastructure.Satel.Communication;
+using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Loop.StepType;
 using Sod.Infrastructure.Store;
 
 namespace Sod.Tests.Infrastructure.State.Loop.ReadStateTestsHelpers

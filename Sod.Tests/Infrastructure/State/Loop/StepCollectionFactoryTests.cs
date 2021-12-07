@@ -2,9 +2,10 @@
 using FluentAssertions;
 using Moq;
 using Sod.Infrastructure.Satel;
-using Sod.Infrastructure.State.Events;
-using Sod.Infrastructure.State.Loop;
-using Sod.Infrastructure.State.Loop.StepType;
+using Sod.Infrastructure.Satel.Communication;
+using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Loop;
+using Sod.Infrastructure.Satel.State.Loop.StepType;
 using Sod.Infrastructure.Store;
 using Xunit;
 
