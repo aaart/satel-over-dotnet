@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Sod.Infrastructure.Capabilities
 {
-    public class LoggingCapability
+    public class LoggingCapability : ILoggingCapability
     {
         public LoggingCapability()
         {

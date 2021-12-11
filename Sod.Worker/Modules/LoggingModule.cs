@@ -36,7 +36,7 @@ namespace Sod.Worker.Modules
             public void Execute(ResolveRequestContext ctx, Action<ResolveRequestContext> next)
             {
                 var instance = ctx.Instance;
-                if (instance is LoggingCapability loggingCapability)
+                if (instance is ILoggingCapability loggingCapability)
                 {
                     loggingCapability.Logger = ctx.Resolve<SerilogLoggerFactory>().CreateLogger(instance.GetType());
                 }

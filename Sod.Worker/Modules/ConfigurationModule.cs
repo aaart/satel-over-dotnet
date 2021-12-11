@@ -1,11 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Autofac;
 using Microsoft.Extensions.Configuration;
+using Sod.Infrastructure.Satel.State.Events.Mqtt;
 
 namespace Sod.Worker.Modules
 {
-    public class ConfigurationRootModule : Module
+    public class ConfigurationModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -17,6 +20,20 @@ namespace Sod.Worker.Modules
                     .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
                     .Build())
                 .As<IConfigurationRoot>()
+                .SingleInstance();
+
+            builder
+                .Register(ctx =>
+                {
+                    var cfg = ctx.Resolve<IConfigurationRoot>();
+                    var mappings = 
+                        cfg
+                            .GetSection("Satel:OutgoingChangeMappings")
+                            .GetChildren()
+                            .Select(x => x.Get<OutgoingChangeMapping>());
+                    return new OutgoingChangeMappings(mappings);
+                })
+                .As<OutgoingChangeMappings>()
                 .SingleInstance();
         }
     }
