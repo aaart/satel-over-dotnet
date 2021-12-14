@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
@@ -100,6 +101,7 @@ namespace Sod.Worker.Modules
                     {
                         optionsBuilder.WithTls(x =>
                         {
+                            X509Certificate2 caCrt = new X509Certificate2(File.ReadAllBytes("ca.crt"));
                             x.UseTls = true;
                             x.SslProtocol = System.Security.Authentication.SslProtocols.Tls12;
                             x.CertificateValidationHandler = (certContext) =>
@@ -111,7 +113,7 @@ namespace Sod.Worker.Modules
                                 chain.ChainPolicy.VerificationTime = DateTime.Now;
                                 chain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 0, 0);
                                 
-                                //chain.ChainPolicy.CustomTrustStore.Add(caCrt);
+                                chain.ChainPolicy.CustomTrustStore.Add(caCrt);
                                 chain.ChainPolicy.TrustMode = X509ChainTrustMode.CustomRootTrust;
 
                                 // convert provided X509Certificate to X509Certificate2
