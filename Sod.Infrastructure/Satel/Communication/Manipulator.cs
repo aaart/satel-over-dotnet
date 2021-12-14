@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Capabilities;
 using Sod.Infrastructure.Satel.Socket;
 using static Sod.Infrastructure.Satel.Communication.Communication;
@@ -26,6 +27,7 @@ namespace Sod.Infrastructure.Satel.Communication
         
         public async Task<(CommandStatus status, bool[] outputsState)> ReadOutputs()
         {
+            Logger.LogDebug("reading outputs");
             return await GenericResponse(
                 async () => await SendAsync(_socketSender, Command.OutputsState, Array.Empty<byte>(), Array.Empty<byte>()),
                 Array.Empty<bool>(),

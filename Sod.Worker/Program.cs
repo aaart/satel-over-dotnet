@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Sod.Worker.Modules;
 
 namespace Sod.Worker
 {
@@ -20,7 +21,14 @@ namespace Sod.Worker
         // ReSharper disable once MemberCanBePrivate.Global
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseServiceProviderFactory(new AutofacServiceProviderFactory(builder => builder.RegisterAssemblyModules(typeof(Program).Assembly)))
+                .UseServiceProviderFactory(
+                    new AutofacServiceProviderFactory(
+                        builder => 
+                            builder
+                                // Order DOES matter, otherwise logging does not work 
+                                .RegisterModule<ConfigurationModule>()
+                                .RegisterModule<LoggingModule>()
+                                .RegisterModule<InfrastructureModule>()))
                 .ConfigureServices((hostContext, services) => services.AddHostedService<Worker>());
     }
 }

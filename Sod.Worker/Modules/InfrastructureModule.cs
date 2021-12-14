@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using MQTTnet;
@@ -97,7 +98,28 @@ namespace Sod.Worker.Modules
                         .WithTcpServer(cfg.GetValue<string>("Mqtt:Host"), cfg.GetValue<int>("Mqtt:Port"));
                     if (cfg.GetValue<bool>("Mqtt:UseTLS"))
                     {
-                        optionsBuilder.WithTls();
+                        optionsBuilder.WithTls(x =>
+                        {
+                            x.UseTls = true;
+                            x.SslProtocol = System.Security.Authentication.SslProtocols.Tls12;
+                            x.CertificateValidationHandler = (certContext) =>
+                            {
+                                X509Chain chain = new X509Chain();
+                                chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
+                                chain.ChainPolicy.RevocationFlag = X509RevocationFlag.ExcludeRoot;
+                                chain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
+                                chain.ChainPolicy.VerificationTime = DateTime.Now;
+                                chain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 0, 0);
+                                
+                                //chain.ChainPolicy.CustomTrustStore.Add(caCrt);
+                                chain.ChainPolicy.TrustMode = X509ChainTrustMode.CustomRootTrust;
+
+                                // convert provided X509Certificate to X509Certificate2
+                                var x5092 = new X509Certificate2(certContext.Certificate);
+
+                                return chain.Build(x5092);
+                            };
+                        });
                     }
                     
                     return optionsBuilder.Build();
@@ -106,14 +128,10 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
 
             builder
-                .Register(ctx =>
-                {
-                    var client = new MqttFactory().CreateMqttClient();
-                    client.ConnectAsync(ctx.Resolve<IMqttClientOptions>());  
-                    return client;
-                })
+                .Register(ctx => new MqttFactory().CreateMqttClient())
                 .As<IMqttClient>()
-                .SingleInstance();
+                .SingleInstance()
+                .OnActivated(async args => await args.Instance.ConnectAsync(args.Context.Resolve<IMqttClientOptions>()) );
             
             builder.RegisterType<MqttOutgoingChangeNotifier>().As<IOutgoingChangeNotifier>().SingleInstance();
             builder.RegisterType<StepCollectionFactory>().As<IStepCollectionFactory>().SingleInstance();

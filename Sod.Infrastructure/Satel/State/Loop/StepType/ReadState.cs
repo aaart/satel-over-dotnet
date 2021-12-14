@@ -34,7 +34,7 @@ namespace Sod.Infrastructure.Satel.State.Loop.StepType
 
                 if (singlePersistedState != singleSatelState)
                 {
-                    changedStates.Add((i, singleSatelState));
+                    changedStates.Add((i + 1, singleSatelState));
                 }
             }
 

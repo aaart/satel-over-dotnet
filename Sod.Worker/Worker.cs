@@ -27,7 +27,6 @@ namespace Sod.Worker
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                Console.WriteLine($"Alive at {DateTime.Now}");
                 var steps = _stepCollectionFactory.BuildStepCollection();
                 await steps.ExecuteAsync();
                 await Task.Delay(1000, stoppingToken);

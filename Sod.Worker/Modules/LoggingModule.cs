@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Autofac;
 using Autofac.Core.Resolving.Pipeline;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
 using Sod.Infrastructure.Capabilities;
+using Sod.Infrastructure.Satel.Communication;
 
 namespace Sod.Worker.Modules
 {
@@ -29,19 +31,26 @@ namespace Sod.Worker.Modules
                 .Register(ctx => new SerilogLoggerFactory(ctx.Resolve<Serilog.ILogger>()))
                 .AsSelf()
                 .InstancePerDependency();
+            
+            builder.ComponentRegistryBuilder.Registered += (_, args) =>
+            {
+                args.ComponentRegistration.PipelineBuilding += (_ , pipeline) =>
+                {
+                    pipeline.Use(new LoggingMiddleware());
+                };
+            };
         }
         
         public class LoggingMiddleware : IResolveMiddleware
         {
             public void Execute(ResolveRequestContext ctx, Action<ResolveRequestContext> next)
             {
+                next(ctx);
                 var instance = ctx.Instance;
                 if (instance is ILoggingCapability loggingCapability)
                 {
                     loggingCapability.Logger = ctx.Resolve<SerilogLoggerFactory>().CreateLogger(instance.GetType());
                 }
-                
-                next(ctx);
             }
 
             public PipelinePhase Phase => PipelinePhase.Activation;
