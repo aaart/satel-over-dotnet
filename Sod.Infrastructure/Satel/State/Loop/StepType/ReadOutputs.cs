@@ -22,7 +22,7 @@ namespace Sod.Infrastructure.Satel.State.Loop.StepType
         {
             foreach (var changedState in changedStates)
             {
-                OutgoingChangeNotifier.Publish(new OutgoingChange(EventType.OutputsStateChanged, changedState.reference, changedState.value.ToString()));
+                OutgoingChangeNotifier.Publish(new OutgoingChange(EventType.OutputsStateChanged, changedState.reference, changedState.value ? "on" : "off"));
             }
         }
     }
