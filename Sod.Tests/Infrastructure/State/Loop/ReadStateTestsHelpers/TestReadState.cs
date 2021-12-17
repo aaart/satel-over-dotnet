@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sod.Infrastructure.Satel;
-using Sod.Infrastructure.State.Events;
-using Sod.Infrastructure.State.Loop.StepType;
+using Sod.Infrastructure.Satel.Communication;
+using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Loop.StepType;
 using Sod.Infrastructure.Store;
 
 namespace Sod.Tests.Infrastructure.State.Loop.ReadStateTestsHelpers
@@ -11,15 +12,15 @@ namespace Sod.Tests.Infrastructure.State.Loop.ReadStateTestsHelpers
     public class TestReadState : ReadState
     {
         private readonly Func<Task<(CommandStatus, bool[])>> _manipulatorMethodImpl;
-        private readonly Action<IEnumerable<int>> _notifyMethodImpl;
+        private readonly Action<IEnumerable<(int reference, bool value)>> _notifyMethodImpl;
 
         public TestReadState(
             IStore store, 
             IManipulator manipulator, 
-            IEventPublisher eventPublisher,
+            IOutgoingChangeNotifier outgoingChangeNotifier,
             Func<Task<(CommandStatus, bool[])>> manipulatorMethodImpl,
-            Action<IEnumerable<int>> notifyMethodImpl) 
-            : base(store, manipulator, eventPublisher)
+            Action<IEnumerable<(int reference, bool value)>> notifyMethodImpl) 
+            : base(store, manipulator, outgoingChangeNotifier)
         {
             _manipulatorMethodImpl = manipulatorMethodImpl;
             _notifyMethodImpl = notifyMethodImpl;
@@ -28,7 +29,7 @@ namespace Sod.Tests.Infrastructure.State.Loop.ReadStateTestsHelpers
         protected override string PersistedStateKey => string.Empty;
         protected override Task<(CommandStatus, bool[])> ManipulatorMethod() => _manipulatorMethodImpl();
 
-        protected override void Notify(IEnumerable<int> changedStates) => _notifyMethodImpl(changedStates);
+        protected override void Notify(IEnumerable<(int reference, bool value)> changedStates) => _notifyMethodImpl(changedStates);
 
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Sod.Infrastructure;
 using Sod.Infrastructure.Satel;
+using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.Socket;
 
 namespace Sod.Console

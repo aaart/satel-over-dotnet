@@ -5,25 +5,34 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Sod.Infrastructure.Capabilities;
+using Sod.Infrastructure.Satel.State.Loop;
 
 namespace Sod.Worker
 {
-    public class Worker : BackgroundService
+    public class Worker : BackgroundService, ILoggingCapability
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly IStepCollectionFactory _stepCollectionFactory;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(IStepCollectionFactory stepCollectionFactory)
         {
-            _logger = logger;
+            _stepCollectionFactory = stepCollectionFactory;
+            Logger = NullLogger.Instance;
         }
 
+        public ILogger Logger { get; set; }
+        
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                var steps = _stepCollectionFactory.BuildStepCollection();
+                await steps.ExecuteAsync();
                 await Task.Delay(1000, stoppingToken);
             }
         }
+
+        
     }
 }
