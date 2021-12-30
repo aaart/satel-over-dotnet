@@ -4,11 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
+using MQTTnet.Extensions.ManagedClient;
 using MQTTnet.Implementations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -80,12 +82,13 @@ namespace Sod.Worker.Modules
             
             builder.RegisterType<SocketSender>().As<ISocketSender>().SingleInstance();
             builder.RegisterType<SocketReceiver>().As<ISocketReceiver>().SingleInstance();
+            builder.RegisterType<GenericCommunicationInterface>().AsSelf().SingleInstance();
             
             builder
                 .Register(ctx =>
                 {
                     var cfg = ctx.Resolve<IConfigurationRoot>();
-                    return new Manipulator(ctx.Resolve<ISocketSender>(), ctx.Resolve<ISocketReceiver>(), cfg.GetValue<string>("Satel:UserCode"));
+                    return new Manipulator(ctx.Resolve<GenericCommunicationInterface>(), cfg.GetValue<string>("Satel:UserCode"));
                 })
                 .As<IManipulator>()
                 .SingleInstance();
@@ -130,10 +133,29 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
 
             builder
-                .Register(ctx => new MqttFactory().CreateMqttClient())
-                .As<IMqttClient>()
+                .Register(ctx => 
+                    new ManagedMqttClientOptionsBuilder()
+                        .WithAutoReconnectDelay(TimeSpan.FromSeconds(2))
+                        .WithClientOptions(ctx.Resolve<IMqttClientOptions>())
+                        .Build())
+                .As<IManagedMqttClientOptions>()
+                .SingleInstance();
+            
+            builder
+                .Register(ctx => new MqttFactory().CreateManagedMqttClient())
+                .As<IApplicationMessagePublisher>()
+                .As<IApplicationMessageReceiver>()
                 .SingleInstance()
-                .OnActivated(async args => await args.Instance.ConnectAsync(args.Context.Resolve<IMqttClientOptions>()) );
+                .OnActivated(async args =>
+                {
+                    var client = args.Instance;
+                    await client.StartAsync(args.Context.Resolve<IManagedMqttClientOptions>());
+                    await client.SubscribeAsync("mqttnettest");
+                    client.UseApplicationMessageReceivedHandler(x =>
+                    {
+                        Console.WriteLine(Encoding.Default.GetString(x.ApplicationMessage.Payload));
+                    });
+                });
             
             builder.RegisterType<MqttOutgoingChangeNotifier>().As<IOutgoingChangeNotifier>().SingleInstance();
             builder.RegisterType<StepCollectionFactory>().As<IStepCollectionFactory>().SingleInstance();

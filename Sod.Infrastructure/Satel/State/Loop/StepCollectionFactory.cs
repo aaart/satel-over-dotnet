@@ -1,4 +1,5 @@
-﻿using Sod.Infrastructure.Satel.Communication;
+﻿using System.Threading.Tasks;
+using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
 using Sod.Infrastructure.Satel.State.Loop.StepType;
 using Sod.Infrastructure.Store;
@@ -35,5 +36,7 @@ namespace Sod.Infrastructure.Satel.State.Loop
                 new ReadInputs(_store, _manipulator, _outgoingChangeNotifier)
             };
         }
+
+        public async Task BuildAndExecuteStepCollection() => await BuildStepCollection().ExecuteAsync();
     }
 }

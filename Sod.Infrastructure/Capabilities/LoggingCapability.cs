@@ -5,7 +5,7 @@ namespace Sod.Infrastructure.Capabilities
 {
     public class LoggingCapability : ILoggingCapability
     {
-        public LoggingCapability()
+        protected LoggingCapability()
         {
             Logger = NullLogger.Instance;
         }
