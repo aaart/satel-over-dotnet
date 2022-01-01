@@ -19,7 +19,9 @@ using Sod.Infrastructure.Satel;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.Socket;
 using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Events.Incoming;
 using Sod.Infrastructure.Satel.State.Events.Mqtt;
+using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Satel.State.Loop;
 using Sod.Infrastructure.Store;
 using StackExchange.Redis;
@@ -140,24 +142,32 @@ namespace Sod.Worker.Modules
                         .Build())
                 .As<IManagedMqttClientOptions>()
                 .SingleInstance();
+
+            builder.RegisterType<Broker>().As<IBroker>().SingleInstance();
             
             builder
                 .Register(ctx => new MqttFactory().CreateManagedMqttClient())
                 .As<IApplicationMessagePublisher>()
                 .As<IApplicationMessageReceiver>()
                 .SingleInstance()
-                .OnActivated(async args =>
+                .OnActivated(async activatedEventArgs =>
                 {
-                    var client = args.Instance;
-                    await client.StartAsync(args.Context.Resolve<IManagedMqttClientOptions>());
-                    await client.SubscribeAsync("mqttnettest");
+                    var client = activatedEventArgs.Instance;
+                    await client.StartAsync(activatedEventArgs.Context.Resolve<IManagedMqttClientOptions>());
+                    var mappings = activatedEventArgs.Context.Resolve<EventHandlerMappings>();
+                    foreach (var topic in mappings.Topics)
+                    {
+                        await client.SubscribeAsync(topic);
+                    }
+                    
+                    var broker = activatedEventArgs.Context.Resolve<IBroker>();
                     client.UseApplicationMessageReceivedHandler(x =>
                     {
-                        Console.WriteLine(Encoding.Default.GetString(x.ApplicationMessage.Payload));
+                        broker.Process(new IncomingEvent(x.ApplicationMessage.Topic, Encoding.UTF8.GetString(x.ApplicationMessage.Payload)));
                     });
                 });
             
-            builder.RegisterType<MqttOutgoingChangeNotifier>().As<IOutgoingChangeNotifier>().SingleInstance();
+            builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
             builder.RegisterType<StepCollectionFactory>().As<IStepCollectionFactory>().SingleInstance();
         }
     }

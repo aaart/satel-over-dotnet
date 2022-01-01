@@ -4,23 +4,24 @@ using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Publishing;
+using Sod.Infrastructure.Satel.State.Events.Outgoing;
 
 namespace Sod.Infrastructure.Satel.State.Events.Mqtt
 {
-    public class MqttOutgoingChangeNotifier : IOutgoingChangeNotifier
+    public class MqttOutgoingEventPublisher : IOutgoingEventPublisher
     {
         private readonly IApplicationMessagePublisher _publisher;
-        private readonly OutgoingChangeMappings _mappings;
+        private readonly OutgoingEventMappings _mappings;
 
-        public MqttOutgoingChangeNotifier(IApplicationMessagePublisher publisher, OutgoingChangeMappings mappings)
+        public MqttOutgoingEventPublisher(IApplicationMessagePublisher publisher, OutgoingEventMappings mappings)
         {
             _publisher = publisher;
             _mappings = mappings;
         }
         
-        public async Task<IEnumerable<FailedOutgoingChange>> Publish(OutgoingChange change)
+        public async Task<IEnumerable<FailedOutgoingEvent>> Publish(OutgoingEvent change)
         {
-            var failed = new List<FailedOutgoingChange>();
+            var failed = new List<FailedOutgoingEvent>();
             foreach (var topic in _mappings.GetTopics(change))
             {
                 var msg = new MqttApplicationMessageBuilder()
@@ -30,7 +31,7 @@ namespace Sod.Infrastructure.Satel.State.Events.Mqtt
                 var publishResult = await _publisher.PublishAsync(msg, CancellationToken.None);
                 if (publishResult.ReasonCode != MqttClientPublishReasonCode.Success)
                 {
-                    failed.Add(new FailedOutgoingChange(change));
+                    failed.Add(new FailedOutgoingEvent(change));
                 }
             }
 

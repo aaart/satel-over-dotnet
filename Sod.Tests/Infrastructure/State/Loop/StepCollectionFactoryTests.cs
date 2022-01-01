@@ -4,6 +4,7 @@ using Moq;
 using Sod.Infrastructure.Satel;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Satel.State.Loop;
 using Sod.Infrastructure.Satel.State.Loop.StepType;
 using Sod.Infrastructure.Store;
@@ -19,7 +20,7 @@ namespace Sod.Tests.Infrastructure.State.Loop
         {
             var store = new Mock<IStore>();
             var manipulator = new Mock<IManipulator>();
-            var eventPublisher = new Mock<IOutgoingChangeNotifier>();
+            var eventPublisher = new Mock<IOutgoingEventPublisher>();
             
             var builder = new StepCollectionFactory(store.Object, manipulator.Object, eventPublisher.Object);
 

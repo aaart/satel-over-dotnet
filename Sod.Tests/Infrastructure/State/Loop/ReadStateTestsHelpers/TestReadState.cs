@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Sod.Infrastructure.Satel;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Satel.State.Loop.StepType;
 using Sod.Infrastructure.Store;
 
@@ -17,10 +18,10 @@ namespace Sod.Tests.Infrastructure.State.Loop.ReadStateTestsHelpers
         public TestReadState(
             IStore store, 
             IManipulator manipulator, 
-            IOutgoingChangeNotifier outgoingChangeNotifier,
+            IOutgoingEventPublisher outgoingEventPublisher,
             Func<Task<(CommandStatus, bool[])>> manipulatorMethodImpl,
             Action<IEnumerable<(int reference, bool value)>> notifyMethodImpl) 
-            : base(store, manipulator, outgoingChangeNotifier)
+            : base(store, manipulator, outgoingEventPublisher)
         {
             _manipulatorMethodImpl = manipulatorMethodImpl;
             _notifyMethodImpl = notifyMethodImpl;

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Store;
 
 namespace Sod.Infrastructure.Satel.State.Loop.StepType
@@ -10,16 +11,16 @@ namespace Sod.Infrastructure.Satel.State.Loop.StepType
     {
         protected IStore Store { get; }
         protected IManipulator Manipulator { get; }
-        protected IOutgoingChangeNotifier OutgoingChangeNotifier { get; }
+        protected IOutgoingEventPublisher OutgoingEventPublisher { get; }
 
         protected BaseStep(
             IStore store, 
             IManipulator manipulator,
-            IOutgoingChangeNotifier outgoingChangeNotifier)
+            IOutgoingEventPublisher outgoingEventPublisher)
         {
             Store = store;
             Manipulator = manipulator;
-            OutgoingChangeNotifier = outgoingChangeNotifier;
+            OutgoingEventPublisher = outgoingEventPublisher;
         }
 
         public async Task ExecuteAsync()

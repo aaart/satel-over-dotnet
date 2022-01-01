@@ -5,6 +5,7 @@ using Moq;
 using Sod.Infrastructure.Satel;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Store;
 using Sod.Tests.Infrastructure.State.Loop.ReadStateTestsHelpers;
 using Xunit;
@@ -16,7 +17,7 @@ namespace Sod.Tests.Infrastructure.State.Loop
     {
         private readonly Mock<IStore> _storeMock = new Mock<IStore>();
         private readonly Mock<IManipulator> _manipulatorMock = new Mock<IManipulator>();
-        private readonly Mock<IOutgoingChangeNotifier> _eventPublisherMock = new Mock<IOutgoingChangeNotifier>();
+        private readonly Mock<IOutgoingEventPublisher> _eventPublisherMock = new Mock<IOutgoingEventPublisher>();
 
         [Theory]
         [InlineData(CommandStatus.InvalidCrc)]
