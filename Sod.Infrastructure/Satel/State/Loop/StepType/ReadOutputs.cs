@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Store;
 
 namespace Sod.Infrastructure.Satel.State.Loop.StepType
 {
     public class ReadOutputs : ReadState
     {
-        public ReadOutputs(IStore store, IManipulator manipulator, IOutgoingChangeNotifier outgoingChangeNotifier) 
-            : base(store, manipulator, outgoingChangeNotifier)
+        public ReadOutputs(IStore store, IManipulator manipulator, IOutgoingEventPublisher outgoingEventPublisher) 
+            : base(store, manipulator, outgoingEventPublisher)
         {
             
         }
@@ -22,7 +23,7 @@ namespace Sod.Infrastructure.Satel.State.Loop.StepType
         {
             foreach (var changedState in changedStates)
             {
-                OutgoingChangeNotifier.Publish(new OutgoingChange(EventType.OutputsStateChanged, changedState.reference, changedState.value ? "on" : "off"));
+                OutgoingEventPublisher.Publish(new OutgoingEvent(OutgoingEventType.OutputsStateChanged, changedState.reference, changedState.value ? "on" : "off"));
             }
         }
     }

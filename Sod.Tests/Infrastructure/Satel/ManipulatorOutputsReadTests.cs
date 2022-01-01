@@ -19,7 +19,7 @@ namespace Sod.Tests.Infrastructure.Satel
             var socketSender = new MockSocketSender(frameToSend => Task.FromResult(frameToSend.Length));
             var socketReceiver = new MockSocketReceiver(() => Task.FromResult((receivedFrame.Length, segment)));
 
-            var manipulator = new Manipulator(socketSender, socketReceiver);
+            var manipulator = new Manipulator(new GenericCommunicationInterface(socketReceiver, socketSender));
             var (status, state) = await manipulator.ReadOutputs();
             status.Should().Be(expectedStatus);
             state[9].Should().BeTrue();

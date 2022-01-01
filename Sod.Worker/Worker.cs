@@ -27,9 +27,16 @@ namespace Sod.Worker
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var steps = _stepCollectionFactory.BuildStepCollection();
-                await steps.ExecuteAsync();
-                await Task.Delay(1000, stoppingToken);
+                try
+                {
+                    var steps = _stepCollectionFactory.BuildStepCollection();
+                    await steps.ExecuteAsync();
+                    await Task.Delay(1000, stoppingToken);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, e.Message);
+                }
             }
         }
 

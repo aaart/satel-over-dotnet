@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Store;
 
 namespace Sod.Infrastructure.Satel.State.Loop.StepType
@@ -13,8 +14,8 @@ namespace Sod.Infrastructure.Satel.State.Loop.StepType
         protected ReadState(
             IStore store, 
             IManipulator manipulator, 
-            IOutgoingChangeNotifier outgoingChangeNotifier) 
-            : base(store, manipulator, outgoingChangeNotifier)
+            IOutgoingEventPublisher outgoingEventPublisher) 
+            : base(store, manipulator, outgoingEventPublisher)
         {
         }
 

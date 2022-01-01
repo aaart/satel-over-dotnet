@@ -23,6 +23,9 @@ class Program
         await client.ConnectAsync(mqttOpt);
         var res = await client.PublishAsync("mqttconsoletest", msg);
         Console.WriteLine($"reason: {res.ReasonString}");
+
+        var subRes = await client.SubscribeAsync("test_topic");
+        
     }
 
 

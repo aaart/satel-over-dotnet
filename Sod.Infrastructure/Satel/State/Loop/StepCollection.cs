@@ -5,11 +5,11 @@ namespace Sod.Infrastructure.Satel.State.Loop
 {
     public class StepCollection : List<IStep>, IStepCollection
     {
-        private readonly int _milisecondsInterval;
+        private readonly int _millisecondInterval;
 
-        public StepCollection(int milisecondsInterval)
+        public StepCollection(int millisecondInterval)
         {
-            _milisecondsInterval = milisecondsInterval;
+            _millisecondInterval = millisecondInterval;
         }
         
         public async Task ExecuteAsync()
@@ -17,7 +17,7 @@ namespace Sod.Infrastructure.Satel.State.Loop
             foreach (var step in this)
             {
                 await step.ExecuteAsync();
-                await Task.Delay(_milisecondsInterval);
+                await Task.Delay(_millisecondInterval);
             }
         }
     }

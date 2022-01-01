@@ -1,5 +1,7 @@
-﻿using Sod.Infrastructure.Satel.Communication;
+﻿using System.Threading.Tasks;
+using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
+using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Satel.State.Loop.StepType;
 using Sod.Infrastructure.Store;
 
@@ -10,17 +12,17 @@ namespace Sod.Infrastructure.Satel.State.Loop
         private readonly int _milisecondsInterval;
         private readonly IStore _store;
         private readonly IManipulator _manipulator;
-        private readonly IOutgoingChangeNotifier _outgoingChangeNotifier;
+        private readonly IOutgoingEventPublisher _outgoingEventPublisher;
 
         public StepCollectionFactory(
             IStore store, 
             IManipulator manipulator,
-            IOutgoingChangeNotifier outgoingChangeNotifier,
+            IOutgoingEventPublisher outgoingEventPublisher,
             int milisecondsInterval = 10)
         {
             _store = store;
             _manipulator = manipulator;
-            _outgoingChangeNotifier = outgoingChangeNotifier;
+            _outgoingEventPublisher = outgoingEventPublisher;
             _milisecondsInterval = milisecondsInterval;
         }
 
@@ -31,9 +33,11 @@ namespace Sod.Infrastructure.Satel.State.Loop
             {
                 // update removed temporary
                 //new UpdateOutputs(_store, _manipulator, _eventPublisher),
-                new ReadOutputs(_store, _manipulator, _outgoingChangeNotifier),
-                new ReadInputs(_store, _manipulator, _outgoingChangeNotifier)
+                new ReadOutputs(_store, _manipulator, _outgoingEventPublisher),
+                new ReadInputs(_store, _manipulator, _outgoingEventPublisher)
             };
         }
+
+        public async Task BuildAndExecuteStepCollection() => await BuildStepCollection().ExecuteAsync();
     }
 }

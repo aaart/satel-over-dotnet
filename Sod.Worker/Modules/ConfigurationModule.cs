@@ -1,10 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using Autofac;
 using Microsoft.Extensions.Configuration;
+using Sod.Infrastructure.Satel.State.Events.Incoming;
 using Sod.Infrastructure.Satel.State.Events.Mqtt;
+using Module = Autofac.Module;
 
 namespace Sod.Worker.Modules
 {
@@ -28,12 +31,30 @@ namespace Sod.Worker.Modules
                     var cfg = ctx.Resolve<IConfigurationRoot>();
                     var mappings = 
                         cfg
-                            .GetSection("Satel:OutgoingChangeMappings")
+                            .GetSection("Satel:OutgoingEventMappings")
                             .GetChildren()
-                            .Select(x => x.Get<OutgoingChangeMapping>());
-                    return new OutgoingChangeMappings(mappings);
+                            .Select(x => x.Get<OutgoingEventMapping>());
+                    return new OutgoingEventMappings(mappings);
                 })
-                .As<OutgoingChangeMappings>()
+                .As<OutgoingEventMappings>()
+                .SingleInstance();
+
+            builder
+                .RegisterType<UpdateOutputStateHandler>().Named<IEventHandler>("Sod.Infrastructure.Satel.State.Events.Incoming.UpdateOutputStateHandler").InstancePerDependency();
+
+            builder
+                .Register(ctx =>
+                {
+                    var cfg = ctx.Resolve<IConfigurationRoot>();
+                    var mappings =
+                        cfg
+                            .GetSection("Satel:Topic2IncomingEventHandlerMappings")
+                            .GetChildren()
+                            .Select(x => (x["Topic"], x["Handler"], int.Parse(x["IOIndex"])));
+
+                    return new EventHandlerMappings(mappings.Select(x => (x.Item1, ctx.ResolveNamed<IEventHandler>(x.Item2, new NamedParameter("ioIndex", x.Item3)))));
+                })
+                .As<EventHandlerMappings>()
                 .SingleInstance();
         }
     }

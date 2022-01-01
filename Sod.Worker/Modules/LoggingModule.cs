@@ -25,7 +25,7 @@ namespace Sod.Worker.Modules
             builder
                 .Register(ctx => ctx.Resolve<LoggerConfiguration>().CreateLogger())
                 .As<Serilog.ILogger>()
-                .InstancePerDependency();
+                .SingleInstance();
 
             builder
                 .Register(ctx => new SerilogLoggerFactory(ctx.Resolve<Serilog.ILogger>()))
