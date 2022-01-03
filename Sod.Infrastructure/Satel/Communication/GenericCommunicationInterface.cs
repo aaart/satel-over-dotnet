@@ -8,7 +8,7 @@ namespace Sod.Infrastructure.Satel.Communication
 {
     public class GenericCommunicationInterface
     {
-        private readonly object _lock = new object();
+        private static readonly object _lock = new object();
         
         private readonly ISocketReceiver _socketReceiver;
         private readonly ISocketSender _socketSender;
