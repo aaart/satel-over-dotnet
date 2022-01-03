@@ -3,6 +3,7 @@
     public enum OutgoingEventType
     {
         InputsStateChanged,
-        OutputsStateChanged
+        OutputsStateChanged,
+        Other
     }
 }
