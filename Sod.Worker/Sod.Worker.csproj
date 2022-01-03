@@ -26,8 +26,6 @@
       <None Update="ca.crt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <Content Remove="appsettings.local.json" />
-      <None Include="appsettings.local.json" />
     </ItemGroup>
 
     <ItemGroup>
