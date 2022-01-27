@@ -29,7 +29,7 @@ namespace Sod.Infrastructure.Store
             var redisValue = await _database.StringGetAsync(new RedisKey(key));
             if (!redisValue.HasValue)
             {
-                throw new ValueNotFoundException();
+                throw new KeyNotFoundException();
             }
             return JsonConvert.DeserializeObject<T>(redisValue.ToString()) ?? throw new NullReferenceException();
         }
