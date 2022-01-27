@@ -2,7 +2,7 @@
 
 namespace Sod.Infrastructure.Store.Exceptions
 {
-    public class ValueNotFoundException : SodException
+    public class KeyNotFoundException : SodException
     {
     }
 }

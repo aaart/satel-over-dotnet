@@ -66,7 +66,23 @@ namespace Sod.Worker.Modules
                     }
                 })
                 .SingleInstance();
-            builder.RegisterType<RedisStore>().As<IStore>().SingleInstance();
+            builder
+                .RegisterType<Store>()
+                .As<IStore>()
+                .OnActivated(args =>
+                {
+                    var keysToSet = new[]
+                    {
+                        Constants.Store.InputsStateKey,
+                        Constants.Store.OutputsStateKey
+                    };
+
+                    foreach (var keyToSet in keysToSet)
+                    {
+                        args.Instance.SetAsync(keyToSet, Enumerable.Repeat(false, 128).ToArray()).Wait();
+                    }
+                })
+                .SingleInstance();
 
             builder
                 .Register(ctx =>
