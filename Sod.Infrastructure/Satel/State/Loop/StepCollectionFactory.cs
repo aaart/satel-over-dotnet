@@ -18,7 +18,7 @@ namespace Sod.Infrastructure.Satel.State.Loop
             IStore store, 
             IManipulator manipulator,
             IOutgoingEventPublisher outgoingEventPublisher,
-            int milisecondsInterval = 10)
+            int milisecondsInterval = 100)
         {
             _store = store;
             _manipulator = manipulator;

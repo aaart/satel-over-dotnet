@@ -4,12 +4,12 @@ using Sod.Infrastructure.Satel.Communication;
 
 namespace Sod.Infrastructure.Satel.State.Events.Incoming
 {
-    public class UpdateOutputStateHandler : IEventHandler
+    public class OutputDirectUpdateStateHandler : IEventHandler
     {
         private readonly int _ioIndex;
         private readonly IManipulator _manipulator;
 
-        public UpdateOutputStateHandler(int ioIndex, IManipulator manipulator)
+        public OutputDirectUpdateStateHandler(int ioIndex, IManipulator manipulator)
         {
             _ioIndex = ioIndex;
             _manipulator = manipulator;
