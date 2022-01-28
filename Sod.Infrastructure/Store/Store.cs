@@ -20,7 +20,7 @@ namespace Sod.Infrastructure.Store
             {
                 throw new KeyNotFoundException();
             }
-            
+
             return Task.FromResult<T>((T)value);
         }
 

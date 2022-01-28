@@ -1,4 +1,6 @@
-﻿namespace Sod.Infrastructure
+﻿using System;
+
+namespace Sod.Infrastructure
 {
     public static partial class Constants
     {
@@ -6,6 +8,7 @@
         {
             public const string InputsStateKey = "InputsState";
             public const string OutputsStateKey = "OutputsState";
+            public const string OutputsToUpdate = "OutputsToUpdate";
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
 
             builder
-                .RegisterType<UpdateOutputStateHandler>().Named<IEventHandler>("Sod.Infrastructure.Satel.State.Events.Incoming.UpdateOutputStateHandler").InstancePerDependency();
+                .RegisterType<OutputDirectUpdateStateHandler>().Named<IEventHandler>("Sod.Infrastructure.Satel.State.Events.Incoming.UpdateOutputStateHandler").InstancePerDependency();
 
             builder
                 .Register(ctx =>
