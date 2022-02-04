@@ -24,6 +24,11 @@ namespace Sod.Infrastructure.Store
             }
         }
 
+        public Task PushAsync(string key, object value)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<T> GetAsync<T>(string key)
         {
             var redisValue = await _database.StringGetAsync(new RedisKey(key));
