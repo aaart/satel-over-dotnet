@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
 using Sod.Infrastructure.Satel.State.Events.Outgoing;
-using Sod.Infrastructure.Store;
+using Sod.Infrastructure.Storage;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sod.Infrastructure.Satel.State.Loop.StepType
 {

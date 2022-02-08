@@ -7,7 +7,7 @@ using Sod.Infrastructure.Satel.State.Events;
 using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Satel.State.Loop;
 using Sod.Infrastructure.Satel.State.Loop.StepType;
-using Sod.Infrastructure.Store;
+using Sod.Infrastructure.Storage;
 using Xunit;
 
 namespace Sod.Tests.Infrastructure.State.Loop
