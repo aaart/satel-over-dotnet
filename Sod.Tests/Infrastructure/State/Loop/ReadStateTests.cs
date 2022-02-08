@@ -6,10 +6,11 @@ using Sod.Infrastructure.Satel;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
 using Sod.Infrastructure.Satel.State.Events.Outgoing;
-using Sod.Infrastructure.Store;
+using Sod.Infrastructure.Storage;
 using Sod.Tests.Infrastructure.State.Loop.ReadStateTestsHelpers;
 using Xunit;
 using static FluentAssertions.FluentActions;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sod.Tests.Infrastructure.State.Loop
 {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
 using Sod.Infrastructure.Satel.State.Events.Outgoing;
-using Sod.Infrastructure.Store;
+using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.Satel.State.Loop.StepType
 {
@@ -14,7 +14,7 @@ namespace Sod.Infrastructure.Satel.State.Loop.StepType
         {
         }
 
-        protected override string PersistedStateKey => Constants.Store.InputsStateKey;
+        protected override string PersistedStateKey => Constants.Store.InputsState;
 
         protected override Task<(CommandStatus, bool[])> ManipulatorMethod() => Manipulator.ReadInputs();
         

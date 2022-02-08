@@ -22,8 +22,10 @@ using Sod.Infrastructure.Satel.State.Events;
 using Sod.Infrastructure.Satel.State.Events.Incoming;
 using Sod.Infrastructure.Satel.State.Events.Mqtt;
 using Sod.Infrastructure.Satel.State.Events.Outgoing;
+using Sod.Infrastructure.Satel.State.Handlers;
 using Sod.Infrastructure.Satel.State.Loop;
-using Sod.Infrastructure.Store;
+using Sod.Infrastructure.Satel.State.Tasks;
+using Sod.Infrastructure.Storage;
 using StackExchange.Redis;
 using Constants = Sod.Infrastructure.Constants;
 
@@ -53,8 +55,8 @@ namespace Sod.Worker.Modules
                     var db = evnt.Instance;
                     IEnumerable<(RedisKey key, RedisValue redisValue)> valueTuples = new[]
                     {
-                        Constants.Store.InputsStateKey,
-                        Constants.Store.OutputsStateKey
+                        Constants.Store.InputsState,
+                        Constants.Store.OutputsState
                     }.Select(x => (new RedisKey(x), db.StringGet(new RedisKey(x))));
 
                     foreach (var tuple in valueTuples)
@@ -67,14 +69,14 @@ namespace Sod.Worker.Modules
                 })
                 .SingleInstance();
             builder
-                .RegisterType<Store>()
+                .RegisterType<RedisStore>()
                 .As<IStore>()
                 .OnActivated(args =>
                 {
                     var keysToSet = new[]
                     {
-                        Constants.Store.InputsStateKey,
-                        Constants.Store.OutputsStateKey
+                        Constants.Store.InputsState,
+                        Constants.Store.OutputsState
                     };
 
                     foreach (var keyToSet in keysToSet)
@@ -184,7 +186,16 @@ namespace Sod.Worker.Modules
                 });
             
             builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
-            builder.RegisterType<StepCollectionFactory>().As<IStepCollectionFactory>().SingleInstance();
+
+            builder.RegisterType<RedisTaskQueue>().As<ITaskQueue>().SingleInstance();
+            builder.RegisterType<TaskPlanner>().As<ITaskPlanner>().SingleInstance();
+            builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
+            
+            builder.RegisterType<ReadInputsHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ReadOutputsHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<UpdateStorageHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<UpdateOutputsHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<QueueSubscription>().As<IQueueSubscription>().SingleInstance();
         }
     }
 }

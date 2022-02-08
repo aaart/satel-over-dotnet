@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Sod.Infrastructure.Store.Exceptions;
+using Sod.Infrastructure.Storage.Exceptions;
 using StackExchange.Redis;
 
-namespace Sod.Infrastructure.Store
+namespace Sod.Infrastructure.Storage
 {
     public class RedisStore : IStore
     {
@@ -24,11 +24,6 @@ namespace Sod.Infrastructure.Store
             }
         }
 
-        public Task PushAsync(string key, object value)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<T> GetAsync<T>(string key)
         {
             var redisValue = await _database.StringGetAsync(new RedisKey(key));
@@ -37,12 +32,6 @@ namespace Sod.Infrastructure.Store
                 throw new KeyNotFoundException();
             }
             return JsonConvert.DeserializeObject<T>(redisValue.ToString()) ?? throw new NullReferenceException();
-        }
-
-        public async Task<bool> ExistsAsync<T>(string key)
-        {
-            var redisValue = await _database.StringGetAsync(new RedisKey(key));
-            return redisValue.HasValue;
         }
     }
 }
