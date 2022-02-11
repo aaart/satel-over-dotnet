@@ -3,7 +3,8 @@ using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
 using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Satel.State.Loop.StepType;
-using Sod.Infrastructure.Store;
+using Sod.Infrastructure.Storage;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sod.Infrastructure.Satel.State.Loop
 {
@@ -18,7 +19,7 @@ namespace Sod.Infrastructure.Satel.State.Loop
             IStore store, 
             IManipulator manipulator,
             IOutgoingEventPublisher outgoingEventPublisher,
-            int milisecondsInterval = 10)
+            int milisecondsInterval = 100)
         {
             _store = store;
             _manipulator = manipulator;

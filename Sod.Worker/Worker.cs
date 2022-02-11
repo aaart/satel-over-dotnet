@@ -8,16 +8,25 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sod.Infrastructure.Capabilities;
 using Sod.Infrastructure.Satel.State.Loop;
+using Sod.Infrastructure.Satel.State.Tasks;
+using Sod.Infrastructure.Storage;
 
 namespace Sod.Worker
 {
     public class Worker : BackgroundService, ILoggingCapability
     {
-        private readonly IStepCollectionFactory _stepCollectionFactory;
+        private readonly IQueueSubscription _subscription;
+        private readonly ITaskPlanner _planner;
+        private readonly ITaskQueue _queue;
 
-        public Worker(IStepCollectionFactory stepCollectionFactory)
+        public Worker(
+            IQueueSubscription subscription,
+            ITaskPlanner planner,
+            ITaskQueue queue)
         {
-            _stepCollectionFactory = stepCollectionFactory;
+            _subscription = subscription;
+            _planner = planner;
+            _queue = queue;
             Logger = NullLogger.Instance;
         }
 
@@ -29,9 +38,9 @@ namespace Sod.Worker
             {
                 try
                 {
-                    var steps = _stepCollectionFactory.BuildStepCollection();
-                    await steps.ExecuteAsync();
-                    await Task.Delay(1000, stoppingToken);
+                    await _planner.Plan(_queue);
+                    await _subscription.ReceiveTasks(_queue);
+                    await Task.Delay(500, stoppingToken);
                 }
                 catch (Exception e)
                 {

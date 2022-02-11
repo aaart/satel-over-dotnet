@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace Sod.Infrastructure.Store
+namespace Sod.Infrastructure.Storage
 {
     public interface IStore
     {
         Task SetAsync(string key, object value);
         Task<T> GetAsync<T>(string key);
-        Task<bool> ExistsAsync<T>(string key);
     }
 }

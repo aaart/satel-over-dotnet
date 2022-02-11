@@ -39,9 +39,10 @@ namespace Sod.Worker.Modules
                 .As<OutgoingEventMappings>()
                 .SingleInstance();
 
-            builder
-                .RegisterType<UpdateOutputStateHandler>().Named<IEventHandler>("Sod.Infrastructure.Satel.State.Events.Incoming.UpdateOutputStateHandler").InstancePerDependency();
-
+            // builder
+            //     .RegisterType<OutputDirectUpdateStateHandler>().Named<IEventHandler>("Sod.Infrastructure.Satel.State.Events.Incoming.UpdateOutputStateHandler").InstancePerDependency();
+            builder.RegisterType<OutputEnqueueUpdateStateHandler>().Named<IEventHandler>("Sod.Infrastructure.Satel.State.Events.Incoming.OutputEnqueueUpdateStateHandler").InstancePerDependency();
+            
             builder
                 .Register(ctx =>
                 {

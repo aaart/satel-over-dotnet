@@ -6,7 +6,7 @@ using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.State.Events;
 using Sod.Infrastructure.Satel.State.Events.Outgoing;
 using Sod.Infrastructure.Satel.State.Loop.StepType;
-using Sod.Infrastructure.Store;
+using Sod.Infrastructure.Storage;
 
 namespace Sod.Tests.Infrastructure.State.Loop.ReadStateTestsHelpers
 {

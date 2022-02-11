@@ -19,19 +19,19 @@ namespace Sod.Infrastructure.Satel.State.Events.Mqtt
             _mappings = mappings;
         }
         
-        public async Task<IEnumerable<FailedOutgoingEvent>> Publish(OutgoingEvent change)
+        public async Task<IEnumerable<FailedOutgoingEvent>> PublishAsync(OutgoingEvent evnt)
         {
             var failed = new List<FailedOutgoingEvent>();
-            foreach (var topic in _mappings.GetTopics(change))
+            foreach (var topic in _mappings.GetTopics(evnt))
             {
                 var msg = new MqttApplicationMessageBuilder()
                     .WithTopic(topic)
-                    .WithPayload(change.Value)
+                    .WithPayload(evnt.Value)
                     .Build();
                 var publishResult = await _publisher.PublishAsync(msg, CancellationToken.None);
                 if (publishResult.ReasonCode != MqttClientPublishReasonCode.Success)
                 {
-                    failed.Add(new FailedOutgoingEvent(change));
+                    failed.Add(new FailedOutgoingEvent(evnt));
                 }
             }
 
