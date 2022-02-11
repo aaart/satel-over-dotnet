@@ -19,7 +19,7 @@ namespace Sod.Infrastructure.Satel.State.Handlers
             switch (type)
             {
                 case TaskType.UpdateOutputs:
-                    return _provider.GetRequiredService<UpdateOutputsHandler>();
+                    return _provider.GetRequiredService<SwitchOutputsHandler>();
                 case TaskType.ReadInputs:
                     return _provider.GetRequiredService<ReadInputsHandler>();
                 case TaskType.ReadOutputs:

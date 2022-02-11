@@ -8,27 +8,24 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.Satel.State.Handlers
 {
-    public class UpdateOutputsHandler : LoggingCapability, IHandler
+    public class SwitchOutputsHandler : LoggingCapability, IHandler
     {
-        private readonly IStore _store;
         private readonly IManipulator _manipulator;
 
-        public UpdateOutputsHandler(IStore store, IManipulator manipulator)
+        public SwitchOutputsHandler(IManipulator manipulator)
         {
-            Logger.LogDebug($"{nameof(UpdateOutputsHandler)} is executing.");
-            _store = store;
+            Logger.LogDebug($"{nameof(SwitchOutputsHandler)} is executing.");
             _manipulator = manipulator;
         }
 
 
         public async Task Handle(IReadOnlyDictionary<string, object> parameters)
         {
-            var persistedState = await _store.GetAsync<bool[]>(Constants.Store.OutputsState);
             var outputs = new bool[128];
             foreach (var parameter in parameters)
             {
                 var index = Convert.ToInt32(parameter.Key) - 1;
-                outputs[index] = persistedState[index] != OnOffParse.ToBoolean(Convert.ToString(parameter.Value)!);
+                outputs[index] = true;
             }
             await _manipulator.SwitchOutputs(outputs);
         }
