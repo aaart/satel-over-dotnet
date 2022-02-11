@@ -5,6 +5,8 @@
         UpdateOutputs,
         ReadInputs,
         ReadOutputs,
-        UpdateStorage
+        UpdateStorage,
+        NotifyInputsChanged,
+        NotifyOutputsChanged
     }
 }

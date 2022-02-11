@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Capabilities;
@@ -17,9 +18,14 @@ namespace Sod.Infrastructure.Satel.State.Handlers
         }
 
 
-        public Task Handle(IReadOnlyDictionary<string, object> parameters)
+        public async Task Handle(IReadOnlyDictionary<string, object> parameters)
         {
-            return Task.CompletedTask;
+            foreach (var parameter in parameters)
+            {
+                var outputs = new bool[128];
+                outputs[Convert.ToInt32(parameter.Key) - 1] = true;
+                await _manipulator.SwitchOutputs(outputs);
+            }
         }
     }
 }

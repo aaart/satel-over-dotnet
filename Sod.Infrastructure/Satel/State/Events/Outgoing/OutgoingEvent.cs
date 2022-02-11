@@ -1,12 +1,19 @@
 ﻿namespace Sod.Infrastructure.Satel.State.Events.Outgoing
 {
-    public record OutgoingEvent
+    public class OutgoingEvent
     {
         public OutgoingEvent(OutgoingEventType type, int reference, string value)
         {
             Type = type;
             Reference = reference;
             Value = value;
+        }
+        
+        public OutgoingEvent(OutgoingEventType type, int reference, bool value)
+        {
+            Type = type;
+            Reference = reference;
+            Value = value ? "ON" : "OFF";
         }
         
         public OutgoingEventType Type { get; }

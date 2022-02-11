@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Capabilities;
@@ -17,9 +18,16 @@ namespace Sod.Infrastructure.Satel.State.Handlers
         
         public async Task Handle(IReadOnlyDictionary<string, object> parameters)
         {
-            foreach (var key in parameters.Keys)
+            foreach (var parameter in parameters)
             {
-                await _store.SetAsync(key, parameters[key]);
+                try
+                {
+                    await _store.SetAsync(parameter.Key, parameter.Value);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, e.Message);
+                }
             }
         }
     }

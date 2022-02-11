@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Capabilities;
+using Sod.Infrastructure.Enums;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Storage;
 
@@ -18,6 +19,7 @@ namespace Sod.Infrastructure.Satel.State.Handlers
         }
 
         protected override string PersistedStateKey => Constants.Store.InputsState;
+        protected override TaskType NotificationTaskType => TaskType.NotifyInputsChanged;
         protected override Task<(CommandStatus, bool[])> ManipulatorMethod(IManipulator manipulator) => manipulator.ReadInputs();
     }
 }

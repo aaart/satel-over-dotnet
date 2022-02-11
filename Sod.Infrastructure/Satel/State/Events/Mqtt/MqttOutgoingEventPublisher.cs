@@ -19,7 +19,7 @@ namespace Sod.Infrastructure.Satel.State.Events.Mqtt
             _mappings = mappings;
         }
         
-        public async Task<IEnumerable<FailedOutgoingEvent>> Publish(OutgoingEvent evnt)
+        public async Task<IEnumerable<FailedOutgoingEvent>> PublishAsync(OutgoingEvent evnt)
         {
             var failed = new List<FailedOutgoingEvent>();
             foreach (var topic in _mappings.GetTopics(evnt))
