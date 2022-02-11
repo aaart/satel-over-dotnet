@@ -26,6 +26,10 @@ namespace Sod.Infrastructure.Satel.State.Handlers
                     return _provider.GetRequiredService<ReadOutputsHandler>();
                 case TaskType.UpdateStorage:
                     return _provider.GetRequiredService<UpdateStorageHandler>();
+                case TaskType.NotifyInputsChanged:
+                    return _provider.GetRequiredService<InputsChangeNotificationHandler>();
+                case TaskType.NotifyOutputsChanged:
+                    return _provider.GetRequiredService<OutputsChangeNotificationHandler>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

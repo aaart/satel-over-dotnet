@@ -1,15 +1,25 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Sod.Infrastructure.Enums;
+using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.Satel.State.Events.Incoming
 {
     public class OutputEnqueueUpdateStateHandler : IEventHandler
     {
-        
-        
-        public Task Handle(IncomingEvent incomingEvent)
+        private readonly string _ioIndex;
+        private readonly ITaskQueue _queue;
+
+        public OutputEnqueueUpdateStateHandler(int ioIndex, ITaskQueue queue)
         {
-            
-            throw new System.NotImplementedException();
+            _ioIndex = Convert.ToString(ioIndex);
+            _queue = queue;
+        }
+
+        public async Task HandleAsync(IncomingEvent incomingEvent)
+        {
+            await _queue.Enqueue(new SatelTask(TaskType.UpdateOutputs, new Dictionary<string, object> { { _ioIndex, incomingEvent.Payload } }));
         }
     }
 }

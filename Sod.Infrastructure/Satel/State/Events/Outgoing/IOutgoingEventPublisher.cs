@@ -5,6 +5,6 @@ namespace Sod.Infrastructure.Satel.State.Events.Outgoing
 {
     public interface IOutgoingEventPublisher
     {
-        Task<IEnumerable<FailedOutgoingEvent>> Publish(OutgoingEvent evnt);
+        Task<IEnumerable<FailedOutgoingEvent>> PublishAsync(OutgoingEvent evnt);
     }
 }

@@ -195,6 +195,8 @@ namespace Sod.Worker.Modules
             builder.RegisterType<ReadOutputsHandler>().AsSelf().SingleInstance();
             builder.RegisterType<UpdateStorageHandler>().AsSelf().SingleInstance();
             builder.RegisterType<UpdateOutputsHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<InputsChangeNotificationHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<OutputsChangeNotificationHandler>().AsSelf().SingleInstance();
             builder.RegisterType<QueueSubscription>().As<IQueueSubscription>().SingleInstance();
         }
     }

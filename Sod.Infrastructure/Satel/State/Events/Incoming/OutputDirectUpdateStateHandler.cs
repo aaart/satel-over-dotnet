@@ -15,7 +15,7 @@ namespace Sod.Infrastructure.Satel.State.Events.Incoming
             _manipulator = manipulator;
         }
         
-        public async Task Handle(IncomingEvent incomingEvent) // TODO: incomingEvent not used!
+        public async Task HandleAsync(IncomingEvent incomingEvent) // TODO: incomingEvent not used!
         {
             var outputs = new bool[128];
             outputs[_ioIndex - 1] = true;

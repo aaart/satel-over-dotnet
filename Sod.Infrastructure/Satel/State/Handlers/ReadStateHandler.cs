@@ -30,24 +30,27 @@ namespace Sod.Infrastructure.Satel.State.Handlers
             var persistedState = await _store.GetAsync<bool[]>(PersistedStateKey);
             ValidateState(persistedState, satelState);
 
-            var stateUpdated = false;
+            var changes = new Dictionary<string, object>();
             for (int i = 0; i < persistedState.Length; i++)
             {
                 if (persistedState[i] != satelState[i])
                 {
                     persistedState[i] = satelState[i];
-                    stateUpdated = true;
+                    changes.Add($"{Convert.ToString(i + 1)}", persistedState[i]);
                 }
             }
 
-            if (stateUpdated)
+            if (changes.Any())
             {
                 await _queue.Enqueue(new SatelTask(TaskType.UpdateStorage, new Dictionary<string, object> { { PersistedStateKey, persistedState } }));
+                await _queue.Enqueue(new SatelTask(NotificationTaskType, changes));
             }
         }
 
         protected abstract string PersistedStateKey { get; }
 
+        protected abstract TaskType NotificationTaskType { get; }
+        
         protected abstract Task<(CommandStatus, bool[])> ManipulatorMethod(IManipulator manipulator);
 
         private void ValidateStatus(CommandStatus status)

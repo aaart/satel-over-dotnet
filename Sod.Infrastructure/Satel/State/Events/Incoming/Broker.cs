@@ -20,7 +20,7 @@ namespace Sod.Infrastructure.Satel.State.Events.Incoming
             foreach (var handler in _handlerMappings.GetHandlers(incomingEvent.Topic))
             {
                 
-                await handler.Handle(incomingEvent);
+                await handler.HandleAsync(incomingEvent);
             }
         }
     }
