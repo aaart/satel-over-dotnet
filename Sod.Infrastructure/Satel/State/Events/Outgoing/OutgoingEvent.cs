@@ -13,7 +13,7 @@
         {
             Type = type;
             Reference = reference;
-            Value = value ? "ON" : "OFF";
+            Value = OnOffParse.ToString(value);
         }
         
         public OutgoingEventType Type { get; }
