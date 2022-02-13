@@ -40,7 +40,7 @@ namespace Sod.Worker
                 {
                     await _planner.Plan(_queue);
                     await _subscription.ReceiveTasks(_queue);
-                    await Task.Delay(500, stoppingToken);
+                    await Task.Delay(100, stoppingToken);
                 }
                 catch (Exception e)
                 {

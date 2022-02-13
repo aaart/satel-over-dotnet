@@ -64,7 +64,22 @@ namespace Sod.Infrastructure.Satel.Communication
                 new CommunicationDefaultResponse<IntegraResponse>(IntegraResponse.NotApplicable, Command.Result),
                 data => (IntegraResponse)data[0]);
         }
-        
+
+        public async Task<(CommandStatus status, IntegraResponse response)> DisableOutputs(bool[] outputs)
+        {
+            return await _genericCommunicationInterface.Execute(
+                new CommunicationMessage(Command.OutputsOff, Translation.ToByteArray(outputs), _userCode),
+                new CommunicationDefaultResponse<IntegraResponse>(IntegraResponse.NotApplicable, Command.Result),
+                data => (IntegraResponse)data[0]);
+        }
+        public async Task<(CommandStatus status, IntegraResponse response)> EnableOutputs(bool[] outputs)
+        {
+            return await _genericCommunicationInterface.Execute(
+                new CommunicationMessage(Command.OutputsOn, Translation.ToByteArray(outputs), _userCode),
+                new CommunicationDefaultResponse<IntegraResponse>(IntegraResponse.NotApplicable, Command.Result),
+                data => (IntegraResponse)data[0]);
+        }
+
         public async Task<(CommandStatus status, IntegraResponse response)> ArmInMode0(bool[] partitions)
         {
             return await _genericCommunicationInterface.Execute(

@@ -15,6 +15,8 @@
         ArmInMode0 = 0x80,
         DisArm = 0x84,
         ForceArmInMode0 = 0xA0,
+        OutputsOn = 0x88,
+        OutputsOff = 0x89,
         OutputsSwitch = 0x91,
         
         // result
