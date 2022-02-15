@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sod.Infrastructure.Capabilities;
-using Sod.Infrastructure.Satel.State.Loop;
 using Sod.Infrastructure.Satel.State.Tasks;
 using Sod.Infrastructure.Storage;
 
@@ -18,6 +15,7 @@ namespace Sod.Worker
         private readonly IQueueSubscription _subscription;
         private readonly ITaskPlanner _planner;
         private readonly ITaskQueue _queue;
+        private readonly int _interval = 100;
 
         public Worker(
             IQueueSubscription subscription,
@@ -40,7 +38,7 @@ namespace Sod.Worker
                 {
                     await _planner.Plan(_queue);
                     await _subscription.ReceiveTasks(_queue);
-                    await Task.Delay(100, stoppingToken);
+                    await Task.Delay(_interval, stoppingToken);
                 }
                 catch (Exception e)
                 {

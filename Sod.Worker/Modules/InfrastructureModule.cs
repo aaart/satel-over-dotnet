@@ -188,7 +188,10 @@ namespace Sod.Worker.Modules
             builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
 
             builder.RegisterType<RedisTaskQueue>().As<ITaskQueue>().SingleInstance();
-            builder.RegisterType<TaskPlanner>().As<ITaskPlanner>().SingleInstance();
+            builder
+                .Register(ctx => new TaskPlanner(ctx.Resolve<IConfigurationRoot>().GetValue<int>("Worker:IterationCount")))
+                .As<ITaskPlanner>()
+                .SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
             
             builder.RegisterType<ReadInputsHandler>().AsSelf().SingleInstance();

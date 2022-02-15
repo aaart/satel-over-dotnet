@@ -9,7 +9,7 @@ namespace Sod.Infrastructure.Storage
 {
     public class RedisTaskQueue : ITaskQueue
     {
-        private readonly RedisKey _key = new RedisKey(nameof(RedisTaskQueue));
+        private readonly RedisKey _key = new(nameof(RedisTaskQueue));
         private readonly IDatabaseAsync _database;
 
         public RedisTaskQueue(IDatabaseAsync database)
