@@ -38,7 +38,7 @@ namespace Sod.Infrastructure.Satel.Communication
 
             if ((Command)cmd != expectedCommand)
             {
-                return (CommandStatus.InvalidCommandReceived, Array.Empty<byte>());
+                return (CommandStatus.InvalidCommandReceived, new[] { cmd });
             }
             
             var receivedCrcHigh = data[byteCount - 4];
