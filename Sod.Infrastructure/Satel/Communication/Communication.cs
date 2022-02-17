@@ -33,7 +33,7 @@ namespace Sod.Infrastructure.Satel.Communication
             var cmd = data[2];
             if (!Enum.IsDefined(typeof(Command), (int)cmd))
             {
-                return (CommandStatus.NotSupportedCommand, Array.Empty<byte>());
+                return (CommandStatus.NotSupportedCommand, new[] { cmd });
             }
 
             if ((Command)cmd != expectedCommand)
