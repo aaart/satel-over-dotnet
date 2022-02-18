@@ -3,8 +3,8 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Tasks
 {
-    public interface IQueueSubscription
+    public interface IQueueProcessor
     {
-        Task ReceiveTasks(ITaskQueue queue);
+        Task Process(ITaskQueue queue);
     }
 }

@@ -12,17 +12,17 @@ namespace Sod.Worker
 {
     public class Worker : BackgroundService, ILoggingCapability
     {
-        private readonly IQueueSubscription _subscription;
+        private readonly IQueueProcessor _processor;
         private readonly ITaskPlanner _planner;
         private readonly ITaskQueue _queue;
         private readonly int _interval = 100;
 
         public Worker(
-            IQueueSubscription subscription,
+            IQueueProcessor processor,
             ITaskPlanner planner,
             ITaskQueue queue)
         {
-            _subscription = subscription;
+            _processor = processor;
             _planner = planner;
             _queue = queue;
             Logger = NullLogger.Instance;
@@ -37,7 +37,7 @@ namespace Sod.Worker
                 try
                 {
                     await _planner.Plan(_queue);
-                    await _subscription.ReceiveTasks(_queue);
+                    await _processor.Process(_queue);
                     await Task.Delay(_interval, stoppingToken);
                 }
                 catch (Exception e)

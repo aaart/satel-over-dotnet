@@ -4,16 +4,16 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Tasks
 {
-    public class QueueSubscription : IQueueSubscription
+    public class QueueProcessor : IQueueProcessor
     {
         private readonly IHandlerFactory _handlerFactory;
 
-        public QueueSubscription(IHandlerFactory handlerFactory)
+        public QueueProcessor(IHandlerFactory handlerFactory)
         {
             _handlerFactory = handlerFactory;
         }
         
-        public async Task ReceiveTasks(ITaskQueue queue)
+        public async Task Process(ITaskQueue queue)
         {
             var (exists, task) = await queue.DequeueAsync();
             while (exists)
