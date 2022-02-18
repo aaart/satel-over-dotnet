@@ -16,7 +16,6 @@ namespace Sod.Tests.Infrastructure.State.Handlers
     {
         private readonly Mock<IStore> _storeMock = new();
         private readonly Mock<IManipulator> _manipulatorMock = new();
-        private readonly Mock<IOutgoingEventPublisher> _eventPublisherMock = new();
 
         [Theory]
         [InlineData(CommandStatus.InvalidCrc)]
