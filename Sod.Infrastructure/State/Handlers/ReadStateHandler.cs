@@ -7,7 +7,7 @@ using Sod.Infrastructure.Enums;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Storage;
 
-namespace Sod.Infrastructure.Satel.State.Handlers
+namespace Sod.Infrastructure.State.Handlers
 {
     public abstract class ReadStateHandler : LoggingCapability, IHandler
     {
@@ -35,14 +35,13 @@ namespace Sod.Infrastructure.Satel.State.Handlers
             {
                 if (persistedState[i] != satelState[i])
                 {
-                    persistedState[i] = satelState[i];
-                    changes.Add($"{Convert.ToString(i + 1)}", persistedState[i]);
+                    changes.Add($"{Convert.ToString(i + 1)}", satelState[i]);
                 }
             }
 
             if (changes.Any())
             {
-                await _queue.Enqueue(new SatelTask(TaskType.UpdateStorage, new Dictionary<string, object> { { PersistedStateKey, persistedState } }));
+                await _queue.Enqueue(new SatelTask(TaskType.UpdateStorage, new Dictionary<string, object> { { PersistedStateKey, satelState } }));
                 await _queue.Enqueue(new SatelTask(NotificationTaskType, changes));
             }
         }
