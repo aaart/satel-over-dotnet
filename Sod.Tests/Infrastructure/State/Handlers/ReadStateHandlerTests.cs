@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using Sod.Infrastructure.Satel.Communication;
-using Sod.Infrastructure.State.Events.Outgoing;
 using Sod.Infrastructure.Storage;
 using Sod.Tests.Infrastructure.State.Handlers.ReadStateHandlerTestsHelpers;
 using Xunit;
 using static FluentAssertions.FluentActions;
-using Task = System.Threading.Tasks.Task;
 
 namespace Sod.Tests.Infrastructure.State.Handlers
 {
