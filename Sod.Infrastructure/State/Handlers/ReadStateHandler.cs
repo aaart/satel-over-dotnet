@@ -12,17 +12,15 @@ namespace Sod.Infrastructure.State.Handlers
     public abstract class ReadStateHandler : LoggingCapability, IHandler
     {
         private readonly IStore _store;
-        private readonly ITaskQueue _queue;
         private readonly IManipulator _manipulator;
 
-        protected ReadStateHandler(IStore store, ITaskQueue queue, IManipulator manipulator)
+        protected ReadStateHandler(IStore store, IManipulator manipulator)
         {
             _store = store;
-            _queue = queue;
             _manipulator = manipulator;
         }
 
-        public async Task Handle(IReadOnlyDictionary<string, object> parameters)
+        public async Task<IEnumerable<SatelTask>> Handle(IReadOnlyDictionary<string, object> parameters)
         {
             var (status, satelState) = await ManipulatorMethod(_manipulator);
             ValidateStatus(status);
@@ -41,9 +39,14 @@ namespace Sod.Infrastructure.State.Handlers
 
             if (changes.Any())
             {
-                await _queue.Enqueue(new SatelTask(TaskType.UpdateStorage, new Dictionary<string, object> { { PersistedStateKey, satelState } }));
-                await _queue.Enqueue(new SatelTask(NotificationTaskType, changes));
+                return new[]
+                {
+                    new SatelTask(TaskType.UpdateStorage, new Dictionary<string, object> { { PersistedStateKey, satelState } }),
+                    new SatelTask(NotificationTaskType, changes)
+                };
             }
+            
+            return Enumerable.Empty<SatelTask>();
         }
 
         protected abstract string PersistedStateKey { get; }

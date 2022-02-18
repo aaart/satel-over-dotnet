@@ -5,8 +5,8 @@ using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using Autofac;
 using Microsoft.Extensions.Configuration;
-using Sod.Infrastructure.Satel.State.Events.Incoming;
-using Sod.Infrastructure.Satel.State.Events.Mqtt;
+using Sod.Infrastructure.State.Events.Incoming;
+using Sod.Infrastructure.State.Events.Mqtt;
 using Module = Autofac.Module;
 
 namespace Sod.Worker.Modules

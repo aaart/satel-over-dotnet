@@ -1,0 +1,21 @@
+﻿using System.Threading.Tasks;
+using Sod.Infrastructure.Enums;
+using Sod.Infrastructure.Satel.Communication;
+using Sod.Infrastructure.Storage;
+
+namespace Sod.Infrastructure.State.Handlers
+{
+    public class ReadInputsHandler : ReadStateHandler
+    {
+        public ReadInputsHandler(
+            IStore store, 
+            IManipulator manipulator) 
+            : base(store, manipulator)
+        {
+        }
+
+        protected override string PersistedStateKey => Constants.Store.InputsState;
+        protected override TaskType NotificationTaskType => TaskType.NotifyInputsChanged;
+        protected override Task<(CommandStatus, bool[])> ManipulatorMethod(IManipulator manipulator) => manipulator.ReadInputs();
+    }
+}

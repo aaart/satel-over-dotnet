@@ -1,0 +1,31 @@
+﻿using System.Threading.Tasks;
+using Sod.Infrastructure.State.Handlers;
+using Sod.Infrastructure.Storage;
+
+namespace Sod.Infrastructure.State.Tasks
+{
+    public class QueueSubscription : IQueueSubscription
+    {
+        private readonly IHandlerFactory _handlerFactory;
+
+        public QueueSubscription(IHandlerFactory handlerFactory)
+        {
+            _handlerFactory = handlerFactory;
+        }
+        
+        public async Task ReceiveTasks(ITaskQueue queue)
+        {
+            var (exists, task) = await queue.DequeueAsync();
+            while (exists)
+            {
+                var handler = _handlerFactory.CreateHandler(task!.Type);
+                var tasks = await handler.Handle(task!.Parameters);
+                foreach (var newTask in tasks)
+                {
+                    await queue.EnqueueAsync(newTask);
+                }
+                (exists, task) = await queue.DequeueAsync();
+            }
+        }
+    }
+}

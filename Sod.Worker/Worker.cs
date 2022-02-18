@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sod.Infrastructure.Capabilities;
-using Sod.Infrastructure.Satel.State.Tasks;
+using Sod.Infrastructure.State.Tasks;
 using Sod.Infrastructure.Storage;
 
 namespace Sod.Worker

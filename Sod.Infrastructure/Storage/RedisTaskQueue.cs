@@ -17,9 +17,9 @@ namespace Sod.Infrastructure.Storage
             _database = database;
         }
 
-        public async Task Enqueue(SatelTask satelTask) => await _database.ListRightPushAsync(_key, new RedisValue(JsonConvert.SerializeObject(satelTask)));
+        public async Task EnqueueAsync(SatelTask satelTask) => await _database.ListRightPushAsync(_key, new RedisValue(JsonConvert.SerializeObject(satelTask)));
 
-        public async Task<(bool exists, SatelTask? value)> Dequeue()
+        public async Task<(bool exists, SatelTask? value)> DequeueAsync()
         {
             var head = await _database.ListLeftPopAsync(_key);
             return (head.HasValue, head.HasValue ? JsonConvert.DeserializeObject<SatelTask>(head.ToString()) : null);
