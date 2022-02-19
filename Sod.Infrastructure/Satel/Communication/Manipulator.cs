@@ -25,7 +25,6 @@ namespace Sod.Infrastructure.Satel.Communication
         
         public async Task<(CommandStatus status, bool[] outputsState)> ReadOutputs()
         {
-            Logger.LogDebug("reading outputs");
             return await _genericCommunicationInterface.Execute(
                 new CommunicationMessage(Command.OutputsState, Array.Empty<byte>(), Array.Empty<byte>()),
                 new CommunicationDefaultResponse<bool[]>(Array.Empty<bool>(), Command.OutputsState),
@@ -34,7 +33,6 @@ namespace Sod.Infrastructure.Satel.Communication
 
         public async Task<(CommandStatus status, bool[] inputsState)> ReadInputs()
         {
-            Logger.LogDebug("reading inputs");
             return await _genericCommunicationInterface.Execute(
                 new CommunicationMessage(Command.ZonesViolation, Array.Empty<byte>(), Array.Empty<byte>()),
                 new CommunicationDefaultResponse<bool[]>(Array.Empty<bool>(), Command.ZonesViolation),
