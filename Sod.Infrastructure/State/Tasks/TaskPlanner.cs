@@ -9,12 +9,12 @@ namespace Sod.Infrastructure.State.Tasks
 {
     public class TaskPlanner : LoggingCapability, ITaskPlanner
     {
-        private readonly int _maxIterationCount;
+        private readonly int _iterationCount;
         private int _iteration;
 
-        public TaskPlanner(int maxIterationCount)
+        public TaskPlanner(int iterationCount)
         {
-            _maxIterationCount = maxIterationCount;
+            _iterationCount = iterationCount;
         }
 
         public Task Plan(ITaskQueue queue)
@@ -27,7 +27,7 @@ namespace Sod.Infrastructure.State.Tasks
                     queue.EnqueueAsync(new SatelTask(TaskType.ReadInputs));
                 }
 
-                if (++_iteration == _maxIterationCount)
+                if (++_iteration == _iterationCount)
                 {
                     _iteration = 0;
                 }
