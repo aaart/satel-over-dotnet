@@ -2,9 +2,9 @@
 
 namespace Sod.Infrastructure.State.Handlers
 {
-    public class InputsChangeNotificationHandler : ChangeNotificationHandler
+    public class InputsChangeNotificationStateHandler : ChangeNotificationStateHandler
     {
-        public InputsChangeNotificationHandler(IOutgoingEventPublisher eventPublisher) 
+        public InputsChangeNotificationStateHandler(IOutgoingEventPublisher eventPublisher) 
             : base(eventPublisher)
         {
         }

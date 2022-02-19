@@ -9,12 +9,12 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Handlers
 {
-    public abstract class ReadStateHandler : LoggingCapability, IHandler
+    public abstract class ReadStateStateHandler : LoggingCapability, IStateHandler
     {
         private readonly IStore _store;
         private readonly IManipulator _manipulator;
 
-        protected ReadStateHandler(IStore store, IManipulator manipulator)
+        protected ReadStateStateHandler(IStore store, IManipulator manipulator)
         {
             _store = store;
             _manipulator = manipulator;

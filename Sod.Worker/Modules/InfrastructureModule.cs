@@ -187,12 +187,12 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
             
-            builder.RegisterType<ReadInputsHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<ReadOutputsHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<UpdateStorageHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<UpdateOutputsHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<InputsChangeNotificationHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<OutputsChangeNotificationHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ReadInputsStateHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ReadOutputsStateHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<UpdateStorageStateHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<UpdateOutputsStateHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<InputsChangeNotificationStateHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<OutputsChangeNotificationStateHandler>().AsSelf().SingleInstance();
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
         }
     }

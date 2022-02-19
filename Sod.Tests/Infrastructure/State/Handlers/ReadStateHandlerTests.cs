@@ -24,7 +24,7 @@ namespace Sod.Tests.Infrastructure.State.Handlers
         [InlineData(CommandStatus.NotSupportedCommand)]
         public async Task GivenStateReadStep_WhenManipulatorResultDoesNotIndicateSuccess_ExpectExceptionThrown(CommandStatus commandStatus)
         {
-            var testReadState = new TestReadStateHandler(
+            var testReadState = new TestReadStateStateHandler(
                 _storeMock.Object, 
                 _manipulatorMock.Object, 
                 _ => Task.FromResult((commandStatus, Array.Empty<bool>())));
@@ -39,7 +39,7 @@ namespace Sod.Tests.Infrastructure.State.Handlers
         {
             _storeMock.Setup(x => x.GetAsync<bool[]>(It.IsAny<string>())).Returns(Task.FromResult(new bool[1]));
             
-            var testReadState = new TestReadStateHandler(
+            var testReadState = new TestReadStateStateHandler(
                 _storeMock.Object, 
                 _manipulatorMock.Object, 
                 _ => Task.FromResult((CommandStatus.Processed, new bool[2])));

@@ -11,14 +11,14 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Handlers
 {
-    public class UpdateOutputsHandler : LoggingCapability, IHandler
+    public class UpdateOutputsStateHandler : LoggingCapability, IStateHandler
     {
         private readonly ITaskQueue _queue;
         private readonly IManipulator _manipulator;
 
-        public UpdateOutputsHandler(ITaskQueue queue, IManipulator manipulator)
+        public UpdateOutputsStateHandler(ITaskQueue queue, IManipulator manipulator)
         {
-            Logger.LogDebug($"{nameof(UpdateOutputsHandler)} is executing.");
+            Logger.LogDebug($"{nameof(UpdateOutputsStateHandler)} is executing.");
             _queue = queue;
             _manipulator = manipulator;
         }

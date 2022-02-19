@@ -8,11 +8,11 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Handlers
 {
-    public abstract class ChangeNotificationHandler : LoggingCapability, IHandler
+    public abstract class ChangeNotificationStateHandler : LoggingCapability, IStateHandler
     {
         private readonly IOutgoingEventPublisher _eventPublisher;
 
-        protected ChangeNotificationHandler(IOutgoingEventPublisher eventPublisher)
+        protected ChangeNotificationStateHandler(IOutgoingEventPublisher eventPublisher)
         {
             _eventPublisher = eventPublisher;
         }

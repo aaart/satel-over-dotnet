@@ -5,9 +5,9 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Handlers
 {
-    public class ReadInputsHandler : ReadStateHandler
+    public class ReadInputsStateHandler : ReadStateStateHandler
     {
-        public ReadInputsHandler(
+        public ReadInputsStateHandler(
             IStore store, 
             IManipulator manipulator) 
             : base(store, manipulator)

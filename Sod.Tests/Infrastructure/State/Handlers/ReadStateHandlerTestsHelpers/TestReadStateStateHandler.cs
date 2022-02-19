@@ -10,11 +10,11 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Tests.Infrastructure.State.Handlers.ReadStateHandlerTestsHelpers
 {
-    public class TestReadStateHandler : ReadStateHandler
+    public class TestReadStateStateHandler : ReadStateStateHandler
     {
         private readonly Func<IManipulator, Task<(CommandStatus, bool[])>> _manipulatorMethodImpl;
 
-        public TestReadStateHandler(
+        public TestReadStateStateHandler(
             IStore store, 
             IManipulator manipulator,
             Func<IManipulator, Task<(CommandStatus, bool[])>> manipulatorMethodImpl) 

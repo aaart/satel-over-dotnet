@@ -8,11 +8,11 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Handlers
 {
-    public class UpdateStorageHandler : LoggingCapability, IHandler
+    public class UpdateStorageStateHandler : LoggingCapability, IStateHandler
     {
         private readonly IStore _store;
 
-        public UpdateStorageHandler(IStore store)
+        public UpdateStorageStateHandler(IStore store)
         {
             _store = store;
         }

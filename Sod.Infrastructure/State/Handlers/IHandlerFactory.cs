@@ -4,6 +4,6 @@ namespace Sod.Infrastructure.State.Handlers
 {
     public interface IHandlerFactory
     {
-        IHandler CreateHandler(TaskType type);
+        IStateHandler CreateHandler(TaskType type);
     }
 }
