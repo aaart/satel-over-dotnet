@@ -24,7 +24,7 @@ namespace Sod.Tests.Infrastructure.State.Handlers.ReadStateHandlerTestsHelpers
         }
         
         protected override string PersistedStateKey => string.Empty;
-        protected override TaskType NotificationTaskType => TaskType.ReadInputs;
+        protected override TaskType NotificationTaskType => TaskType.NotifyInputsChanged;
 
         protected override Task<(CommandStatus, bool[])> ManipulatorMethod(IManipulator manipulator) => _manipulatorMethodImpl(manipulator);
 
