@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Sod.Infrastructure.Capabilities;
+using Sod.Infrastructure.Configuration;
 using Sod.Infrastructure.Enums;
 using Sod.Infrastructure.Storage;
 using Task = System.Threading.Tasks.Task;
@@ -9,12 +11,12 @@ namespace Sod.Infrastructure.State.Tasks
 {
     public class TaskPlanner : LoggingCapability, ITaskPlanner
     {
-        private readonly int _iterationCount;
         private int _iteration;
+        private readonly TaskPlannerOptions _options;
 
-        public TaskPlanner(int iterationCount)
+        public TaskPlanner(IOptions<TaskPlannerOptions> opt)
         {
-            _iterationCount = iterationCount;
+            _options = opt.Value;
         }
 
         public Task Plan(ITaskQueue queue)
@@ -27,7 +29,7 @@ namespace Sod.Infrastructure.State.Tasks
                     queue.EnqueueAsync(new SatelTask(TaskType.ReadInputs));
                 }
 
-                if (++_iteration == _iterationCount)
+                if (++_iteration == _options.IterationCount)
                 {
                     _iteration = 0;
                 }

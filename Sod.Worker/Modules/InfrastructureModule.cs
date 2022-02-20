@@ -182,7 +182,7 @@ namespace Sod.Worker.Modules
 
             builder.RegisterType<RedisTaskQueue>().As<ITaskQueue>().SingleInstance();
             builder
-                .Register(ctx => new TaskPlanner(ctx.Resolve<IConfigurationRoot>().GetValue<int>("Worker:IterationCount")))
+                .RegisterType<TaskPlanner>()
                 .As<ITaskPlanner>()
                 .SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
