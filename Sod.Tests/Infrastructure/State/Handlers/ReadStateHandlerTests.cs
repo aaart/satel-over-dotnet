@@ -19,13 +19,10 @@ namespace Sod.Tests.Infrastructure.State.Handlers
         private readonly Mock<IManipulator> _manipulatorMock = new();
 
         [Theory]
-        [InlineData(CommandStatus.InvalidCrc)]
-        [InlineData(CommandStatus.InvalidFrame)]
-        [InlineData(CommandStatus.NotSent)]
-        [InlineData(CommandStatus.InvalidCommandReceived)]
-        [InlineData(CommandStatus.NotSupportedCommand)]
-        public async Task GivenReadStateHandler_WhenManipulatorResultDoesNotIndicateSuccess_ExpectExceptionThrown(CommandStatus commandStatus)
+        [MemberData(nameof(CreateNotSuccessfulStatuses))]
+        public async Task GivenReadStateHandler_WhenManipulatorResultDoesNotIndicateSuccess_ExpectExceptionThrown(string commandStatusName)
         {
+            var commandStatus = Enum.Parse<CommandStatus>(commandStatusName);
             var testReadStateHandler = new TestReadStateStateHandler(
                 _storeMock.Object,
                 _manipulatorMock.Object,
@@ -89,5 +86,10 @@ namespace Sod.Tests.Infrastructure.State.Handlers
             tasks[0].Type.Should().Be(TaskType.UpdateStorage);
             tasks[1].Type.Should().Be(TaskType.NotifyInputsChanged);
         }
+
+        public static IEnumerable<object[]> CreateNotSuccessfulStatuses() => 
+            Enum.GetNames<CommandStatus>()
+                .Where(x => x != Enum.GetName(CommandStatus.Processed))
+                .Select(x => new object[] { x });
     }
 }
