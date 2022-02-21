@@ -30,13 +30,18 @@ namespace Sod.Infrastructure.State.Tasks
 
         public async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var iteration = 0;
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    await _planner.Plan(_queue);
+                    await _planner.Plan(_queue, iteration);
                     await _processor.Process(_queue);
                     await Task.Delay(_options.Interval, stoppingToken);
+                    if (iteration == _options.IterationCount)
+                    {
+                        iteration = 0;
+                    }
                 }
                 catch (Exception e)
                 {

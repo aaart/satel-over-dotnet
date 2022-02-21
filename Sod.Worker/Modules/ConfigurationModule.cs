@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using Autofac;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Sod.Infrastructure.Configuration;
 using Sod.Infrastructure.State.Events.Incoming;
 using Sod.Infrastructure.State.Events.Mqtt;
 using Module = Autofac.Module;
@@ -24,6 +26,9 @@ namespace Sod.Worker.Modules
                     .Build())
                 .As<IConfigurationRoot>()
                 .SingleInstance();
+            
+            builder.RegisterOptions<LoopOptions>();
+            builder.RegisterOptions<MqttOptions>();
 
             builder
                 .Register(ctx =>

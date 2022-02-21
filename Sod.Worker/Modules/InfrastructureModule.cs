@@ -7,10 +7,12 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Autofac;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MQTTnet;
 using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
 using Newtonsoft.Json;
+using Sod.Infrastructure.Configuration;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.Socket;
 using Sod.Infrastructure.State.Events.Incoming;
@@ -109,15 +111,16 @@ namespace Sod.Worker.Modules
             builder
                 .Register(ctx =>
                 {
-                    var cfg = ctx.Resolve<IConfigurationRoot>();
+                    var cfg = ctx.Resolve<IOptions<MqttOptions>>().Value;
+                    
                     var optionsBuilder = new MqttClientOptionsBuilder()
-                        .WithCredentials(cfg.GetValue<string>("Mqtt:User"), cfg.GetValue<string>("Mqtt:Password"))
-                        .WithTcpServer(cfg.GetValue<string>("Mqtt:Host"), cfg.GetValue<int>("Mqtt:Port"));
-                    if (cfg.GetValue<bool>("Mqtt:UseTLS"))
+                        .WithCredentials(cfg.User, cfg.Password)
+                        .WithTcpServer(cfg.Host, cfg.Port);
+                    if (cfg.CrtPath != null)
                     {
                         optionsBuilder.WithTls(x =>
                         {
-                            X509Certificate2 caCrt = new X509Certificate2(File.ReadAllBytes("ca.crt"));
+                            X509Certificate2 caCrt = new X509Certificate2(File.ReadAllBytes(cfg.CrtPath));
                             x.UseTls = true;
                             x.SslProtocol = System.Security.Authentication.SslProtocols.Tls12;
                             x.CertificateValidationHandler = (certContext) =>

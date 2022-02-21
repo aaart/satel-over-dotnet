@@ -5,6 +5,6 @@ namespace Sod.Infrastructure.State.Tasks
 {
     public interface ITaskPlanner
     {
-        Task Plan(ITaskQueue queue);
+        Task Plan(ITaskQueue queue, int iteration);
     }
 }
