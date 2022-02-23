@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sod.Infrastructure.Capabilities;
-using Sod.Infrastructure.Configuration;
 using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Tasks
@@ -20,12 +19,12 @@ namespace Sod.Infrastructure.State.Tasks
             IQueueProcessor processor,
             ITaskPlanner planner,
             ITaskQueue queue,
-            IOptions<LoopOptions> opt)
+            LoopOptions opt)
         {
             _processor = processor;
             _planner = planner;
             _queue = queue;
-            _options = opt.Value;
+            _options = opt;
         }
 
         public async Task ExecuteAsync(CancellationToken stoppingToken)

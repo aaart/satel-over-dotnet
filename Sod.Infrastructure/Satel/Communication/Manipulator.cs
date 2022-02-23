@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sod.Infrastructure.Capabilities;
-using Sod.Infrastructure.Configuration;
 using Sod.Infrastructure.Satel.Socket;
 
 namespace Sod.Infrastructure.Satel.Communication
@@ -15,10 +14,10 @@ namespace Sod.Infrastructure.Satel.Communication
         
         
         
-        public Manipulator(GenericCommunicationInterface genericCommunicationInterface, IOptions<SatelUserCodeOptions> options)
+        public Manipulator(GenericCommunicationInterface genericCommunicationInterface, SatelUserCodeOptions options)
         {
             _genericCommunicationInterface = genericCommunicationInterface;
-            _userCode = (!string.IsNullOrEmpty(options.Value.UserCode) ? Translation.CreateUserCodeBinaryRepresentation(options.Value.UserCode) : null) ?? throw new ArgumentException("Provided user code is empty.");
+            _userCode = (!string.IsNullOrEmpty(options.UserCode) ? Translation.CreateUserCodeBinaryRepresentation(options.UserCode) : null) ?? throw new ArgumentException("Provided user code is empty.");
         }
         
         public async Task<(CommandStatus status, bool[] outputsState)> ReadOutputs()

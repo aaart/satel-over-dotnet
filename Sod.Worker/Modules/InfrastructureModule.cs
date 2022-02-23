@@ -12,7 +12,6 @@ using MQTTnet;
 using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
 using Newtonsoft.Json;
-using Sod.Infrastructure.Configuration;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.Socket;
 using Sod.Infrastructure.State.Events.Incoming;
@@ -90,8 +89,8 @@ namespace Sod.Worker.Modules
                 .SingleInstance()
                 .OnActivated(args =>
                 {
-                    var cfg = args.Context.Resolve<IOptions<SatelConnectionOptions>>();
-                    args.Instance.Connect(cfg.Value.Address, cfg.Value.Port);
+                    var cfg = args.Context.Resolve<SatelConnectionOptions>();
+                    args.Instance.Connect(cfg.Address, cfg.Port);
                 });
             
             builder.RegisterType<SocketSender>().As<ISocketSender>().SingleInstance();
@@ -103,7 +102,7 @@ namespace Sod.Worker.Modules
             builder
                 .Register(ctx =>
                 {
-                    var cfg = ctx.Resolve<IOptions<MqttOptions>>().Value;
+                    var cfg = ctx.Resolve<MqttOptions>();
                     
                     var optionsBuilder = new MqttClientOptionsBuilder()
                         .WithCredentials(cfg.User, cfg.Password)

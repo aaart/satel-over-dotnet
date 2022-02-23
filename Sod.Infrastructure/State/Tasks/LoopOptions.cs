@@ -1,4 +1,4 @@
-﻿namespace Sod.Infrastructure.Configuration
+﻿namespace Sod.Infrastructure.State.Tasks
 {
     public class LoopOptions
     {

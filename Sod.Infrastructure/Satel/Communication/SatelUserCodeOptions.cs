@@ -1,4 +1,4 @@
-﻿namespace Sod.Infrastructure.Configuration
+﻿namespace Sod.Infrastructure.Satel.Communication
 {
     public class SatelUserCodeOptions
     {

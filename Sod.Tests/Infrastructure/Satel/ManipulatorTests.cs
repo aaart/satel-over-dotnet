@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
-using Sod.Infrastructure.Configuration;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Tests.Infrastructure.Satel.Mocks;
 using Xunit;
@@ -18,7 +17,7 @@ namespace Sod.Tests.Infrastructure.Satel
             var socketSender = new MockSocketSender(frameToSend => Task.FromResult(1));
             var socketReceiver = new MockSocketReceiver(() => Task.FromResult((0, new ArraySegment<byte>())));
 
-            Invoking(() => new Manipulator(new GenericCommunicationInterface(socketReceiver, socketSender), new OptionsWrapper<SatelUserCodeOptions>(new SatelUserCodeOptions())))
+            Invoking(() => new Manipulator(new GenericCommunicationInterface(socketReceiver, socketSender), new SatelUserCodeOptions()))
                 .Should()
                 .Throw<ArgumentException>();
         }
@@ -29,7 +28,7 @@ namespace Sod.Tests.Infrastructure.Satel
             var socketSender = new MockSocketSender(frameToSend => Task.FromResult(1));
             var socketReceiver = new MockSocketReceiver(() => Task.FromResult((0, new ArraySegment<byte>())));
 
-            Invoking(() => new Manipulator(new GenericCommunicationInterface(socketReceiver, socketSender), new OptionsWrapper<SatelUserCodeOptions>(new SatelUserCodeOptions { UserCode = "" })))
+            Invoking(() => new Manipulator(new GenericCommunicationInterface(socketReceiver, socketSender), new SatelUserCodeOptions { UserCode = "" }))
                 .Should()
                 .Throw<ArgumentException>();
         }

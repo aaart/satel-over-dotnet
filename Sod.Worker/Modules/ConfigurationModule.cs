@@ -6,9 +6,10 @@ using System.Reflection.Metadata.Ecma335;
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using Sod.Infrastructure.Configuration;
+using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.State.Events.Incoming;
 using Sod.Infrastructure.State.Events.Mqtt;
+using Sod.Infrastructure.State.Tasks;
 using Module = Autofac.Module;
 
 namespace Sod.Worker.Modules
@@ -27,10 +28,10 @@ namespace Sod.Worker.Modules
                 .As<IConfigurationRoot>()
                 .SingleInstance();
             
-            builder.RegisterOptions<LoopOptions>();
-            builder.RegisterOptions<MqttOptions>();
-            builder.RegisterOptions<SatelConnectionOptions>("Satel");
-            builder.RegisterOptions<SatelUserCodeOptions>("Satel");
+            builder.RegisterConfiguration<LoopOptions>("Loop");
+            builder.RegisterConfiguration<MqttOptions>("Mqtt");
+            builder.RegisterConfiguration<SatelConnectionOptions>("Satel");
+            builder.RegisterConfiguration<SatelUserCodeOptions>("Satel");
 
             builder
                 .Register(ctx =>

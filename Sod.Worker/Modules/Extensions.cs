@@ -7,13 +7,9 @@ namespace Sod.Worker.Modules
 {
     public static class Extensions
     {
-        public static void RegisterOptions<T>(this ContainerBuilder builder, string section = null) where T : class
+        public static void RegisterConfiguration<T>(this ContainerBuilder builder, string section) where T : class
         {
-            section ??= typeof(T).Name.Replace("Options", String.Empty);
-            builder.Register(
-                ctx =>
-                    Options.Create(
-                        ctx.Resolve<IConfigurationRoot>().GetSection(section).Get<T>()));
+            builder.Register(ctx => ctx.Resolve<IConfigurationRoot>().GetSection(section).Get<T>());
         }
     }
 }
