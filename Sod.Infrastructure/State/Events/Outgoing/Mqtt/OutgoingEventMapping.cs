@@ -1,4 +1,4 @@
-﻿namespace Sod.Infrastructure.State.Events.Mqtt
+﻿namespace Sod.Infrastructure.State.Events.Outgoing.Mqtt
 {
     public record OutgoingEventMapping
     {

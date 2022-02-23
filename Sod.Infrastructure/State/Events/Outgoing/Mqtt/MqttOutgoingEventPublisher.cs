@@ -3,9 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client.Publishing;
-using Sod.Infrastructure.State.Events.Outgoing;
 
-namespace Sod.Infrastructure.State.Events.Mqtt
+namespace Sod.Infrastructure.State.Events.Outgoing.Mqtt
 {
     public class MqttOutgoingEventPublisher : IOutgoingEventPublisher
     {

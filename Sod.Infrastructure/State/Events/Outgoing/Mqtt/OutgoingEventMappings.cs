@@ -2,9 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Sod.Infrastructure.State.Events.Outgoing;
 
-namespace Sod.Infrastructure.State.Events.Mqtt
+namespace Sod.Infrastructure.State.Events.Outgoing.Mqtt
 {
     public class OutgoingEventMappings : IEnumerable<OutgoingEventMapping>
     {

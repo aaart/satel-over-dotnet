@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.State.Events.Incoming;
-using Sod.Infrastructure.State.Events.Mqtt;
+using Sod.Infrastructure.State.Events.Outgoing.Mqtt;
 using Sod.Infrastructure.State.Tasks;
 using Module = Autofac.Module;
 
