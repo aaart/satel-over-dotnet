@@ -18,7 +18,6 @@ namespace Sod.Infrastructure.State.Events.Incoming
             Logger.LogDebug("an event received.");
             foreach (var handler in _handlerMappings.GetHandlers(incomingEvent.Topic))
             {
-                
                 await handler.HandleAsync(incomingEvent);
             }
         }
