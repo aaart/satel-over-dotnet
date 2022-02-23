@@ -29,6 +29,8 @@ namespace Sod.Worker.Modules
             
             builder.RegisterOptions<LoopOptions>();
             builder.RegisterOptions<MqttOptions>();
+            builder.RegisterOptions<SatelConnectionOptions>("Satel");
+            builder.RegisterOptions<SatelUserCodeOptions>("Satel");
 
             builder
                 .Register(ctx =>

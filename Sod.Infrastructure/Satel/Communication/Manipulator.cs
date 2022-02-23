@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Sod.Infrastructure.Capabilities;
+using Sod.Infrastructure.Configuration;
 using Sod.Infrastructure.Satel.Socket;
 
 namespace Sod.Infrastructure.Satel.Communication
@@ -10,17 +12,13 @@ namespace Sod.Infrastructure.Satel.Communication
     {
         private readonly byte[] _userCode;
         private readonly GenericCommunicationInterface _genericCommunicationInterface;
-
-        public Manipulator(GenericCommunicationInterface genericCommunicationInterface)
-            : this(genericCommunicationInterface, string.Empty)
-        {
-            _genericCommunicationInterface = genericCommunicationInterface;
-        }
         
-        public Manipulator(GenericCommunicationInterface genericCommunicationInterface, string userCode)
+        
+        
+        public Manipulator(GenericCommunicationInterface genericCommunicationInterface, IOptions<SatelUserCodeOptions> options)
         {
             _genericCommunicationInterface = genericCommunicationInterface;
-            _userCode = !string.IsNullOrEmpty(userCode) ? Translation.CreateUserCodeBinaryRepresentation(userCode) : Array.Empty<byte>();
+            _userCode = (!string.IsNullOrEmpty(options.Value.UserCode) ? Translation.CreateUserCodeBinaryRepresentation(options.Value.UserCode) : null) ?? throw new ArgumentException("Provided user code is empty.");
         }
         
         public async Task<(CommandStatus status, bool[] outputsState)> ReadOutputs()

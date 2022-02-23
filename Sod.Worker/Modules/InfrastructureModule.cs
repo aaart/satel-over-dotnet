@@ -35,8 +35,7 @@ namespace Sod.Worker.Modules
             builder
                 .Register(ctx =>
                 {
-                    var cfg = ctx.Resolve<IConfigurationRoot>();
-                    var connString = cfg.GetValue<string>("ConnectionStrings:Redis");
+                    var connString = ctx.Resolve<IConfigurationRoot>().GetConnectionString("Redis");
                     return ConnectionMultiplexer.Connect(connString);
                 })
                 .As<ConnectionMultiplexer>()
@@ -84,29 +83,22 @@ namespace Sod.Worker.Modules
             builder
                 .Register(ctx =>
                 {
-                    var cfg = ctx.Resolve<IConfigurationRoot>();
-                    var address = cfg.GetValue<string>("Satel:Address");
-                    var port = cfg.GetValue<int>("Satel:Port");
-                    
                     var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-                    socket.Connect(address, port);
                     return socket;
                 })
                 .As<Socket>()
-                .SingleInstance();
+                .SingleInstance()
+                .OnActivated(args =>
+                {
+                    var cfg = args.Context.Resolve<IOptions<SatelConnectionOptions>>();
+                    args.Instance.Connect(cfg.Value.Address, cfg.Value.Port);
+                });
             
             builder.RegisterType<SocketSender>().As<ISocketSender>().SingleInstance();
             builder.RegisterType<SocketReceiver>().As<ISocketReceiver>().SingleInstance();
             builder.RegisterType<GenericCommunicationInterface>().AsSelf().SingleInstance();
             
-            builder
-                .Register(ctx =>
-                {
-                    var cfg = ctx.Resolve<IConfigurationRoot>();
-                    return new Manipulator(ctx.Resolve<GenericCommunicationInterface>(), cfg.GetValue<string>("Satel:UserCode"));
-                })
-                .As<IManipulator>()
-                .SingleInstance();
+            builder.RegisterType<Manipulator>().As<IManipulator>().SingleInstance();
 
             builder
                 .Register(ctx =>
