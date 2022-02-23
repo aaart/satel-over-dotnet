@@ -6,7 +6,7 @@ using Sod.Infrastructure.Capabilities;
 using Sod.Infrastructure.State.Events.Outgoing;
 using Sod.Infrastructure.Storage;
 
-namespace Sod.Infrastructure.State.Handlers
+namespace Sod.Infrastructure.State.Handlers.Notifications
 {
     public abstract class ChangeNotificationStateHandler : LoggingCapability, IStateHandler
     {

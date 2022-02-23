@@ -3,7 +3,7 @@ using Sod.Infrastructure.Enums;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Storage;
 
-namespace Sod.Infrastructure.State.Handlers
+namespace Sod.Infrastructure.State.Handlers.StateRead
 {
     public class ReadInputsStateHandler : ReadStateStateHandler
     {

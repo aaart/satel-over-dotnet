@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Capabilities;
 using Sod.Infrastructure.Storage;
 
-namespace Sod.Infrastructure.State.Handlers
+namespace Sod.Infrastructure.State.Handlers.StorageUpdate
 {
     public class UpdateStorageStateHandler : LoggingCapability, IStateHandler
     {
