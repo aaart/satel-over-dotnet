@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Sod.Infrastructure.Storage;
 
-namespace Sod.Infrastructure.State.Handlers
+namespace Sod.Infrastructure.State.Tasks.Handlers
 {
     public interface IStateHandler
     {

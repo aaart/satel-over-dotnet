@@ -1,12 +1,12 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Sod.Infrastructure.Enums;
-using Sod.Infrastructure.State.Handlers.Notifications;
-using Sod.Infrastructure.State.Handlers.OutputsUpdate;
-using Sod.Infrastructure.State.Handlers.StateRead;
-using Sod.Infrastructure.State.Handlers.StorageUpdate;
+using Sod.Infrastructure.State.Tasks.Handlers.Notifications;
+using Sod.Infrastructure.State.Tasks.Handlers.OutputsUpdate;
+using Sod.Infrastructure.State.Tasks.Handlers.StateRead;
+using Sod.Infrastructure.State.Tasks.Handlers.StorageUpdate;
 
-namespace Sod.Infrastructure.State.Handlers
+namespace Sod.Infrastructure.State.Tasks.Handlers
 {
     public class HandlerFactory : IHandlerFactory
     {

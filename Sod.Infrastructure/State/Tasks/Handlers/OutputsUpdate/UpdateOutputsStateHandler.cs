@@ -9,7 +9,7 @@ using Sod.Infrastructure.Satel;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Storage;
 
-namespace Sod.Infrastructure.State.Handlers.OutputsUpdate
+namespace Sod.Infrastructure.State.Tasks.Handlers.OutputsUpdate
 {
     public class UpdateOutputsStateHandler : LoggingCapability, IStateHandler
     {

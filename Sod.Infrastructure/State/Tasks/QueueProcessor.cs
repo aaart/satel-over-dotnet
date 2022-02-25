@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Sod.Infrastructure.State.Handlers;
+using Sod.Infrastructure.State.Tasks.Handlers;
 using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Tasks

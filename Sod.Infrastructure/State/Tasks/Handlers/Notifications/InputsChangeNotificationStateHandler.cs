@@ -1,6 +1,6 @@
 ﻿using Sod.Infrastructure.State.Events.Outgoing;
 
-namespace Sod.Infrastructure.State.Handlers.Notifications
+namespace Sod.Infrastructure.State.Tasks.Handlers.Notifications
 {
     public class InputsChangeNotificationStateHandler : ChangeNotificationStateHandler
     {

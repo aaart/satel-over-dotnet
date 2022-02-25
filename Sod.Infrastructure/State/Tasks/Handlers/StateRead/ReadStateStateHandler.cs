@@ -7,7 +7,7 @@ using Sod.Infrastructure.Enums;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Storage;
 
-namespace Sod.Infrastructure.State.Handlers.StateRead
+namespace Sod.Infrastructure.State.Tasks.Handlers.StateRead
 {
     public abstract class ReadStateStateHandler : LoggingCapability, IStateHandler
     {

@@ -1,6 +1,6 @@
 ﻿using Sod.Infrastructure.Enums;
 
-namespace Sod.Infrastructure.State.Handlers
+namespace Sod.Infrastructure.State.Tasks.Handlers
 {
     public interface IHandlerFactory
     {

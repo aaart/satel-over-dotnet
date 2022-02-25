@@ -5,8 +5,7 @@ using System.Xml;
 using Sod.Infrastructure.Enums;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.State.Events.Outgoing;
-using Sod.Infrastructure.State.Handlers;
-using Sod.Infrastructure.State.Handlers.StateRead;
+using Sod.Infrastructure.State.Tasks.Handlers.StateRead;
 using Sod.Infrastructure.Storage;
 
 namespace Sod.Tests.Infrastructure.State.Handlers.ReadStateHandlerTestsHelpers
