@@ -1,5 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Sod.Infrastructure.Satel;
+using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
+using Sod.Model.Events.Outgoing;
+using Sod.Model.Tasks.Types;
 
 namespace Sod.Model.Events.Incoming.Events.Handlers
 {
@@ -14,9 +19,13 @@ namespace Sod.Model.Events.Incoming.Events.Handlers
             _queue = queue;
         }
         
-        public Task HandleAsync(IncomingEvent incomingEvent)
+        public async Task HandleAsync(IncomingEvent incomingEvent)
         {
-            return Task.CompletedTask;
+            var data = new OutputsUpdateTask(
+                new List<IOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(incomingEvent.Payload) } },
+                false,
+                OutgoingEventType.OutputsStateChanged);
+            await _queue.EnqueueAsync(data);
         }
     }
 }
