@@ -2,10 +2,10 @@
 {
     public class MqttOptions
     {
-        public string Host { get; set; } = null!;
-        public int Port { get; set; }
-        public string User { get; set; } = null!;
-        public string Password { get; set; } = null!;
-        public string? CrtPath { get; set; }
+        public string Host { get; init; } = null!;
+        public int Port { get; init; }
+        public string User { get; init; } = null!;
+        public string Password { get; init; } = null!;
+        public string? CrtPath { get; init; } = null;
     }
 }
