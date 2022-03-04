@@ -4,14 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
-using Newtonsoft.Json.Linq;
 using Sod.Infrastructure.Satel.Communication;
-using Sod.Infrastructure.State.Tasks;
-using Sod.Infrastructure.State.Tasks.Handlers.Notifications;
-using Sod.Infrastructure.State.Tasks.Handlers.StorageUpdate;
-using Sod.Infrastructure.Storage;
-using Sod.Infrastructure.Storage.TaskTypes;
-using Sod.Infrastructure.Storage.TaskTypes.StorageUpdate;
+using Sod.Model.DataStructures;
+using Sod.Model.Tasks.Types;
 using Sod.Tests.Infrastructure.State.Handlers.ReadStateHandlerTestsHelpers;
 using Sod.Tests.Infrastructure.State.Mocks;
 using Xunit;
@@ -91,7 +86,7 @@ namespace Sod.Tests.Infrastructure.State.Handlers
                 .HaveCount(2);
 
             tasks[0].GetType().Should().Be(typeof(StorageUpdateTask));
-            tasks[1].GetType().Should().Be(typeof(ChangeNotificationTaskHandler));
+            tasks[1].GetType().Should().Be(typeof(IOChangeNotificationTask));
         }
 
         public static IEnumerable<object[]> CreateNotSuccessfulStatuses() =>

@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using Sod.Infrastructure.State.Tasks;
+using Sod.Model.Processing;
 
 namespace Sod.Worker
 {

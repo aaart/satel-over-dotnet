@@ -7,25 +7,21 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Autofac;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using MQTTnet;
 using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
 using Newtonsoft.Json;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.Socket;
-using Sod.Infrastructure.State.Events.Incoming;
-using Sod.Infrastructure.State.Events.Outgoing;
-using Sod.Infrastructure.State.Events.Outgoing.Mqtt;
-using Sod.Infrastructure.State.Tasks;
-using Sod.Infrastructure.State.Tasks.Handlers;
-using Sod.Infrastructure.State.Tasks.Handlers.IOStateRead;
-using Sod.Infrastructure.State.Tasks.Handlers.Notifications;
-using Sod.Infrastructure.State.Tasks.Handlers.OutputsUpdate;
-using Sod.Infrastructure.State.Tasks.Handlers.StorageUpdate;
-using Sod.Infrastructure.Storage;
+using Sod.Model;
+using Sod.Model.DataStructures;
+using Sod.Model.Events.Incoming;
+using Sod.Model.Events.Outgoing;
+using Sod.Model.Events.Outgoing.Mqtt;
+using Sod.Model.Processing;
+using Sod.Model.Tasks.Handlers;
+using Sod.Model.Tasks.Handlers.Types;
 using StackExchange.Redis;
-using Constants = Sod.Infrastructure.Constants;
 
 namespace Sod.Worker.Modules
 {
@@ -84,7 +80,7 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
 
             builder
-                .Register(ctx =>
+                .Register(_ =>
                 {
                     var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
                     return socket;
@@ -155,7 +151,7 @@ namespace Sod.Worker.Modules
             builder.RegisterType<Broker>().As<IBroker>().SingleInstance();
             
             builder
-                .Register(ctx => new MqttFactory().CreateManagedMqttClient())
+                .Register(_ => new MqttFactory().CreateManagedMqttClient())
                 .As<IApplicationMessagePublisher>()
                 .As<IApplicationMessageReceiver>()
                 .SingleInstance()
@@ -185,10 +181,10 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
             
-            builder.RegisterType<ReadIOStateTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<UpdateStorageTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<UpdateOutputsTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<ChangeNotificationTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ReadStateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<StorageUpdateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<OutputsUpdateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<IOChangeNotificationTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
             builder.RegisterType<Loop>().AsSelf();
         }

@@ -1,7 +1,5 @@
-﻿using Sod.Infrastructure.State.Events.Outgoing;
-using Sod.Infrastructure.State.Tasks;
-using Sod.Infrastructure.Storage.TaskTypes;
-using Sod.Infrastructure.Storage.TaskTypes.IOStateRead;
+﻿using Sod.Model.CommonTypes;
+using Sod.Model.Tasks.Types;
 
 namespace Sod.Tests.Infrastructure.State.Mocks
 {

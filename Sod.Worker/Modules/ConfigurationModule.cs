@@ -1,16 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 using Autofac;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Sod.Infrastructure.Satel.Communication;
-using Sod.Infrastructure.State.Events.Incoming;
-using Sod.Infrastructure.State.Events.Outgoing.Mqtt;
-using Sod.Infrastructure.State.Tasks;
-using Module = Autofac.Module;
+using Sod.Model.Events.Incoming;
+using Sod.Model.Events.Outgoing.Mqtt;
+using Sod.Model.Processing;
 
 namespace Sod.Worker.Modules
 {

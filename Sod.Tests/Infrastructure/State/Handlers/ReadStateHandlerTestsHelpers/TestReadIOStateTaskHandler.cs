@@ -1,12 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Sod.Infrastructure.Satel.Communication;
-using Sod.Infrastructure.State.Tasks.Handlers.IOStateRead;
-using Sod.Infrastructure.Storage;
+﻿using Sod.Infrastructure.Satel.Communication;
+using Sod.Model.DataStructures;
+using Sod.Model.Tasks.Handlers.Types;
 
 namespace Sod.Tests.Infrastructure.State.Handlers.ReadStateHandlerTestsHelpers
 {
-    public class TestReadIOStateTaskHandler : ReadIOStateTaskHandler
+    public class TestReadIOStateTaskHandler : ReadStateTaskHandler
     {
 
         public TestReadIOStateTaskHandler(
