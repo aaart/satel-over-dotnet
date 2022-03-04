@@ -4,8 +4,10 @@ using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Tasks.Handlers
 {
-    public interface IStateHandler
+    public interface ITaskHandler
     {
-        Task<IEnumerable<SatelTask>> Handle(IReadOnlyDictionary<string, object> parameters);
+        Task<IEnumerable<SatelTask>> Handle(SatelTask data);
+
+        object Prop => new object();
     }
 }

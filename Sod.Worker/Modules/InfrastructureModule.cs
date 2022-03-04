@@ -19,9 +19,9 @@ using Sod.Infrastructure.State.Events.Outgoing;
 using Sod.Infrastructure.State.Events.Outgoing.Mqtt;
 using Sod.Infrastructure.State.Tasks;
 using Sod.Infrastructure.State.Tasks.Handlers;
+using Sod.Infrastructure.State.Tasks.Handlers.IOStateRead;
 using Sod.Infrastructure.State.Tasks.Handlers.Notifications;
 using Sod.Infrastructure.State.Tasks.Handlers.OutputsUpdate;
-using Sod.Infrastructure.State.Tasks.Handlers.StateRead;
 using Sod.Infrastructure.State.Tasks.Handlers.StorageUpdate;
 using Sod.Infrastructure.Storage;
 using StackExchange.Redis;
@@ -185,12 +185,10 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
             
-            builder.RegisterType<ReadInputsStateHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<ReadOutputsStateHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<UpdateStorageStateHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<UpdateOutputsStateHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<InputsChangeNotificationStateHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<OutputsChangeNotificationStateHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ReadIOStateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<UpdateStorageTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<UpdateOutputsTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ChangeNotificationTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
             builder.RegisterType<Loop>().AsSelf();
         }

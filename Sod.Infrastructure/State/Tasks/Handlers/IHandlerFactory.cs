@@ -1,9 +1,9 @@
-﻿using Sod.Infrastructure.Enums;
+﻿using Sod.Infrastructure.Storage;
 
 namespace Sod.Infrastructure.State.Tasks.Handlers
 {
     public interface IHandlerFactory
     {
-        IStateHandler CreateHandler(TaskType type);
+        ITaskHandler CreateHandler(SatelTask task);
     }
 }
