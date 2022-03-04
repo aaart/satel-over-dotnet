@@ -4,17 +4,17 @@ namespace Sod.Model.Tasks.Types
 {
     public class ReadStateTask : SatelTask
     {
-        public ReadStateTask(string persistedStateKey, TaskType notificationTaskType, IOReadManipulatorMethod method, OutgoingEventType outgoingEventType)
+        public ReadStateTask(string persistedStateKey, NotificationTaskType notificationNotificationTaskType, IOReadManipulatorMethod method, OutgoingEventType outgoingEventType)
         {
             PersistedStateKey = persistedStateKey;
-            NotificationTaskType = notificationTaskType;
+            NotificationNotificationTaskType = notificationNotificationTaskType;
             Method = method;
             OutgoingEventType = outgoingEventType;
         }
 
 
         public string PersistedStateKey { get; }
-        public TaskType NotificationTaskType { get; }
+        public NotificationTaskType NotificationNotificationTaskType { get; }
         public IOReadManipulatorMethod Method { get; }
         public OutgoingEventType OutgoingEventType { get; }
     }

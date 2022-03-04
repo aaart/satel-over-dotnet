@@ -15,14 +15,14 @@ namespace Sod.Model.Processing
                 queue.EnqueueAsync(
                         new ReadStateTask(
                             Constants.Store.InputsState,
-                            TaskType.NotifyIOChanged,
+                            NotificationTaskType.NotifyIOChanged,
                             IOReadManipulatorMethod.Inputs,
                             OutgoingEventType.InputsStateChanged
                         ));
                 queue.EnqueueAsync(
                         new ReadStateTask(
                             Constants.Store.OutputsState,
-                            TaskType.NotifyIOChanged,
+                            NotificationTaskType.NotifyIOChanged,
                             IOReadManipulatorMethod.Outputs,
                             OutgoingEventType.OutputsStateChanged
                         ));
