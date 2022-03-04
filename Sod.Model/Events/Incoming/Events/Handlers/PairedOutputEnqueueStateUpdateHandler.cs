@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Sod.Model.DataStructures;
 
-namespace Sod.Model.Events.Incoming
+namespace Sod.Model.Events.Incoming.Events.Handlers
 {
     public class PairedOutputEnqueueStateUpdateHandler : IEventHandler
     {

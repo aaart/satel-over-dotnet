@@ -1,6 +1,6 @@
 ﻿using Sod.Infrastructure.Satel;
 
-namespace Sod.Model.CommonTypes
+namespace Sod.Model.Events.Outgoing
 {
     public class OutgoingEvent
     {

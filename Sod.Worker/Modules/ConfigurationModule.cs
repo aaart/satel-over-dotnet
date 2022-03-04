@@ -5,6 +5,7 @@ using Autofac;
 using Microsoft.Extensions.Configuration;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.Events.Incoming;
+using Sod.Model.Events.Incoming.Events.Handlers;
 using Sod.Model.Events.Outgoing.Mqtt;
 using Sod.Model.Processing;
 

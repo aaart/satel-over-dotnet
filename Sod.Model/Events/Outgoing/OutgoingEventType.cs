@@ -1,4 +1,4 @@
-﻿namespace Sod.Model.CommonTypes
+﻿namespace Sod.Model.Events.Outgoing
 {
     public enum OutgoingEventType
     {

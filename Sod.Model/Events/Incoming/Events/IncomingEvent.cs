@@ -1,4 +1,4 @@
-﻿namespace Sod.Model.Events.Incoming
+﻿namespace Sod.Model.Events.Incoming.Events
 {
     public class IncomingEvent
     {

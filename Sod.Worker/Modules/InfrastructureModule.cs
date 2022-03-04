@@ -16,6 +16,7 @@ using Sod.Infrastructure.Satel.Socket;
 using Sod.Model;
 using Sod.Model.DataStructures;
 using Sod.Model.Events.Incoming;
+using Sod.Model.Events.Incoming.Events;
 using Sod.Model.Events.Outgoing;
 using Sod.Model.Events.Outgoing.Mqtt;
 using Sod.Model.Processing;

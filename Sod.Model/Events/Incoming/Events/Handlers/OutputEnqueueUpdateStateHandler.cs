@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using Sod.Infrastructure.Satel;
 using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
+using Sod.Model.Events.Outgoing;
 using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Events.Incoming
+namespace Sod.Model.Events.Incoming.Events.Handlers
 {
     public class OutputEnqueueUpdateStateHandler : IEventHandler
     {
