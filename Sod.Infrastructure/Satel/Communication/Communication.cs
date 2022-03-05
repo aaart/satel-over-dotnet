@@ -47,7 +47,7 @@ namespace Sod.Infrastructure.Satel.Communication
             var (calculatedCrcHigh, calculatedCrcLow) = Frame.Crc(cmd, data);
             if (receivedCrcHigh != calculatedCrcHigh || receivedCrcLow != calculatedCrcLow)
             {
-                return (CommandStatus.InvalidCrc, Array.Empty<byte>());
+                return (CommandStatus.InvalidCrc, new []{ receivedCrcHigh, receivedCrcLow, calculatedCrcHigh, calculatedCrcLow });
             }
             
             return (CommandStatus.Processed, data);
