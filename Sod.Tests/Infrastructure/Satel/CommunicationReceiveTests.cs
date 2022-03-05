@@ -33,7 +33,7 @@ namespace Sod.Tests.Infrastructure.Satel
             var socketReceiver = new MockSocketReceiver(() => Task.FromResult((frame.Length, segment)));
             var (receiveStatus, data) = await ReceiveAsync(socketReceiver, expectedCommand);
             receiveStatus.Should().Be(CommandStatus.InvalidCrc);
-            data.Length.Should().Be(0);
+            data.Length.Should().Be(4);
         }
         
         [Theory]

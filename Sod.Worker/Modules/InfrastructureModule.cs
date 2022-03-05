@@ -8,26 +8,21 @@ using System.Text;
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using MQTTnet;
-using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
-using MQTTnet.Implementations;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Serilog.Core;
-using Sod.Infrastructure.Satel;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.Socket;
-using Sod.Infrastructure.Satel.State.Events;
-using Sod.Infrastructure.Satel.State.Events.Incoming;
-using Sod.Infrastructure.Satel.State.Events.Mqtt;
-using Sod.Infrastructure.Satel.State.Events.Outgoing;
-using Sod.Infrastructure.Satel.State.Handlers;
-using Sod.Infrastructure.Satel.State.Loop;
-using Sod.Infrastructure.Satel.State.Tasks;
-using Sod.Infrastructure.Storage;
+using Sod.Model;
+using Sod.Model.DataStructures;
+using Sod.Model.Events.Incoming;
+using Sod.Model.Events.Incoming.Events;
+using Sod.Model.Events.Outgoing;
+using Sod.Model.Events.Outgoing.Mqtt;
+using Sod.Model.Processing;
+using Sod.Model.Tasks.Handlers;
+using Sod.Model.Tasks.Handlers.Types;
 using StackExchange.Redis;
-using Constants = Sod.Infrastructure.Constants;
 
 namespace Sod.Worker.Modules
 {
@@ -40,8 +35,7 @@ namespace Sod.Worker.Modules
             builder
                 .Register(ctx =>
                 {
-                    var cfg = ctx.Resolve<IConfigurationRoot>();
-                    var connString = cfg.GetValue<string>("ConnectionStrings:Redis");
+                    var connString = ctx.Resolve<IConfigurationRoot>().GetConnectionString("Redis");
                     return ConnectionMultiplexer.Connect(connString);
                 })
                 .As<ConnectionMultiplexer>()
@@ -87,44 +81,38 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
 
             builder
-                .Register(ctx =>
+                .Register(_ =>
                 {
-                    var cfg = ctx.Resolve<IConfigurationRoot>();
-                    var address = cfg.GetValue<string>("Satel:Address");
-                    var port = cfg.GetValue<int>("Satel:Port");
-                    
                     var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-                    socket.Connect(address, port);
                     return socket;
                 })
                 .As<Socket>()
-                .SingleInstance();
+                .SingleInstance()
+                .OnActivated(args =>
+                {
+                    var cfg = args.Context.Resolve<SatelConnectionOptions>();
+                    args.Instance.Connect(cfg.Address, cfg.Port);
+                });
             
             builder.RegisterType<SocketSender>().As<ISocketSender>().SingleInstance();
             builder.RegisterType<SocketReceiver>().As<ISocketReceiver>().SingleInstance();
             builder.RegisterType<GenericCommunicationInterface>().AsSelf().SingleInstance();
             
-            builder
-                .Register(ctx =>
-                {
-                    var cfg = ctx.Resolve<IConfigurationRoot>();
-                    return new Manipulator(ctx.Resolve<GenericCommunicationInterface>(), cfg.GetValue<string>("Satel:UserCode"));
-                })
-                .As<IManipulator>()
-                .SingleInstance();
+            builder.RegisterType<Manipulator>().As<IManipulator>().SingleInstance();
 
             builder
                 .Register(ctx =>
                 {
-                    var cfg = ctx.Resolve<IConfigurationRoot>();
+                    var cfg = ctx.Resolve<MqttOptions>();
+                    
                     var optionsBuilder = new MqttClientOptionsBuilder()
-                        .WithCredentials(cfg.GetValue<string>("Mqtt:User"), cfg.GetValue<string>("Mqtt:Password"))
-                        .WithTcpServer(cfg.GetValue<string>("Mqtt:Host"), cfg.GetValue<int>("Mqtt:Port"));
-                    if (cfg.GetValue<bool>("Mqtt:UseTLS"))
+                        .WithCredentials(cfg.User, cfg.Password)
+                        .WithTcpServer(cfg.Host, cfg.Port);
+                    if (cfg.CrtPath != null)
                     {
                         optionsBuilder.WithTls(x =>
                         {
-                            X509Certificate2 caCrt = new X509Certificate2(File.ReadAllBytes("ca.crt"));
+                            X509Certificate2 caCrt = new X509Certificate2(File.ReadAllBytes(cfg.CrtPath));
                             x.UseTls = true;
                             x.SslProtocol = System.Security.Authentication.SslProtocols.Tls12;
                             x.CertificateValidationHandler = (certContext) =>
@@ -164,7 +152,7 @@ namespace Sod.Worker.Modules
             builder.RegisterType<Broker>().As<IBroker>().SingleInstance();
             
             builder
-                .Register(ctx => new MqttFactory().CreateManagedMqttClient())
+                .Register(_ => new MqttFactory().CreateManagedMqttClient())
                 .As<IApplicationMessagePublisher>()
                 .As<IApplicationMessageReceiver>()
                 .SingleInstance()
@@ -188,16 +176,18 @@ namespace Sod.Worker.Modules
             builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
 
             builder.RegisterType<RedisTaskQueue>().As<ITaskQueue>().SingleInstance();
-            builder.RegisterType<TaskPlanner>().As<ITaskPlanner>().SingleInstance();
+            builder
+                .RegisterType<TaskPlanner>()
+                .As<ITaskPlanner>()
+                .SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
             
-            builder.RegisterType<ReadInputsHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<ReadOutputsHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<UpdateStorageHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<UpdateOutputsHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<InputsChangeNotificationHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<OutputsChangeNotificationHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<QueueSubscription>().As<IQueueSubscription>().SingleInstance();
+            builder.RegisterType<ReadStateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<StorageUpdateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<OutputsUpdateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<IOChangeNotificationTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
+            builder.RegisterType<Loop>().AsSelf();
         }
     }
 }

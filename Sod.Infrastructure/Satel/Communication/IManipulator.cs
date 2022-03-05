@@ -10,5 +10,7 @@ namespace Sod.Infrastructure.Satel.Communication
         Task<(CommandStatus status, IntegraResponse response)> ArmInMode0(bool[] partitions);
         Task<(CommandStatus status, IntegraResponse response)> DisArm(bool[] partitions);
         Task<(CommandStatus status, bool[] zonesAlarm)> ReadArmedPartitions();
+        Task<(CommandStatus status, IntegraResponse response)> DisableOutputs(bool[] outputs);
+        Task<(CommandStatus status, IntegraResponse response)> EnableOutputs(bool[] outputs);
     }
 }

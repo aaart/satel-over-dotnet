@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Sod.Infrastructure.Capabilities;
 using Sod.Infrastructure.Satel.Socket;
 
@@ -10,22 +11,17 @@ namespace Sod.Infrastructure.Satel.Communication
     {
         private readonly byte[] _userCode;
         private readonly GenericCommunicationInterface _genericCommunicationInterface;
-
-        public Manipulator(GenericCommunicationInterface genericCommunicationInterface)
-            : this(genericCommunicationInterface, string.Empty)
-        {
-            _genericCommunicationInterface = genericCommunicationInterface;
-        }
         
-        public Manipulator(GenericCommunicationInterface genericCommunicationInterface, string userCode)
+        
+        
+        public Manipulator(GenericCommunicationInterface genericCommunicationInterface, SatelUserCodeOptions options)
         {
             _genericCommunicationInterface = genericCommunicationInterface;
-            _userCode = !string.IsNullOrEmpty(userCode) ? Translation.CreateUserCodeBinaryRepresentation(userCode) : Array.Empty<byte>();
+            _userCode = (!string.IsNullOrEmpty(options.UserCode) ? Translation.CreateUserCodeBinaryRepresentation(options.UserCode) : null) ?? throw new ArgumentException("Provided user code is empty.");
         }
         
         public async Task<(CommandStatus status, bool[] outputsState)> ReadOutputs()
         {
-            Logger.LogDebug("reading outputs");
             return await _genericCommunicationInterface.Execute(
                 new CommunicationMessage(Command.OutputsState, Array.Empty<byte>(), Array.Empty<byte>()),
                 new CommunicationDefaultResponse<bool[]>(Array.Empty<bool>(), Command.OutputsState),
@@ -34,7 +30,6 @@ namespace Sod.Infrastructure.Satel.Communication
 
         public async Task<(CommandStatus status, bool[] inputsState)> ReadInputs()
         {
-            Logger.LogDebug("reading inputs");
             return await _genericCommunicationInterface.Execute(
                 new CommunicationMessage(Command.ZonesViolation, Array.Empty<byte>(), Array.Empty<byte>()),
                 new CommunicationDefaultResponse<bool[]>(Array.Empty<bool>(), Command.ZonesViolation),
@@ -64,7 +59,22 @@ namespace Sod.Infrastructure.Satel.Communication
                 new CommunicationDefaultResponse<IntegraResponse>(IntegraResponse.NotApplicable, Command.Result),
                 data => (IntegraResponse)data[0]);
         }
-        
+
+        public async Task<(CommandStatus status, IntegraResponse response)> DisableOutputs(bool[] outputs)
+        {
+            return await _genericCommunicationInterface.Execute(
+                new CommunicationMessage(Command.OutputsOff, Translation.ToByteArray(outputs), _userCode),
+                new CommunicationDefaultResponse<IntegraResponse>(IntegraResponse.NotApplicable, Command.Result),
+                data => (IntegraResponse)data[0]);
+        }
+        public async Task<(CommandStatus status, IntegraResponse response)> EnableOutputs(bool[] outputs)
+        {
+            return await _genericCommunicationInterface.Execute(
+                new CommunicationMessage(Command.OutputsOn, Translation.ToByteArray(outputs), _userCode),
+                new CommunicationDefaultResponse<IntegraResponse>(IntegraResponse.NotApplicable, Command.Result),
+                data => (IntegraResponse)data[0]);
+        }
+
         public async Task<(CommandStatus status, IntegraResponse response)> ArmInMode0(bool[] partitions)
         {
             return await _genericCommunicationInterface.Execute(

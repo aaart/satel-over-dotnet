@@ -33,12 +33,12 @@ namespace Sod.Infrastructure.Satel.Communication
             var cmd = data[2];
             if (!Enum.IsDefined(typeof(Command), (int)cmd))
             {
-                return (CommandStatus.NotSupportedCommand, Array.Empty<byte>());
+                return (CommandStatus.NotSupportedCommand, new[] { cmd });
             }
 
             if ((Command)cmd != expectedCommand)
             {
-                return (CommandStatus.InvalidCommandReceived, Array.Empty<byte>());
+                return (CommandStatus.InvalidCommandReceived, new[] { cmd });
             }
             
             var receivedCrcHigh = data[byteCount - 4];
@@ -47,7 +47,7 @@ namespace Sod.Infrastructure.Satel.Communication
             var (calculatedCrcHigh, calculatedCrcLow) = Frame.Crc(cmd, data);
             if (receivedCrcHigh != calculatedCrcHigh || receivedCrcLow != calculatedCrcLow)
             {
-                return (CommandStatus.InvalidCrc, Array.Empty<byte>());
+                return (CommandStatus.InvalidCrc, new []{ receivedCrcHigh, receivedCrcLow, calculatedCrcHigh, calculatedCrcLow });
             }
             
             return (CommandStatus.Processed, data);

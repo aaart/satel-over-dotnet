@@ -27,5 +27,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Sod.Infrastructure\Sod.Infrastructure.csproj" />
+      <ProjectReference Include="..\Sod.Model\Sod.Model.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Tasks\Handlers" />
     </ItemGroup>
 </Project>

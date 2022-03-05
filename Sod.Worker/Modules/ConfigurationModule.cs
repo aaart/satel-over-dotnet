@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 using Autofac;
 using Microsoft.Extensions.Configuration;
-using Sod.Infrastructure.Satel.State.Events.Incoming;
-using Sod.Infrastructure.Satel.State.Events.Mqtt;
-using Module = Autofac.Module;
+using Sod.Infrastructure.Satel.Communication;
+using Sod.Model.Events.Incoming;
+using Sod.Model.Events.Incoming.Events.Handlers;
+using Sod.Model.Events.Outgoing.Mqtt;
+using Sod.Model.Processing;
 
 namespace Sod.Worker.Modules
 {
@@ -24,6 +24,11 @@ namespace Sod.Worker.Modules
                     .Build())
                 .As<IConfigurationRoot>()
                 .SingleInstance();
+            
+            builder.RegisterConfiguration<LoopOptions>("Loop");
+            builder.RegisterConfiguration<MqttOptions>("Mqtt");
+            builder.RegisterConfiguration<SatelConnectionOptions>("Satel");
+            builder.RegisterConfiguration<SatelUserCodeOptions>("Satel");
 
             builder
                 .Register(ctx =>
@@ -39,9 +44,8 @@ namespace Sod.Worker.Modules
                 .As<OutgoingEventMappings>()
                 .SingleInstance();
 
-            // builder
-            //     .RegisterType<OutputDirectUpdateStateHandler>().Named<IEventHandler>("Sod.Infrastructure.Satel.State.Events.Incoming.UpdateOutputStateHandler").InstancePerDependency();
-            builder.RegisterType<OutputEnqueueUpdateStateHandler>().Named<IEventHandler>("Sod.Infrastructure.Satel.State.Events.Incoming.OutputEnqueueUpdateStateHandler").InstancePerDependency();
+            builder.RegisterType<OutputEnqueueUpdateStateHandler>().Named<IEventHandler>(typeof(OutputEnqueueUpdateStateHandler).FullName!).InstancePerDependency();
+            builder.RegisterType<PairedOutputEnqueueStateUpdateHandler>().Named<IEventHandler>(typeof(PairedOutputEnqueueStateUpdateHandler).FullName!).InstancePerDependency();
             
             builder
                 .Register(ctx =>

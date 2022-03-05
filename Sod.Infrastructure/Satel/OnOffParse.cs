@@ -8,7 +8,7 @@ namespace Sod.Infrastructure.Satel
 
         public static bool ToBoolean(string val)
         {
-            switch (val)
+            switch (val.ToUpperInvariant())
             {
                 case "ON":
                     return true;
