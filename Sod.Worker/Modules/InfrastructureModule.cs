@@ -55,29 +55,20 @@ namespace Sod.Worker.Modules
 
                     foreach (var tuple in valueTuples)
                     {
-                        if (!tuple.redisValue.HasValue)
-                        {
-                            db.StringSet(tuple.key, new RedisValue(JsonConvert.SerializeObject(Enumerable.Repeat(false, 128).ToArray())));
-                        }
+                        db.StringSet(tuple.key, new RedisValue(JsonConvert.SerializeObject(Enumerable.Repeat(false, 128).ToArray())));
+                    }
+
+                    var key = new RedisKey(Constants.Queue.RedisTaskQueue);
+                    var length = db.ListLength(key);
+                    if (length > 0)
+                    {
+                        db.ListTrim(key, 0, length);
                     }
                 })
                 .SingleInstance();
             builder
                 .RegisterType<RedisStore>()
                 .As<IStore>()
-                .OnActivated(args =>
-                {
-                    var keysToSet = new[]
-                    {
-                        Constants.Store.InputsState,
-                        Constants.Store.OutputsState
-                    };
-
-                    foreach (var keyToSet in keysToSet)
-                    {
-                        args.Instance.SetAsync(keyToSet, Enumerable.Repeat(false, 128).ToArray()).Wait();
-                    }
-                })
                 .SingleInstance();
 
             builder
@@ -93,18 +84,18 @@ namespace Sod.Worker.Modules
                     var cfg = args.Context.Resolve<SatelConnectionOptions>();
                     args.Instance.Connect(cfg.Address, cfg.Port);
                 });
-            
+
             builder.RegisterType<SocketSender>().As<ISocketSender>().SingleInstance();
             builder.RegisterType<SocketReceiver>().As<ISocketReceiver>().SingleInstance();
             builder.RegisterType<GenericCommunicationInterface>().AsSelf().SingleInstance();
-            
+
             builder.RegisterType<Manipulator>().As<IManipulator>().SingleInstance();
 
             builder
                 .Register(ctx =>
                 {
                     var cfg = ctx.Resolve<MqttOptions>();
-                    
+
                     var optionsBuilder = new MqttClientOptionsBuilder()
                         .WithCredentials(cfg.User, cfg.Password)
                         .WithTcpServer(cfg.Host, cfg.Port);
@@ -123,7 +114,7 @@ namespace Sod.Worker.Modules
                                 chain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
                                 chain.ChainPolicy.VerificationTime = DateTime.Now;
                                 chain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 0, 0);
-                                
+
                                 chain.ChainPolicy.CustomTrustStore.Add(caCrt);
                                 chain.ChainPolicy.TrustMode = X509ChainTrustMode.CustomRootTrust;
 
@@ -134,14 +125,14 @@ namespace Sod.Worker.Modules
                             };
                         });
                     }
-                    
+
                     return optionsBuilder.Build();
                 })
                 .As<IMqttClientOptions>()
                 .SingleInstance();
 
             builder
-                .Register(ctx => 
+                .Register(ctx =>
                     new ManagedMqttClientOptionsBuilder()
                         .WithAutoReconnectDelay(TimeSpan.FromSeconds(2))
                         .WithClientOptions(ctx.Resolve<IMqttClientOptions>())
@@ -150,7 +141,7 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
 
             builder.RegisterType<Broker>().As<IBroker>().SingleInstance();
-            
+
             builder
                 .Register(_ => new MqttFactory().CreateManagedMqttClient())
                 .As<IApplicationMessagePublisher>()
@@ -165,14 +156,11 @@ namespace Sod.Worker.Modules
                     {
                         await client.SubscribeAsync(topic);
                     }
-                    
+
                     var broker = activatedEventArgs.Context.Resolve<IBroker>();
-                    client.UseApplicationMessageReceivedHandler(x =>
-                    {
-                        broker.Process(new IncomingEvent(x.ApplicationMessage.Topic, Encoding.UTF8.GetString(x.ApplicationMessage.Payload)));
-                    });
+                    client.UseApplicationMessageReceivedHandler(x => { broker.Process(new IncomingEvent(x.ApplicationMessage.Topic, Encoding.UTF8.GetString(x.ApplicationMessage.Payload))); });
                 });
-            
+
             builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
 
             builder.RegisterType<RedisTaskQueue>().As<ITaskQueue>().SingleInstance();
@@ -181,7 +169,7 @@ namespace Sod.Worker.Modules
                 .As<ITaskPlanner>()
                 .SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
-            
+
             builder.RegisterType<ReadStateTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<StorageUpdateTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<OutputsUpdateTaskHandler>().AsSelf().SingleInstance();
