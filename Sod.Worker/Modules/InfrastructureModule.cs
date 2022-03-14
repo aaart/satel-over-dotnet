@@ -66,11 +66,20 @@ namespace Sod.Worker.Modules
                     }
                 })
                 .SingleInstance();
+            // builder
+            //     .RegisterType<RedisStore>()
+            //     .As<IStore>()
+            //     .SingleInstance();
             builder
-                .RegisterType<RedisStore>()
+                .RegisterType<InMemoryStore>()
                 .As<IStore>()
+                .OnActivated(args =>
+                {
+                    args.Instance.SetAsync(Constants.Store.InputsState, new bool[128]);
+                    args.Instance.SetAsync(Constants.Store.OutputsState, new bool[128]);
+                })
                 .SingleInstance();
-
+            
             builder
                 .Register(_ =>
                 {
@@ -163,7 +172,8 @@ namespace Sod.Worker.Modules
 
             builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
 
-            builder.RegisterType<RedisTaskQueue>().As<ITaskQueue>().SingleInstance();
+            // builder.RegisterType<RedisTaskQueue>().As<ITaskQueue>().SingleInstance();
+            builder.RegisterType<InMemoryTaskQueue>().As<ITaskQueue>().SingleInstance();
             builder
                 .RegisterType<TaskPlanner>()
                 .As<ITaskPlanner>()
