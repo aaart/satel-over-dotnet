@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Sod.Model.Tasks;
 
@@ -6,7 +6,7 @@ namespace Sod.Model.DataStructures
 {
     public class InMemoryTaskQueue : ITaskQueue
     {
-        private readonly Queue<SatelTask> _queue = new();
+        private readonly ConcurrentQueue<SatelTask> _queue = new();
 
         public Task EnqueueAsync(SatelTask satelTask)
         {
