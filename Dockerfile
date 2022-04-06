@@ -1,9 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-COPY Sod.Infrastructure/* Sod.Infrastructure
-COPY Sod.Model/* Sod.Model
-COPY Sod.Worker/* Sod.Worker
+COPY Sod.Infrastructure/* Sod.Infrastructure/
+COPY Sod.Model/* Sod.Model/
+COPY Sod.Worker/* Sod.Worker/
 
 RUN dotnet restore Sod.Infrastructure/Sod.Infrastructure.csproj
 RUN dotnet restore Sod.Model/Sod.Model.csproj
