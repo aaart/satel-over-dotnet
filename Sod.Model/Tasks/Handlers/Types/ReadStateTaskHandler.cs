@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
@@ -39,6 +40,7 @@ namespace Sod.Model.Tasks.Handlers.Types
 
             if (changes.Any())
             {
+                Logger.LogInformation($"{changes.Count} change(s) was found.");
                 var t1 = new StorageUpdateTask(data.PersistedStateKey, satelState);
                 var t2 = new IOChangeNotificationTask(changes, data.OutgoingEventType); 
                 return new SatelTask[] { t1, t2 };

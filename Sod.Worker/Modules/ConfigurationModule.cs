@@ -45,7 +45,7 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
 
             builder.RegisterType<OutputEnqueueUpdateStateHandler>().Named<IEventHandler>(typeof(OutputEnqueueUpdateStateHandler).FullName!).InstancePerDependency();
-            builder.RegisterType<PairedOutputEnqueueStateUpdateHandler>().Named<IEventHandler>(typeof(PairedOutputEnqueueStateUpdateHandler).FullName!).InstancePerDependency();
+            builder.RegisterType<NoNotificationOutputEnqueueStateUpdateHandler>().Named<IEventHandler>(typeof(NoNotificationOutputEnqueueStateUpdateHandler).FullName!).InstancePerDependency();
             
             builder
                 .Register(ctx =>
