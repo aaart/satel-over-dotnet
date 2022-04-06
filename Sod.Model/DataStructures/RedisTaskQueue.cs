@@ -9,7 +9,7 @@ namespace Sod.Model.DataStructures
 {
     public class RedisTaskQueue : ITaskQueue
     {
-        private readonly RedisKey _key = new(nameof(RedisTaskQueue));
+        private readonly RedisKey _key = new(Constants.Queue.RedisTaskQueue);
         private readonly IDatabaseAsync _database;
 
         public RedisTaskQueue(IDatabaseAsync database)
