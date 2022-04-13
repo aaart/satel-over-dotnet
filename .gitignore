@@ -355,3 +355,4 @@ MigrationBackup/
 # other
 appsettings.local.json
 ca.crt
+log/
