@@ -44,8 +44,8 @@ namespace Sod.Worker.Modules
                 .As<OutgoingEventMappings>()
                 .SingleInstance();
 
-            builder.RegisterType<OutputEnqueueUpdateStateHandler>().Named<IEventHandler>(typeof(OutputEnqueueUpdateStateHandler).FullName!).InstancePerDependency();
-            builder.RegisterType<NoNotificationOutputEnqueueStateUpdateHandler>().Named<IEventHandler>(typeof(NoNotificationOutputEnqueueStateUpdateHandler).FullName!).InstancePerDependency();
+            builder.RegisterType<OutputEnqueueUpdateStateHandler>().Named<IEventHandler>("EnqueueAndNotify").InstancePerDependency();
+            builder.RegisterType<NoNotificationOutputEnqueueStateUpdateHandler>().Named<IEventHandler>("EnqueueDoNotNotify").InstancePerDependency();
             
             builder
                 .Register(ctx =>

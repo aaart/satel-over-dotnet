@@ -31,45 +31,6 @@ namespace Sod.Worker.Modules
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-
-            builder
-                .Register(ctx =>
-                {
-                    var connString = ctx.Resolve<IConfigurationRoot>().GetConnectionString("Redis");
-                    return ConnectionMultiplexer.Connect(connString);
-                })
-                .As<ConnectionMultiplexer>()
-                .SingleInstance();
-
-            builder
-                .Register(ctx => ctx.Resolve<ConnectionMultiplexer>().GetDatabase(0))
-                .As<IDatabaseAsync>()
-                .OnActivated(evnt =>
-                {
-                    var db = evnt.Instance;
-                    IEnumerable<(RedisKey key, RedisValue redisValue)> valueTuples = new[]
-                    {
-                        Constants.Store.InputsState,
-                        Constants.Store.OutputsState
-                    }.Select(x => (new RedisKey(x), db.StringGet(new RedisKey(x))));
-
-                    foreach (var tuple in valueTuples)
-                    {
-                        db.StringSet(tuple.key, new RedisValue(JsonConvert.SerializeObject(Enumerable.Repeat(false, 128).ToArray())));
-                    }
-
-                    var key = new RedisKey(Constants.Queue.RedisTaskQueue);
-                    var length = db.ListLength(key);
-                    if (length > 0)
-                    {
-                        db.ListTrim(key, 0, length);
-                    }
-                })
-                .SingleInstance();
-            // builder
-            //     .RegisterType<RedisStore>()
-            //     .As<IStore>()
-            //     .SingleInstance();
             builder
                 .RegisterType<InMemoryStore>()
                 .As<IStore>()
@@ -172,7 +133,6 @@ namespace Sod.Worker.Modules
 
             builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
 
-            // builder.RegisterType<RedisTaskQueue>().As<ITaskQueue>().SingleInstance();
             builder.RegisterType<InMemoryTaskQueue>().As<ITaskQueue>().SingleInstance();
             builder
                 .RegisterType<TaskPlanner>()
