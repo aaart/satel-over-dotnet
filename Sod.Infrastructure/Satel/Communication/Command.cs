@@ -7,6 +7,7 @@
         ZonesAlarm = 0x02,
         ArmedPartitionsSuppressed = 0x09,
         ArmedPartitionsReally = 0x0A,
+        PartitionsAlarm = 0x13,
         OutputsState = 0x17,
         Troubles = 0x1C,
         NewData = 0x7F,
