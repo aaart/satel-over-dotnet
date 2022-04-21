@@ -1,8 +1,9 @@
 ﻿namespace Sod.Model.Events.Outgoing.Mqtt
 {
-    public enum IOType
+    public enum DeviceType
     {
         Input,
-        Output
+        Output,
+        ArmedPartition
     }
 }

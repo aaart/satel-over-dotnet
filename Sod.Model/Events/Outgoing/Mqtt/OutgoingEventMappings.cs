@@ -21,21 +21,24 @@ namespace Sod.Model.Events.Outgoing.Mqtt
         
         public IEnumerable<string> GetTopics(OutgoingEvent evnt)
         {
-            IOType ioType;
+            DeviceType deviceType;
             switch (evnt.Type)
             {
                 case OutgoingEventType.InputsStateChanged:
-                    ioType = IOType.Input;
+                    deviceType = DeviceType.Input;
                     break;
                 case OutgoingEventType.OutputsStateChanged:
-                    ioType = IOType.Output;
+                    deviceType = DeviceType.Output;
+                    break;
+                case OutgoingEventType.ArmedPartitionsStateChanged:
+                    deviceType = DeviceType.ArmedPartition;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
             return _mappings
-                .Where(x => x.Type == ioType && x.IOIndex == evnt.Reference)
+                .Where(x => x.Type == deviceType && x.IOIndex == evnt.Reference)
                 .Select(x => x.Topic);
         }
     }
