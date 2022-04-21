@@ -8,16 +8,16 @@ using Sod.Model.Tasks.Types;
 
 namespace Sod.Model.Tasks.Handlers.Types
 {
-    public class StorageUpdateTaskHandler : BaseHandler<StorageUpdateTask>
+    public class PersistedStateUpdateTaskHandler : BaseHandler<PersistaedStateUpdateTask>
     {
         private readonly IStore _store;
 
-        public StorageUpdateTaskHandler(IStore store)
+        public PersistedStateUpdateTaskHandler(IStore store)
         {
             _store = store;
         }
 
-        protected override async Task<IEnumerable<SatelTask>> Handle(StorageUpdateTask data)
+        protected override async Task<IEnumerable<SatelTask>> Handle(PersistaedStateUpdateTask data)
         {
             try
             {

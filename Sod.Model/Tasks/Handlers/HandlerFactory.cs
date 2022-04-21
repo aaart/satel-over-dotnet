@@ -18,14 +18,14 @@ namespace Sod.Model.Tasks.Handlers
         {
             switch (task)
             {
-                case OutputsUpdateTask:
-                    return _provider.GetRequiredService<OutputsUpdateTaskHandler>();
-                case ReadStateTask:
-                    return _provider.GetRequiredService<ReadStateTaskHandler>();
-                case StorageUpdateTask:
-                    return _provider.GetRequiredService<StorageUpdateTaskHandler>();
-                case IOChangeNotificationTask:
-                    return _provider.GetRequiredService<IOChangeNotificationTaskHandler>();
+                case ActualStateOutputsUpdateTask:
+                    return _provider.GetRequiredService<ActualStateOutputsUpdateTaskHandler>();
+                case ActualStateReadTask:
+                    return _provider.GetRequiredService<ActualStateReadTaskHandler>();
+                case PersistaedStateUpdateTask:
+                    return _provider.GetRequiredService<PersistedStateUpdateTaskHandler>();
+                case ActualStateChangedNotificationTask:
+                    return _provider.GetRequiredService<ActualStateChangedNotificationTaskHandler>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(task), task.GetType(), "Not supported type.");
             }

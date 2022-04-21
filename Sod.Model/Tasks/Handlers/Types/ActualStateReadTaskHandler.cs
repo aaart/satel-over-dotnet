@@ -10,18 +10,18 @@ using Sod.Model.Tasks.Types;
 
 namespace Sod.Model.Tasks.Handlers.Types
 {
-    public class ReadStateTaskHandler : BaseHandler<ReadStateTask>
+    public class ActualStateReadTaskHandler : BaseHandler<ActualStateReadTask>
     {
         private readonly IStore _store;
         private readonly IManipulator _manipulator;
 
-        public ReadStateTaskHandler(IStore store, IManipulator manipulator)
+        public ActualStateReadTaskHandler(IStore store, IManipulator manipulator)
         {
             _store = store;
             _manipulator = manipulator;
         }
 
-        protected override async Task<IEnumerable<SatelTask>> Handle(ReadStateTask data)
+        protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateReadTask data)
         {
             var (status, satelState) = await ManipulatorMethod(data.Method);
             ValidateStatus(status);
@@ -40,9 +40,9 @@ namespace Sod.Model.Tasks.Handlers.Types
 
             if (changes.Any())
             {
-                Logger.LogInformation($"{changes.Count} change(s) was found.");
-                var t1 = new StorageUpdateTask(data.PersistedStateKey, satelState);
-                var t2 = new IOChangeNotificationTask(changes, data.OutgoingEventType); 
+                Logger.LogInformation($"{changes.Count} changes were found.");
+                var t1 = new PersistaedStateUpdateTask(data.PersistedStateKey, satelState);
+                var t2 = new ActualStateChangedNotificationTask(changes, data.OutgoingEventType); 
                 return new SatelTask[] { t1, t2 };
             }
 

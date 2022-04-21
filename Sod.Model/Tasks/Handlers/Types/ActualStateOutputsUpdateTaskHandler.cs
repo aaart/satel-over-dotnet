@@ -8,18 +8,18 @@ using Sod.Model.Tasks.Types;
 
 namespace Sod.Model.Tasks.Handlers.Types
 {
-    public class OutputsUpdateTaskHandler : BaseHandler<OutputsUpdateTask>
+    public class ActualStateOutputsUpdateTaskHandler : BaseHandler<ActualStateOutputsUpdateTask>
     {
         private readonly IManipulator _manipulator;
 
-        public OutputsUpdateTaskHandler(IManipulator manipulator)
+        public ActualStateOutputsUpdateTaskHandler(IManipulator manipulator)
         {
-            Logger.LogDebug($"{nameof(OutputsUpdateTaskHandler)} is executing.");
+            Logger.LogDebug($"{nameof(ActualStateOutputsUpdateTaskHandler)} is executing.");
             _manipulator = manipulator;
         }
 
 
-        protected override async Task<IEnumerable<SatelTask>> Handle(OutputsUpdateTask data)
+        protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateOutputsUpdateTask data)
         {
             var disableOutputs = new bool[128];
             var enableOutputs = new bool[128];
@@ -47,7 +47,7 @@ namespace Sod.Model.Tasks.Handlers.Types
                 await _manipulator.EnableOutputs(enableOutputs);
                 if (data.NotifyChanged)
                 {
-                    tasks.Add(new IOChangeNotificationTask(enableChanges, data.EventType));
+                    tasks.Add(new ActualStateChangedNotificationTask(enableChanges, data.EventType));
                 }
             }
 
@@ -56,7 +56,7 @@ namespace Sod.Model.Tasks.Handlers.Types
                 await _manipulator.DisableOutputs(disableOutputs);
                 if (data.NotifyChanged)
                 {
-                    tasks.Add(new IOChangeNotificationTask(disableChanges, data.EventType));
+                    tasks.Add(new ActualStateChangedNotificationTask(disableChanges, data.EventType));
                 }
             }
 

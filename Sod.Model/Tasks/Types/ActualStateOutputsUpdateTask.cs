@@ -4,9 +4,9 @@ using Sod.Model.Events.Outgoing;
 
 namespace Sod.Model.Tasks.Types
 {
-    public class OutputsUpdateTask : SatelTask
+    public class ActualStateOutputsUpdateTask : SatelTask
     {
-        public OutputsUpdateTask(IEnumerable<IOState> updates, bool notifyChanged, OutgoingEventType eventType)
+        public ActualStateOutputsUpdateTask(IEnumerable<IOState> updates, bool notifyChanged, OutgoingEventType eventType)
         {
             Updates = updates;
             NotifyChanged = notifyChanged;

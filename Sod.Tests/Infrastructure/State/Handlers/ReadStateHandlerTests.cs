@@ -26,11 +26,11 @@ namespace Sod.Tests.Infrastructure.State.Handlers
             var commandStatus = Enum.Parse<CommandStatus>(commandStatusName);
             _manipulatorMock.Setup(x => x.ReadInputs()).Returns(() => Task.FromResult((commandStatus, Array.Empty<bool>())));
             
-            var testReadStateHandler = new TestReadIOStateTaskHandler(
+            var testReadStateHandler = new TestActualStateReadActualIOStateTaskHandler(
                 _storeMock.Object,
                 _manipulatorMock.Object);
 
-            await Awaiting(async () => await testReadStateHandler.Handle(new MockReadStateTask()))
+            await Awaiting(async () => await testReadStateHandler.Handle(new MockActualStateReadTask()))
                 .Should()
                 .ThrowAsync<InvalidOperationException>();
         }
@@ -41,11 +41,11 @@ namespace Sod.Tests.Infrastructure.State.Handlers
             _storeMock.Setup(x => x.GetAsync<bool[]>(It.IsAny<string>())).Returns(Task.FromResult(new bool[1]));
             _manipulatorMock.Setup(x => x.ReadInputs()).Returns(() => Task.FromResult((CommandStatus.Processed, new bool[2])));
             
-            var testReadStateHandler = new TestReadIOStateTaskHandler(
+            var testReadStateHandler = new TestActualStateReadActualIOStateTaskHandler(
                 _storeMock.Object,
                 _manipulatorMock.Object);
 
-            await Awaiting(async () => await testReadStateHandler.Handle(new MockReadStateTask()))
+            await Awaiting(async () => await testReadStateHandler.Handle(new MockActualStateReadTask()))
                 .Should()
                 .ThrowAsync<InvalidOperationException>();
         }
@@ -56,11 +56,11 @@ namespace Sod.Tests.Infrastructure.State.Handlers
             _storeMock.Setup(x => x.GetAsync<bool[]>(It.IsAny<string>())).Returns(Task.FromResult(new bool[128]));
             _manipulatorMock.Setup(x => x.ReadInputs()).Returns(() => Task.FromResult((CommandStatus.Processed, new bool[128])));
             
-            var testReadStateHandler = new TestReadIOStateTaskHandler(
+            var testReadStateHandler = new TestActualStateReadActualIOStateTaskHandler(
                 _storeMock.Object,
                 _manipulatorMock.Object);
 
-            (await testReadStateHandler.Handle(new MockReadStateTask()))
+            (await testReadStateHandler.Handle(new MockActualStateReadTask()))
                 .Should()
                 .BeEmpty();
         }
@@ -76,17 +76,17 @@ namespace Sod.Tests.Infrastructure.State.Handlers
                 return Task.FromResult((CommandStatus.Processed, state));
             });
             
-            var testReadStateHandler = new TestReadIOStateTaskHandler(
+            var testReadStateHandler = new TestActualStateReadActualIOStateTaskHandler(
                 _storeMock.Object,
                 _manipulatorMock.Object);
 
-            var tasks = (await testReadStateHandler.Handle(new MockReadStateTask())).ToArray();
+            var tasks = (await testReadStateHandler.Handle(new MockActualStateReadTask())).ToArray();
             tasks
                 .Should()
                 .HaveCount(2);
 
-            tasks[0].GetType().Should().Be(typeof(StorageUpdateTask));
-            tasks[1].GetType().Should().Be(typeof(IOChangeNotificationTask));
+            tasks[0].GetType().Should().Be(typeof(PersistaedStateUpdateTask));
+            tasks[1].GetType().Should().Be(typeof(ActualStateChangedNotificationTask));
         }
 
         public static IEnumerable<object[]> CreateNotSuccessfulStatuses() =>

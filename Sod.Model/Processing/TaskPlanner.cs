@@ -14,19 +14,25 @@ namespace Sod.Model.Processing
             if (iteration == 0)
             {
                 queue.EnqueueAsync(
-                        new ReadStateTask(
+                        new ActualStateReadTask(
                             Constants.Store.InputsState,
                             NotificationTaskType.NotifyIOChanged,
                             IOReadManipulatorMethod.Inputs,
                             OutgoingEventType.InputsStateChanged
                         ));
                 queue.EnqueueAsync(
-                        new ReadStateTask(
+                        new ActualStateReadTask(
                             Constants.Store.OutputsState,
                             NotificationTaskType.NotifyIOChanged,
                             IOReadManipulatorMethod.Outputs,
                             OutgoingEventType.OutputsStateChanged
                         ));
+                queue.EnqueueAsync(
+                    new ActualStateReadTask(
+                        Constants.Store.ArmedPartitions,
+                        NotificationTaskType.NotifyArmedPartitionsChanged,
+                        IOReadManipulatorMethod.ArmedPartitions,
+                        OutgoingEventType.ArmedPartitionsStateChanged));
             }
 
             return Task.CompletedTask;
