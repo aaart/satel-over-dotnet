@@ -38,6 +38,7 @@ namespace Sod.Worker.Modules
                 {
                     args.Instance.SetAsync(Constants.Store.InputsState, new bool[128]);
                     args.Instance.SetAsync(Constants.Store.OutputsState, new bool[128]);
+                    args.Instance.SetAsync(Constants.Store.ArmedPartitions, new bool[32]);
                 })
                 .SingleInstance();
             

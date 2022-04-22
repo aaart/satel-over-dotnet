@@ -57,6 +57,8 @@ namespace Sod.Model.Tasks.Handlers.Types
                     return await _manipulator.ReadInputs();
                 case IOReadManipulatorMethod.Outputs:
                     return await _manipulator.ReadOutputs();
+                case IOReadManipulatorMethod.ArmedPartitions:
+                    return await _manipulator.ReadArmedPartitions();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(method), method, null);
             }
