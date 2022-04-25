@@ -33,6 +33,8 @@ namespace Sod.Model.Processing
                         NotificationTaskType.NotifyArmedPartitionsChanged,
                         IOReadManipulatorMethod.ArmedPartitions,
                         OutgoingEventType.ArmedPartitionsStateChanged));
+                queue.EnqueueAsync(
+                    new PersistedStateAlarmStateReadTask());
             }
 
             return Task.CompletedTask;

@@ -85,7 +85,7 @@ namespace Sod.Tests.Infrastructure.State.Handlers
                 .Should()
                 .HaveCount(2);
 
-            tasks[0].GetType().Should().Be(typeof(PersistaedStateUpdateTask));
+            tasks[0].GetType().Should().Be(typeof(PersistedStateUpdateTask));
             tasks[1].GetType().Should().Be(typeof(ActualStateChangedNotificationTask));
         }
 

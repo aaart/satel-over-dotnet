@@ -41,7 +41,7 @@ namespace Sod.Model.Tasks.Handlers.Types
             if (changes.Any())
             {
                 Logger.LogInformation($"{changes.Count} changes were found.");
-                var t1 = new PersistaedStateUpdateTask(data.PersistedStateKey, satelState);
+                var t1 = new PersistedStateUpdateTask(data.PersistedStateKey, satelState);
                 var t2 = new ActualStateChangedNotificationTask(changes, data.OutgoingEventType); 
                 return new SatelTask[] { t1, t2 };
             }

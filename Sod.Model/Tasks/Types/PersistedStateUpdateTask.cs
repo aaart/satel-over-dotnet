@@ -1,9 +1,9 @@
 ﻿namespace Sod.Model.Tasks.Types
 {
-    public class PersistaedStateUpdateTask : SatelTask
+    public class PersistedStateUpdateTask : SatelTask
     {
 
-        public PersistaedStateUpdateTask(string storageKey, bool[] values)
+        public PersistedStateUpdateTask(string storageKey, bool[] values)
         {
             StorageKey = storageKey;
             Values = values;

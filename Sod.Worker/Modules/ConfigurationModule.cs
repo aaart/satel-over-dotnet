@@ -54,7 +54,7 @@ namespace Sod.Worker.Modules
                     var cfg = ctx.Resolve<IConfigurationRoot>();
                     IEnumerable<(string topic, bool notify, int ioIndex)> mappings =
                         cfg
-                            .GetSection("Satel:Topic2IncomingEventHandlerMappings")
+                            .GetSection("Satel:IncomingEventMappings")
                             .GetChildren()
                             .Select(x => (x["Topic"], bool.Parse(x["Notify"]), int.Parse(x["IOIndex"])));
 

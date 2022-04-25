@@ -142,9 +142,11 @@ namespace Sod.Worker.Modules
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
 
             builder.RegisterType<ActualStateReadTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<PersistedStateUpdateTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<ActualStateOutputsUpdateTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<ActualStateChangedNotificationTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<PersistedStateUpdateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<PersistedStateAlarmStateReadTaskHandler>().AsSelf().SingleInstance();
+            
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
             builder.RegisterType<Loop>().AsSelf();
         }
