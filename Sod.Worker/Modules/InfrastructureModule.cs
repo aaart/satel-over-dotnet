@@ -36,9 +36,9 @@ namespace Sod.Worker.Modules
                 .As<IStore>()
                 .OnActivated(args =>
                 {
-                    args.Instance.SetAsync(Constants.Store.InputsState, new bool[128]);
-                    args.Instance.SetAsync(Constants.Store.OutputsState, new bool[128]);
-                    args.Instance.SetAsync(Constants.Store.ArmedPartitions, new bool[32]);
+                    args.Instance.SetAsync(Constants.Store.InputsState, Enumerable.Repeat(false, 128).ToArray());
+                    args.Instance.SetAsync(Constants.Store.OutputsState, Enumerable.Repeat(false, 128).ToArray());
+                    args.Instance.SetAsync(Constants.Store.ArmedPartitions, Enumerable.Repeat(true, 32).ToArray());
                 })
                 .SingleInstance();
             

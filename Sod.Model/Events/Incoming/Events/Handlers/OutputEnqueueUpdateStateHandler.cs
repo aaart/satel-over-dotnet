@@ -13,11 +13,13 @@ namespace Sod.Model.Events.Incoming.Events.Handlers
     public class OutputEnqueueUpdateStateHandler : LoggingCapability, IEventHandler
     {
         private readonly int _ioIndex;
+        private readonly bool _notify;
         private readonly ITaskQueue _queue;
 
-        public OutputEnqueueUpdateStateHandler(int ioIndex, ITaskQueue queue)
+        public OutputEnqueueUpdateStateHandler(int ioIndex, bool notify, ITaskQueue queue)
         {
             _ioIndex = ioIndex;
+            _notify = notify;
             _queue = queue;
         }
 
@@ -26,7 +28,7 @@ namespace Sod.Model.Events.Incoming.Events.Handlers
             Logger.LogInformation($"Event receiver from {incomingEvent.Topic}. Payload: {incomingEvent.Payload}");
             var data = new ActualStateOutputsUpdateTask(
                 new List<IOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(incomingEvent.Payload) } },
-                true,
+                _notify,
                 OutgoingEventType.OutputsStateChanged);
             await _queue.EnqueueAsync(data);
         }
