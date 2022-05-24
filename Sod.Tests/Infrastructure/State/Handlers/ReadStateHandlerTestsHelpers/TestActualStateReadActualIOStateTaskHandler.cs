@@ -4,10 +4,10 @@ using Sod.Model.Tasks.Handlers.Types;
 
 namespace Sod.Tests.Infrastructure.State.Handlers.ReadStateHandlerTestsHelpers
 {
-    public class TestReadIOStateTaskHandler : ReadStateTaskHandler
+    public class TestActualStateReadActualIOStateTaskHandler : ActualStateReadTaskHandler
     {
 
-        public TestReadIOStateTaskHandler(
+        public TestActualStateReadActualIOStateTaskHandler(
             IStore store, 
             IManipulator manipulator) 
             : base(store, manipulator)

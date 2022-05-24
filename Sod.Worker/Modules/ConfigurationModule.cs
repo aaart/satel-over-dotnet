@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Autofac;
 using Microsoft.Extensions.Configuration;
+using MQTTnet;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.Events.Incoming;
 using Sod.Model.Events.Incoming.Events.Handlers;
@@ -44,20 +46,20 @@ namespace Sod.Worker.Modules
                 .As<OutgoingEventMappings>()
                 .SingleInstance();
 
-            builder.RegisterType<OutputEnqueueUpdateStateHandler>().Named<IEventHandler>("EnqueueAndNotify").InstancePerDependency();
-            builder.RegisterType<NoNotificationOutputEnqueueStateUpdateHandler>().Named<IEventHandler>("EnqueueDoNotNotify").InstancePerDependency();
-            
+            builder.RegisterType<OutputEnqueueUpdateStateHandler>().As<IEventHandler>().InstancePerDependency();
+
             builder
                 .Register(ctx =>
                 {
                     var cfg = ctx.Resolve<IConfigurationRoot>();
-                    var mappings =
+                    IEnumerable<(string topic, bool notify, int ioIndex)> mappings =
                         cfg
-                            .GetSection("Satel:Topic2IncomingEventHandlerMappings")
+                            .GetSection("Satel:IncomingEventMappings")
                             .GetChildren()
-                            .Select(x => (x["Topic"], x["Handler"], int.Parse(x["IOIndex"])));
+                            .Select(x => (x["Topic"], bool.Parse(x["Notify"]), int.Parse(x["IOIndex"])));
 
-                    return new EventHandlerMappings(mappings.Select(x => (x.Item1, ctx.ResolveNamed<IEventHandler>(x.Item2, new NamedParameter("ioIndex", x.Item3)))));
+                    return new EventHandlerMappings(
+                        mappings.Select(x => (x.topic, ctx.Resolve<IEventHandler>(new NamedParameter("ioIndex", x.ioIndex), new NamedParameter("notify", x.notify)))));
                 })
                 .As<EventHandlerMappings>()
                 .SingleInstance();

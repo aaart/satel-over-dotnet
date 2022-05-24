@@ -36,8 +36,9 @@ namespace Sod.Worker.Modules
                 .As<IStore>()
                 .OnActivated(args =>
                 {
-                    args.Instance.SetAsync(Constants.Store.InputsState, new bool[128]);
-                    args.Instance.SetAsync(Constants.Store.OutputsState, new bool[128]);
+                    args.Instance.SetAsync(Constants.Store.InputsState, Enumerable.Repeat(false, 128).ToArray());
+                    args.Instance.SetAsync(Constants.Store.OutputsState, Enumerable.Repeat(false, 128).ToArray());
+                    args.Instance.SetAsync(Constants.Store.ArmedPartitions, Enumerable.Repeat(true, 32).ToArray());
                 })
                 .SingleInstance();
             
@@ -140,10 +141,12 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
 
-            builder.RegisterType<ReadStateTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<StorageUpdateTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<OutputsUpdateTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<IOChangeNotificationTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ActualStateReadTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ActualStateOutputsUpdateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ActualStateChangedNotificationTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<PersistedStateUpdateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<PersistedStateAlarmStateReadTaskHandler>().AsSelf().SingleInstance();
+            
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
             builder.RegisterType<Loop>().AsSelf();
         }

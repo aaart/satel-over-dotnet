@@ -3,6 +3,7 @@
     public enum IOReadManipulatorMethod
     {
         Inputs,
-        Outputs
+        Outputs,
+        ArmedPartitions
     }
 }

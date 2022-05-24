@@ -2,22 +2,21 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Sod.Model.CommonTypes;
 using Sod.Model.Events.Outgoing;
 using Sod.Model.Tasks.Types;
 
 namespace Sod.Model.Tasks.Handlers.Types
 {
-    public class IOChangeNotificationTaskHandler : BaseHandler<IOChangeNotificationTask>
+    public class ActualStateChangedNotificationTaskHandler : BaseHandler<ActualStateChangedNotificationTask>
     {
         private readonly IOutgoingEventPublisher _eventPublisher;
 
-        public IOChangeNotificationTaskHandler(IOutgoingEventPublisher eventPublisher)
+        public ActualStateChangedNotificationTaskHandler(IOutgoingEventPublisher eventPublisher)
         {
             _eventPublisher = eventPublisher;
         }
 
-        protected override async Task<IEnumerable<SatelTask>> Handle(IOChangeNotificationTask data)
+        protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateChangedNotificationTask data)
         {
             Logger.LogInformation($"Outgoing event type is {data.OutgoingEventType.ToString()}");
             foreach (var state in data.Notifications)
