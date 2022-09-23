@@ -6,47 +6,36 @@ using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
+using Sod.Model.Tasks.Handlers.Policies;
 using Sod.Model.Tasks.Types;
+using Sod.Model.Tools;
 
 namespace Sod.Model.Tasks.Handlers.Types
 {
-    public class ActualStateReadTaskHandler : BaseHandler<ActualStateReadTask>
+    public class ActualStateBinaryIOReadTaskHandler : BaseHandler<ActualStateBinaryIOReadTask>
     {
         private readonly IStore _store;
         private readonly IManipulator _manipulator;
+        private readonly IPostReadPolicy _postReadPolicy;
 
-        public ActualStateReadTaskHandler(IStore store, IManipulator manipulator)
+        public ActualStateBinaryIOReadTaskHandler(IStore store, IManipulator manipulator, IPostReadPolicy postReadPolicy)
         {
             _store = store;
             _manipulator = manipulator;
+            _postReadPolicy = postReadPolicy;
         }
 
-        protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateReadTask data)
+        protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOReadTask data)
         {
-            var (status, satelState) = await ManipulatorMethod(data.Method);
+            var (status, actualState) = await ManipulatorMethod(data.Method);
             ValidateStatus(status);
 
             var persistedState = await _store.GetAsync<bool[]>(data.PersistedStateKey);
-            ValidateState(persistedState, satelState);
+            ValidateState(persistedState, actualState);
 
-            var changes = new List<IOState>();
-            for (int i = 0; i < persistedState.Length; i++)
-            {
-                if (persistedState[i] != satelState[i])
-                {
-                    changes.Add(new IOState { Index = i + 1, Value = satelState[i] });
-                }
-            }
+            var changes = IO.ExtractIOChanges(persistedState, actualState);
 
-            if (changes.Any())
-            {
-                Logger.LogInformation($"{changes.Count} changes were found.");
-                var t1 = new PersistedStateUpdateTask(data.PersistedStateKey, satelState);
-                var t2 = new ActualStateChangedNotificationTask(changes, data.OutgoingEventType); 
-                return new SatelTask[] { t1, t2 };
-            }
-
-            return Enumerable.Empty<SatelTask>();
+            return _postReadPolicy.Apply(changes, data.PersistedStateKey, actualState, data.OutgoingEventType);
         }
 
         private async Task<(CommandStatus, bool[])> ManipulatorMethod(IOReadManipulatorMethod method)
@@ -57,8 +46,6 @@ namespace Sod.Model.Tasks.Handlers.Types
                     return await _manipulator.ReadInputs();
                 case IOReadManipulatorMethod.Outputs:
                     return await _manipulator.ReadOutputs();
-                case IOReadManipulatorMethod.ArmedPartitions:
-                    return await _manipulator.ReadArmedPartitions();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(method), method, null);
             }

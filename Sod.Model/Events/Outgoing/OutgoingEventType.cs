@@ -4,6 +4,7 @@
     {
         InputsStateChanged,
         OutputsStateChanged,
-        ArmedPartitionsStateChanged
+        ArmedPartitionsStateChanged,
+        AlarmTriggered
     }
 }

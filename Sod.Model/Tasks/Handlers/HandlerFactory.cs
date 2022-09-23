@@ -20,14 +20,14 @@ namespace Sod.Model.Tasks.Handlers
             {
                 case ActualStateOutputsUpdateTask:
                     return _provider.GetRequiredService<ActualStateOutputsUpdateTaskHandler>();
-                case ActualStateReadTask:
-                    return _provider.GetRequiredService<ActualStateReadTaskHandler>();
+                case ActualStateBinaryIOReadTask:
+                    return _provider.GetRequiredService<ActualStateBinaryIOReadTaskHandler>();
                 case ActualStateChangedNotificationTask:
                     return _provider.GetRequiredService<ActualStateChangedNotificationTaskHandler>();
                 case PersistedStateUpdateTask:
                     return _provider.GetRequiredService<PersistedStateUpdateTaskHandler>();
-                case PersistedStateAlarmStateReadTask:
-                    return _provider.GetRequiredService<PersistedStateAlarmStateReadTaskHandler>();
+                case ActualStateAlarmStateReadTask:
+                    return _provider.GetRequiredService<ActualStateAlarmStateReadTaskHandler>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(task), task.GetType(), "Not supported type.");
             }

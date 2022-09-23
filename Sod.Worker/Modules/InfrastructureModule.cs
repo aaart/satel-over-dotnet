@@ -21,6 +21,7 @@ using Sod.Model.Events.Outgoing;
 using Sod.Model.Events.Outgoing.Mqtt;
 using Sod.Model.Processing;
 using Sod.Model.Tasks.Handlers;
+using Sod.Model.Tasks.Handlers.Policies;
 using Sod.Model.Tasks.Handlers.Types;
 using StackExchange.Redis;
 
@@ -141,11 +142,20 @@ namespace Sod.Worker.Modules
                 .SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
 
-            builder.RegisterType<ActualStateReadTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ActualStateBinaryIOPostReadPolicy>().AsSelf().SingleInstance();
+            
+            builder
+                .Register(
+                    ctx => new ActualStateBinaryIOReadTaskHandler(
+                        ctx.Resolve<IStore>(), 
+                        ctx.Resolve<IManipulator>(), 
+                        ctx.Resolve<ActualStateBinaryIOPostReadPolicy>()))
+                .As<ActualStateBinaryIOReadTaskHandler>()
+                .SingleInstance();
             builder.RegisterType<ActualStateOutputsUpdateTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<ActualStateChangedNotificationTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<PersistedStateUpdateTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<PersistedStateAlarmStateReadTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ActualStateAlarmStateReadTaskHandler>().AsSelf().SingleInstance();
             
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
             builder.RegisterType<Loop>().AsSelf();

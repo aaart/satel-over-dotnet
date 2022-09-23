@@ -3,9 +3,9 @@ using Sod.Model.Events.Outgoing;
 
 namespace Sod.Model.Tasks.Types
 {
-    public class ActualStateReadTask : SatelTask
+    public class ActualStateBinaryIOReadTask : SatelTask
     {
-        public ActualStateReadTask(string persistedStateKey, NotificationTaskType notificationTaskType, IOReadManipulatorMethod method, OutgoingEventType outgoingEventType)
+        public ActualStateBinaryIOReadTask(string persistedStateKey, NotificationTaskType notificationTaskType, IOReadManipulatorMethod method, OutgoingEventType outgoingEventType)
         {
             PersistedStateKey = persistedStateKey;
             NotificationTaskType = notificationTaskType;

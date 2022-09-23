@@ -4,9 +4,9 @@ using Sod.Model.Tasks.Types;
 
 namespace Sod.Tests.Infrastructure.State.Mocks
 {
-    public class MockActualStateReadTask : ActualStateReadTask
+    public class MockActualStateBinaryIOReadTask : ActualStateBinaryIOReadTask
     {
-        public MockActualStateReadTask() 
+        public MockActualStateBinaryIOReadTask() 
             : base(string.Empty, NotificationTaskType.NotifyIOChanged, IOReadManipulatorMethod.Inputs, OutgoingEventType.InputsStateChanged)
         {
         }
