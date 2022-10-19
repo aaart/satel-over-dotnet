@@ -5,11 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using Sod.Infrastructure.Satel.Communication;
-using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
-using Sod.Model.Events.Outgoing;
-using Sod.Model.Tasks;
-using Sod.Model.Tasks.Handlers.Policies;
 using Sod.Model.Tasks.Types;
 using Sod.Tests.Infrastructure.State.Handlers.ReadStateHandlerTestsHelpers;
 using Sod.Tests.Infrastructure.State.Mocks;
@@ -22,7 +18,6 @@ namespace Sod.Tests.Infrastructure.State.Handlers
     {
         private readonly Mock<IStore> _storeMock = new();
         private readonly Mock<IManipulator> _manipulatorMock = new();
-        private readonly Mock<IPostReadPolicy> _postReadPolicyMock = new();
 
         [Theory]
         [MemberData(nameof(CreateNotSuccessfulStatuses))]
@@ -33,8 +28,7 @@ namespace Sod.Tests.Infrastructure.State.Handlers
             
             var testReadStateHandler = new TestActualStateBinaryIOReadActualIOStateBinaryIOTaskHandler(
                 _storeMock.Object,
-                _manipulatorMock.Object,
-                _postReadPolicyMock.Object);
+                _manipulatorMock.Object);
 
             await Awaiting(async () => await testReadStateHandler.Handle(new MockActualStateBinaryIOReadTask()))
                 .Should()
@@ -49,8 +43,7 @@ namespace Sod.Tests.Infrastructure.State.Handlers
             
             var testReadStateHandler = new TestActualStateBinaryIOReadActualIOStateBinaryIOTaskHandler(
                 _storeMock.Object,
-                _manipulatorMock.Object,
-                _postReadPolicyMock.Object);
+                _manipulatorMock.Object);
 
             await Awaiting(async () => await testReadStateHandler.Handle(new MockActualStateBinaryIOReadTask()))
                 .Should()
@@ -65,8 +58,7 @@ namespace Sod.Tests.Infrastructure.State.Handlers
             
             var testReadStateHandler = new TestActualStateBinaryIOReadActualIOStateBinaryIOTaskHandler(
                 _storeMock.Object,
-                _manipulatorMock.Object,
-                _postReadPolicyMock.Object);
+                _manipulatorMock.Object);
 
             (await testReadStateHandler.Handle(new MockActualStateBinaryIOReadTask()))
                 .Should()
@@ -83,14 +75,9 @@ namespace Sod.Tests.Infrastructure.State.Handlers
                 state[0] = true;
                 return Task.FromResult((CommandStatus.Processed, state));
             });
-            _postReadPolicyMock
-                .Setup(x => x.Apply(It.IsAny<IList<IOState>>(), It.IsAny<string>(), It.IsAny<bool[]>(), It.IsAny<OutgoingEventType>()))
-                .Returns(() => new SatelTask[]{ new PersistedStateUpdateTask(string.Empty, Array.Empty<bool>()), new ActualStateChangedNotificationTask(Enumerable.Empty<IOState>(), It.IsAny<OutgoingEventType>()) });
-            
             var testReadStateHandler = new TestActualStateBinaryIOReadActualIOStateBinaryIOTaskHandler(
                 _storeMock.Object,
-                _manipulatorMock.Object,
-                _postReadPolicyMock.Object);
+                _manipulatorMock.Object);
 
             var tasks = (await testReadStateHandler.Handle(new MockActualStateBinaryIOReadTask())).ToArray();
             tasks

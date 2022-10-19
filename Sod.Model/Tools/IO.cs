@@ -11,6 +11,7 @@ public static class IO
         {
             if (persistedState[i] != satelState[i])
             {
+                // indexing at integra starts from 1.
                 changes.Add(new IOState { Index = i + 1, Value = satelState[i] });
             }
         }

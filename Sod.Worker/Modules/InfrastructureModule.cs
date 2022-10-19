@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Autofac;
-using Microsoft.Extensions.Configuration;
 using MQTTnet;
 using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
-using Newtonsoft.Json;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.Socket;
 using Sod.Model;
+using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
 using Sod.Model.Events.Incoming;
 using Sod.Model.Events.Incoming.Events;
@@ -21,9 +19,7 @@ using Sod.Model.Events.Outgoing;
 using Sod.Model.Events.Outgoing.Mqtt;
 using Sod.Model.Processing;
 using Sod.Model.Tasks.Handlers;
-using Sod.Model.Tasks.Handlers.Policies;
 using Sod.Model.Tasks.Handlers.Types;
-using StackExchange.Redis;
 
 namespace Sod.Worker.Modules
 {
@@ -136,26 +132,14 @@ namespace Sod.Worker.Modules
             builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
 
             builder.RegisterType<InMemoryTaskQueue>().As<ITaskQueue>().SingleInstance();
-            builder
-                .RegisterType<TaskPlanner>()
-                .As<ITaskPlanner>()
-                .SingleInstance();
+            builder.RegisterType<TaskPlanner>().As<ITaskPlanner>().SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
 
-            builder.RegisterType<ActualStateBinaryIOPostReadPolicy>().AsSelf().SingleInstance();
-            
-            builder
-                .Register(
-                    ctx => new ActualStateBinaryIOReadTaskHandler(
-                        ctx.Resolve<IStore>(), 
-                        ctx.Resolve<IManipulator>(), 
-                        ctx.Resolve<ActualStateBinaryIOPostReadPolicy>()))
-                .As<ActualStateBinaryIOReadTaskHandler>()
-                .SingleInstance();
+            builder.RegisterType<ActualStateBinaryIOReadTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterType<ActualStateAlarmIOPostReadTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<ActualStateOutputsUpdateTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<ActualStateChangedNotificationTaskHandler>().AsSelf().SingleInstance();
             builder.RegisterType<PersistedStateUpdateTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<ActualStateAlarmStateReadTaskHandler>().AsSelf().SingleInstance();
             
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
             builder.RegisterType<Loop>().AsSelf();

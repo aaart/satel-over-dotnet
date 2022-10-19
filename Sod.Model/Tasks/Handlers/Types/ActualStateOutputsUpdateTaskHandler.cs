@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.CommonTypes;
 using Sod.Model.Tasks.Types;

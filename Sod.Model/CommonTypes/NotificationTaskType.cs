@@ -3,6 +3,7 @@
     public enum NotificationTaskType
     {
         NotifyIOChanged,
-        NotifyArmedPartitionsChanged
+        NotifyArmedPartitionsChanged,
+        NotifyAlarmTriggeredChanged
     }
 }

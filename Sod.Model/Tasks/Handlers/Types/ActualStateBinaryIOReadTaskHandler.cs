@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Sod.Infrastructure.Satel.Communication;
+﻿using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
-using Sod.Model.Tasks.Handlers.Policies;
 using Sod.Model.Tasks.Types;
 using Sod.Model.Tools;
 
@@ -16,13 +10,11 @@ namespace Sod.Model.Tasks.Handlers.Types
     {
         private readonly IStore _store;
         private readonly IManipulator _manipulator;
-        private readonly IPostReadPolicy _postReadPolicy;
 
-        public ActualStateBinaryIOReadTaskHandler(IStore store, IManipulator manipulator, IPostReadPolicy postReadPolicy)
+        public ActualStateBinaryIOReadTaskHandler(IStore store, IManipulator manipulator)
         {
             _store = store;
             _manipulator = manipulator;
-            _postReadPolicy = postReadPolicy;
         }
 
         protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOReadTask data)
@@ -35,7 +27,17 @@ namespace Sod.Model.Tasks.Handlers.Types
 
             var changes = IO.ExtractIOChanges(persistedState, actualState);
 
-            return _postReadPolicy.Apply(changes, data.PersistedStateKey, actualState, data.OutgoingEventType);
+            switch (data.Method)
+            {
+                case IOReadManipulatorMethod.Inputs:
+                case IOReadManipulatorMethod.Outputs:
+                    return new[] { new ActualStateBinaryIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
+                case IOReadManipulatorMethod.ArmedPartitions:
+                case IOReadManipulatorMethod.AlarmTriggered:
+                    return new[] { new ActualStateAlarmIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private async Task<(CommandStatus, bool[])> ManipulatorMethod(IOReadManipulatorMethod method)
@@ -46,6 +48,10 @@ namespace Sod.Model.Tasks.Handlers.Types
                     return await _manipulator.ReadInputs();
                 case IOReadManipulatorMethod.Outputs:
                     return await _manipulator.ReadOutputs();
+                case IOReadManipulatorMethod.ArmedPartitions:
+                    return await _manipulator.ReadArmedPartitions();
+                case IOReadManipulatorMethod.AlarmTriggered:
+                    return await _manipulator.ReadAlarmTriggered();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(method), method, null);
             }

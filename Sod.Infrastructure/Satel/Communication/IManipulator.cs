@@ -12,5 +12,6 @@ namespace Sod.Infrastructure.Satel.Communication
         Task<(CommandStatus status, bool[] zonesAlarm)> ReadArmedPartitions();
         Task<(CommandStatus status, IntegraResponse response)> DisableOutputs(bool[] outputs);
         Task<(CommandStatus status, IntegraResponse response)> EnableOutputs(bool[] outputs);
+        Task<(CommandStatus status, bool[] triggeredZones)> ReadAlarmTriggered();
     }
 }

@@ -75,6 +75,14 @@ namespace Sod.Infrastructure.Satel.Communication
                 data => (IntegraResponse)data[0]);
         }
 
+        public async Task<(CommandStatus status, bool[] triggeredZones)> ReadAlarmTriggered()
+        {
+            return await _genericCommunicationInterface.Execute(
+                new CommunicationMessage(Command.PartitionsAlarm, Array.Empty<byte>(), Array.Empty<byte>()),
+                new CommunicationDefaultResponse<bool[]>(Array.Empty<bool>(), Command.ArmedPartitionsReally),
+                Translation.ToBooleanArray); 
+        }
+
         public async Task<(CommandStatus status, IntegraResponse response)> ArmInMode0(bool[] partitions)
         {
             return await _genericCommunicationInterface.Execute(
