@@ -135,7 +135,7 @@ namespace Sod.Worker.Modules
             builder.RegisterType<TaskPlanner>().As<ITaskPlanner>().SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
 
-            builder.RegisterTypes(typeof(BaseHandler<>).Assembly.GetTypes().Where(x => x.Name.EndsWith("TaskHandler")).ToArray()).AsSelf().SingleInstance();
+            builder.RegisterTypes(typeof(BaseHandler<>).Assembly.GetTypes().Where(x => x.IsAssignableTo<ITaskHandler>()).ToArray()).AsSelf().SingleInstance();
             
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
             builder.RegisterType<Loop>().AsSelf();
