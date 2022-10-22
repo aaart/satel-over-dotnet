@@ -1,7 +1,5 @@
 ﻿using System;
 using Autofac;
-using Autofac.Core;
-using Autofac.Core.Activators.Reflection;
 using Sod.Model.Tasks;
 using Sod.Model.Tasks.Handlers;
 using Sod.Model.Tasks.Handlers.Types;
@@ -30,6 +28,10 @@ namespace Sod.Worker
                     return _context.Resolve<ActualStateChangedNotificationTaskHandler>();
                 case PersistedStateUpdateTask:
                     return _context.Resolve<PersistedStateUpdateTaskHandler>();
+                case ActualStateAlarmIOPostReadTask:
+                    return _context.Resolve<ActualStateAlarmIOPostReadTaskHandler>();
+                case ActualStateBinaryIOPostReadTask:
+                    return _context.Resolve<ActualStateBinaryIOPostReadTaskHandler>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(task), task.GetType(), "Not supported type.");
             }

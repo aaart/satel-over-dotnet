@@ -135,11 +135,7 @@ namespace Sod.Worker.Modules
             builder.RegisterType<TaskPlanner>().As<ITaskPlanner>().SingleInstance();
             builder.RegisterType<HandlerFactory>().As<IHandlerFactory>().SingleInstance();
 
-            builder.RegisterType<ActualStateBinaryIOReadTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<ActualStateAlarmIOPostReadTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<ActualStateOutputsUpdateTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<ActualStateChangedNotificationTaskHandler>().AsSelf().SingleInstance();
-            builder.RegisterType<PersistedStateUpdateTaskHandler>().AsSelf().SingleInstance();
+            builder.RegisterTypes(typeof(BaseHandler<>).Assembly.GetTypes().Where(x => x.Name.EndsWith("TaskHandler")).ToArray()).AsSelf().SingleInstance();
             
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
             builder.RegisterType<Loop>().AsSelf();
