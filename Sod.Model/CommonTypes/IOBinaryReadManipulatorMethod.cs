@@ -1,6 +1,6 @@
 ﻿namespace Sod.Model.CommonTypes
 {
-    public enum IOReadManipulatorMethod
+    public enum IOBinaryReadManipulatorMethod
     {
         Inputs,
         Outputs,

@@ -29,28 +29,28 @@ namespace Sod.Model.Tasks.Handlers.Types
 
             switch (data.Method)
             {
-                case IOReadManipulatorMethod.Inputs:
-                case IOReadManipulatorMethod.Outputs:
+                case IOBinaryReadManipulatorMethod.Inputs:
+                case IOBinaryReadManipulatorMethod.Outputs:
                     return new[] { new ActualStateBinaryIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
-                case IOReadManipulatorMethod.ArmedPartitions:
-                case IOReadManipulatorMethod.AlarmTriggered:
+                case IOBinaryReadManipulatorMethod.ArmedPartitions:
+                case IOBinaryReadManipulatorMethod.AlarmTriggered:
                     return new[] { new ActualStateAlarmIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private async Task<(CommandStatus, bool[])> ManipulatorMethod(IOReadManipulatorMethod method)
+        private async Task<(CommandStatus, bool[])> ManipulatorMethod(IOBinaryReadManipulatorMethod method)
         {
             switch (method)
             {
-                case IOReadManipulatorMethod.Inputs:
+                case IOBinaryReadManipulatorMethod.Inputs:
                     return await _manipulator.ReadInputs();
-                case IOReadManipulatorMethod.Outputs:
+                case IOBinaryReadManipulatorMethod.Outputs:
                     return await _manipulator.ReadOutputs();
-                case IOReadManipulatorMethod.ArmedPartitions:
+                case IOBinaryReadManipulatorMethod.ArmedPartitions:
                     return await _manipulator.ReadArmedPartitions();
-                case IOReadManipulatorMethod.AlarmTriggered:
+                case IOBinaryReadManipulatorMethod.AlarmTriggered:
                     return await _manipulator.ReadAlarmTriggered();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(method), method, null);

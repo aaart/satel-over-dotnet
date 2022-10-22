@@ -17,21 +17,21 @@ namespace Sod.Model.Processing
                         new ActualStateBinaryIOReadTask(
                             Constants.Store.InputsState,
                             NotificationTaskType.NotifyIOChanged,
-                            IOReadManipulatorMethod.Inputs,
+                            IOBinaryReadManipulatorMethod.Inputs,
                             OutgoingEventType.InputsStateChanged
                         ));
                 queue.EnqueueAsync(
                         new ActualStateBinaryIOReadTask(
                             Constants.Store.OutputsState,
                             NotificationTaskType.NotifyIOChanged,
-                            IOReadManipulatorMethod.Outputs,
+                            IOBinaryReadManipulatorMethod.Outputs,
                             OutgoingEventType.OutputsStateChanged
                         ));
                 queue.EnqueueAsync(
                     new ActualStateBinaryIOReadTask(
                         Constants.Store.ArmedPartitions,
                         NotificationTaskType.NotifyArmedPartitionsChanged,
-                        IOReadManipulatorMethod.ArmedPartitions,
+                        IOBinaryReadManipulatorMethod.ArmedPartitions,
                         OutgoingEventType.ArmedPartitionsStateChanged));
                 
             }
