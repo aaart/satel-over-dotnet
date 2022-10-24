@@ -26,7 +26,7 @@ namespace Sod.Model.Events.Incoming.Events.Handlers
         public async Task HandleAsync(IncomingEvent incomingEvent)
         {
             Logger.LogInformation($"Event receiver from {incomingEvent.Topic}. Payload: {incomingEvent.Payload}");
-            var data = new ActualStateOutputsUpdateTask(
+            var data = new ActualStateBinaryIOUpdateTask(
                 new List<IOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(incomingEvent.Payload) } },
                 _notify,
                 OutgoingEventType.OutputsStateChanged);

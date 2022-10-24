@@ -20,8 +20,8 @@ namespace Sod.Worker
         {
             switch (task)
             {
-                case ActualStateOutputsUpdateTask:
-                    return _context.Resolve<ActualStateOutputsUpdateTaskHandler>();
+                case ActualStateBinaryIOUpdateTask:
+                    return _context.Resolve<ActualStateBinaryIOUpdateTaskHandler>();
                 case ActualStateBinaryIOReadTask:
                     return _context.Resolve<ActualStateBinaryIOReadTaskHandler>();
                 case ActualStateChangedNotificationTask:
