@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Sod.Model.Events.Incoming
 {
-    public class EventHandlerMappings : IEnumerable<IEventHandler>
+    public class EventHandlerMappings : IEnumerable<IStateChangeDispatcher>
     {
-        private readonly Dictionary<string, IEventHandler> _handlers = new();
+        private readonly Dictionary<string, IStateChangeDispatcher> _handlers = new();
 
-        public EventHandlerMappings(IEnumerable<(string topic, IEventHandler handler)> handlers)
+        public EventHandlerMappings(IEnumerable<(string topic, IStateChangeDispatcher handler)> handlers)
         {
             foreach (var tuple in handlers)
             {
@@ -19,9 +19,9 @@ namespace Sod.Model.Events.Incoming
 
         public IEnumerable<string> Topics => _handlers.Keys;
         
-        public IEnumerable<IEventHandler> GetHandlers(string topic) => _handlers.Where(x => string.Equals(x.Key, topic, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Value);
+        public IEnumerable<IStateChangeDispatcher> GetHandlers(string topic) => _handlers.Where(x => string.Equals(x.Key, topic, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Value);
 
-        public IEnumerator<IEventHandler> GetEnumerator() => _handlers.Values.GetEnumerator();
+        public IEnumerator<IStateChangeDispatcher> GetEnumerator() => _handlers.Values.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }

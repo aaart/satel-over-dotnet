@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Capabilities;
-using Sod.Model.Events.Incoming.Events;
 
 namespace Sod.Model.Events.Incoming
 {
@@ -14,12 +13,12 @@ namespace Sod.Model.Events.Incoming
             _handlerMappings = handlerMappings;
         }
 
-        public async Task Process(IncomingEvent incomingEvent)
+        public async Task Process(string topic, string payload)
         {
             Logger.LogDebug("an event received.");
-            foreach (var handler in _handlerMappings.GetHandlers(incomingEvent.Topic))
+            foreach (var handler in _handlerMappings.GetHandlers(topic))
             {
-                await handler.HandleAsync(incomingEvent);
+                await handler.HandleAsync(payload);
             }
         }
     }

@@ -1,10 +1,6 @@
-﻿using System.Threading.Tasks;
-using Sod.Model.Events.Incoming.Events;
+﻿namespace Sod.Model.Events.Incoming;
 
-namespace Sod.Model.Events.Incoming
+public interface IBroker
 {
-    public interface IBroker
-    {
-        Task Process(IncomingEvent incomingEvent);
-    }
+    Task Process(string topic, string payload);
 }

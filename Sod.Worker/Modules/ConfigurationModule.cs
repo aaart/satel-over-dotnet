@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using MQTTnet;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.Events.Incoming;
-using Sod.Model.Events.Incoming.Events.Handlers;
 using Sod.Model.Events.Outgoing.Mqtt;
 using Sod.Model.Processing;
 
@@ -46,20 +45,20 @@ namespace Sod.Worker.Modules
                 .As<OutgoingEventMappings>()
                 .SingleInstance();
 
-            builder.RegisterType<OutputEnqueueUpdateStateHandler>().As<IEventHandler>().InstancePerDependency();
+            builder.RegisterType<StateChangeDispatcher>().AsSelf().InstancePerDependency();
 
             builder
                 .Register(ctx =>
                 {
                     var cfg = ctx.Resolve<IConfigurationRoot>();
-                    IEnumerable<(string topic, bool notify, int ioIndex)> mappings =
+                    IEnumerable<(IncomingEventType incomingEventType, string topic, bool notify, int ioIndex)> mappings =
                         cfg
                             .GetSection("Satel:IncomingEventMappings")
                             .GetChildren()
-                            .Select(x => (x["Topic"], bool.Parse(x["Notify"]), int.Parse(x["IOIndex"])));
+                            .Select(x => (Enum.Parse<IncomingEventType>(x["Type"]), x["Topic"], bool.Parse(x["Notify"]), int.Parse(x["IOIndex"])));
 
                     return new EventHandlerMappings(
-                        mappings.Select(x => (x.topic, ctx.Resolve<IEventHandler>(new NamedParameter("ioIndex", x.ioIndex), new NamedParameter("notify", x.notify)))));
+                        mappings.Select(x => (x.topic, (IStateChangeDispatcher)ctx.Resolve<StateChangeDispatcher>(new NamedParameter("incomingEventType", x.incomingEventType), new NamedParameter("ioIndex", x.ioIndex), new NamedParameter("notify", x.notify)))));
                 })
                 .As<EventHandlerMappings>()
                 .SingleInstance();

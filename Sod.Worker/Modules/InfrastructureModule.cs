@@ -14,7 +14,6 @@ using Sod.Model;
 using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
 using Sod.Model.Events.Incoming;
-using Sod.Model.Events.Incoming.Events;
 using Sod.Model.Events.Outgoing;
 using Sod.Model.Events.Outgoing.Mqtt;
 using Sod.Model.Processing;
@@ -126,7 +125,7 @@ namespace Sod.Worker.Modules
                     }
 
                     var broker = activatedEventArgs.Context.Resolve<IBroker>();
-                    client.UseApplicationMessageReceivedHandler(x => { broker.Process(new IncomingEvent(x.ApplicationMessage.Topic, Encoding.UTF8.GetString(x.ApplicationMessage.Payload))); });
+                    client.UseApplicationMessageReceivedHandler(x => { broker.Process(x.ApplicationMessage.Topic, Encoding.UTF8.GetString(x.ApplicationMessage.Payload)); });
                 });
 
             builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
