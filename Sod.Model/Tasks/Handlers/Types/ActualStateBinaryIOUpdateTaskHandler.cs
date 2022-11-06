@@ -3,61 +3,79 @@ using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.CommonTypes;
 using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Tasks.Handlers.Types
+namespace Sod.Model.Tasks.Handlers.Types;
+
+public class ActualStateBinaryIOUpdateTaskHandler : BaseHandler<ActualStateBinaryIOUpdateTask>
 {
-    public class ActualStateBinaryIOUpdateTaskHandler : BaseHandler<ActualStateBinaryIOUpdateTask>
+    private readonly IManipulator _manipulator;
+
+    public ActualStateBinaryIOUpdateTaskHandler(IManipulator manipulator)
     {
-        private readonly IManipulator _manipulator;
+        Logger.LogDebug($"{nameof(ActualStateBinaryIOUpdateTaskHandler)} is executing.");
+        _manipulator = manipulator;
+    }
 
-        public ActualStateBinaryIOUpdateTaskHandler(IManipulator manipulator)
+
+    protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOUpdateTask data)
+    {
+        var disableOutputs = new bool[128];
+        var enableOutputs = new bool[128];
+        var notifications = new List<BinaryIOState>();
+        var anyEnabled = false;
+        var anyDisabled = false;
+        foreach (var state in data.Updates)
         {
-            Logger.LogDebug($"{nameof(ActualStateBinaryIOUpdateTaskHandler)} is executing.");
-            _manipulator = manipulator;
+            var index = state.Index - 1;
+            var enable = state.Value;
+            if (enable)
+            {
+                enableOutputs[index] = true;
+                anyEnabled = true;
+            }
+            else
+            {
+                disableOutputs[index] = true;
+                anyDisabled = true;
+            }
+            notifications.Add(state);
         }
 
-
-        protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOUpdateTask data)
+        var tasks = new List<SatelTask>();
+        if (anyEnabled)
         {
-            var disableOutputs = new bool[128];
-            var enableOutputs = new bool[128];
-            var disableChanges = new List<IOState>();
-            var enableChanges = new List<IOState>();
-            foreach (var state in data.Updates)
+            switch (data.Method)
             {
-                var index = state.Index - 1;
-                var enable = state.Value;
-                if (enable)
-                {
-                    enableOutputs[index] = true;
-                    enableChanges.Add(state);
-                }
-                else
-                {
-                    disableOutputs[index] = true;
-                    disableChanges.Add(state);
-                }
+                case IOBinaryUpdateType.Outputs:
+                    await _manipulator.EnableOutputs(enableOutputs);
+                    break;
+                case IOBinaryUpdateType.Partitions:
+                    await _manipulator.ArmInMode0(enableOutputs);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-
-            var tasks = new List<SatelTask>();
-            if (enableChanges.Any())
-            {
-                await _manipulator.EnableOutputs(enableOutputs);
-                if (data.NotifyChanged)
-                {
-                    tasks.Add(new ActualStateChangedNotificationTask(enableChanges, data.EventType));
-                }
-            }
-
-            if (disableChanges.Any())
-            {
-                await _manipulator.DisableOutputs(disableOutputs);
-                if (data.NotifyChanged)
-                {
-                    tasks.Add(new ActualStateChangedNotificationTask(disableChanges, data.EventType));
-                }
-            }
-
-            return tasks;
         }
+
+        if (anyDisabled)
+        {
+            switch (data.Method)
+            {
+                case IOBinaryUpdateType.Outputs:
+                    await _manipulator.DisableOutputs(disableOutputs);
+                    break;
+                case IOBinaryUpdateType.Partitions:
+                    await _manipulator.DisArm(disableOutputs);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        if (notifications.Any() && data.NotifyChanged)
+        {
+            tasks.Add(new ActualStateChangedNotificationTask(notifications, data.EventType));
+        }
+
+        return tasks;
     }
 }

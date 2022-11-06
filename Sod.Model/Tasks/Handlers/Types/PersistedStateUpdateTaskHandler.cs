@@ -2,29 +2,28 @@
 using Sod.Model.DataStructures;
 using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Tasks.Handlers.Types
+namespace Sod.Model.Tasks.Handlers.Types;
+
+public class PersistedStateUpdateTaskHandler : BaseHandler<PersistedStateUpdateTask>
 {
-    public class PersistedStateUpdateTaskHandler : BaseHandler<PersistedStateUpdateTask>
+    private readonly IStore _store;
+
+    public PersistedStateUpdateTaskHandler(IStore store)
     {
-        private readonly IStore _store;
+        _store = store;
+    }
 
-        public PersistedStateUpdateTaskHandler(IStore store)
+    protected override async Task<IEnumerable<SatelTask>> Handle(PersistedStateUpdateTask data)
+    {
+        try
         {
-            _store = store;
+            await _store.SetAsync(data.StorageKey, data.Values);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, e.Message);
         }
 
-        protected override async Task<IEnumerable<SatelTask>> Handle(PersistedStateUpdateTask data)
-        {
-            try
-            {
-                await _store.SetAsync(data.StorageKey, data.Values);
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, e.Message);
-            }
-
-            return Enumerable.Empty<SatelTask>();
-        }
+        return Enumerable.Empty<SatelTask>();
     }
 }

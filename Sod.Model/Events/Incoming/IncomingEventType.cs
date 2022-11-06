@@ -3,5 +3,5 @@
 public enum IncomingEventType
 {
     BinaryOutput,
-    AlarmArm
+    AlarmPartition
 }

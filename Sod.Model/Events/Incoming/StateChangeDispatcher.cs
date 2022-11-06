@@ -26,22 +26,23 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
     public async Task HandleAsync(string payload)
     {
         Logger.LogInformation($"Event received for IOIndex = {_ioIndex} and event type = {_incomingEventType.ToString()}. Payload: {payload}");
-        if (_incomingEventType == IncomingEventType.BinaryOutput)
+        IOBinaryUpdateType updateType;
+        OutgoingEventType outgoingEventType;
+        switch (_incomingEventType)
         {
-            var task = new ActualStateBinaryIOUpdateTask(
-                new List<IOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } },
-                _notify,
-                OutgoingEventType.OutputsStateChanged);
-            await _queue.EnqueueAsync(task);
+            case IncomingEventType.BinaryOutput:
+                updateType = IOBinaryUpdateType.Outputs;
+                outgoingEventType = OutgoingEventType.OutputsStateChanged;
+                break;
+            case IncomingEventType.AlarmPartition:
+                updateType = IOBinaryUpdateType.Partitions;
+                outgoingEventType = OutgoingEventType.ArmedPartitionsStateChanged;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
-        else if (_incomingEventType == IncomingEventType.BinaryOutput)
-        {
-            // TODO: Implement this!
-            throw new NotImplementedException("Action still not implemented");
-;        }
-        else
-        {
-            throw new InvalidOperationException($"Cannot process incoming event. Event type = {_incomingEventType}, Index = {_ioIndex}");
-        }
+        
+        var task = new ActualStateBinaryIOUpdateTask(new List<BinaryIOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } }, updateType, _notify, outgoingEventType);
+        await _queue.EnqueueAsync(task);
     }
 }

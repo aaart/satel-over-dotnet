@@ -27,7 +27,7 @@ public class ActualStateAlarmIOPostReadTaskHandler : BaseHandler<ActualStateAlar
                 new ActualStateBinaryIOReadTask(
                     Constants.Store.TriggeredPartitions, 
                     NotificationTaskType.NotifyAlarmTriggeredChanged, 
-                    IOBinaryReadManipulatorMethod.AlarmTriggered, 
+                    IOBinaryReadType.AlarmTriggered, 
                     OutgoingEventType.ArmedPartitionsStateChanged));
         }
         

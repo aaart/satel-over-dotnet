@@ -6,12 +6,12 @@ namespace Sod.Model.Tasks.Types;
 
 public class ActualStateChangedNotificationTask : SatelTask
 {
-    public ActualStateChangedNotificationTask(IEnumerable<IOState> notifications, OutgoingEventType outgoingEventType)
+    public ActualStateChangedNotificationTask(IEnumerable<BinaryIOState> notifications, OutgoingEventType outgoingEventType)
     {
         Notifications = notifications;
         OutgoingEventType = outgoingEventType;
     }
 
-    public IEnumerable<IOState> Notifications { get; }
+    public IEnumerable<BinaryIOState> Notifications { get; }
     public OutgoingEventType OutgoingEventType { get; }
 }

@@ -5,7 +5,7 @@ namespace Sod.Model.Tasks.Types;
 
 public class ActualStateAlarmIOPostReadTask : SatelTask
 {
-    public ActualStateAlarmIOPostReadTask(IList<IOState> changes, string persistedStateKey, bool[] actualState, OutgoingEventType outgoingEventType)
+    public ActualStateAlarmIOPostReadTask(IList<BinaryIOState> changes, string persistedStateKey, bool[] actualState, OutgoingEventType outgoingEventType)
     {
         Changes = changes;
         PersistedStateKey = persistedStateKey;
@@ -13,7 +13,7 @@ public class ActualStateAlarmIOPostReadTask : SatelTask
         OutgoingEventType = outgoingEventType;
     }
 
-    public IList<IOState> Changes { get; }
+    public IList<BinaryIOState> Changes { get; }
     public string PersistedStateKey { get; } 
     public bool[] ActualState { get; } 
     public OutgoingEventType OutgoingEventType { get; }

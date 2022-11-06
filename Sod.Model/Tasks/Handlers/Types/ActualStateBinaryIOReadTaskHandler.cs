@@ -29,28 +29,28 @@ namespace Sod.Model.Tasks.Handlers.Types
 
             switch (data.Method)
             {
-                case IOBinaryReadManipulatorMethod.Inputs:
-                case IOBinaryReadManipulatorMethod.Outputs:
+                case IOBinaryReadType.Inputs:
+                case IOBinaryReadType.Outputs:
                     return new[] { new ActualStateBinaryIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
-                case IOBinaryReadManipulatorMethod.ArmedPartitions:
-                case IOBinaryReadManipulatorMethod.AlarmTriggered:
+                case IOBinaryReadType.ArmedPartitions:
+                case IOBinaryReadType.AlarmTriggered:
                     return new[] { new ActualStateAlarmIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private async Task<(CommandStatus, bool[])> ManipulatorMethod(IOBinaryReadManipulatorMethod method)
+        private async Task<(CommandStatus, bool[])> ManipulatorMethod(IOBinaryReadType method)
         {
             switch (method)
             {
-                case IOBinaryReadManipulatorMethod.Inputs:
+                case IOBinaryReadType.Inputs:
                     return await _manipulator.ReadInputs();
-                case IOBinaryReadManipulatorMethod.Outputs:
+                case IOBinaryReadType.Outputs:
                     return await _manipulator.ReadOutputs();
-                case IOBinaryReadManipulatorMethod.ArmedPartitions:
+                case IOBinaryReadType.ArmedPartitions:
                     return await _manipulator.ReadArmedPartitions();
-                case IOBinaryReadManipulatorMethod.AlarmTriggered:
+                case IOBinaryReadType.AlarmTriggered:
                     return await _manipulator.ReadAlarmTriggered();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(method), method, null);
