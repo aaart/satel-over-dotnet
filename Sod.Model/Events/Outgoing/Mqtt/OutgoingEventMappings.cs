@@ -33,8 +33,11 @@ namespace Sod.Model.Events.Outgoing.Mqtt
                 case OutgoingEventType.ArmedPartitionsStateChanged:
                     deviceType = DeviceType.ArmedPartition;
                     break;
+                case OutgoingEventType.AlarmTriggered:
+                    deviceType = DeviceType.TriggeredAlarm;
+                    break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(evnt.Type), evnt.Type, "Type is out of the expected range!");
             }
 
             return _mappings

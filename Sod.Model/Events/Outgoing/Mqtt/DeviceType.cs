@@ -4,6 +4,7 @@
     {
         Input,
         Output,
-        ArmedPartition
+        ArmedPartition,
+        TriggeredAlarm
     }
 }
