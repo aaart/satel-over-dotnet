@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
-using Sod.Model.DataStructures;
+﻿using Sod.Model.DataStructures;
 
-namespace Sod.Model.Processing
+namespace Sod.Model.Processing;
+
+public interface IQueueProcessor
 {
-    public interface IQueueProcessor
-    {
-        Task Process(ITaskQueue queue);
-    }
+    Task Process(ITaskQueue queue);
 }

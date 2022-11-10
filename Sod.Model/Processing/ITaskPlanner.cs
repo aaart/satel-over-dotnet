@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
-using Sod.Model.DataStructures;
+﻿using Sod.Model.DataStructures;
 
-namespace Sod.Model.Processing
+namespace Sod.Model.Processing;
+
+public interface ITaskPlanner
 {
-    public interface ITaskPlanner
-    {
-        Task Plan(ITaskQueue queue, int iteration);
-    }
+    Task Plan(ITaskQueue queue, int iteration);
 }

@@ -5,38 +5,37 @@ using Sod.Model.DataStructures;
 using Sod.Model.Events.Outgoing;
 using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Processing
-{
-    public class TaskPlanner : LoggingCapability, ITaskPlanner
-    {
-        public Task Plan(ITaskQueue queue, int iteration)
-        {
-            if (iteration == 0)
-            {
-                queue.EnqueueAsync(
-                        new ActualStateBinaryIOReadTask(
-                            Constants.Store.InputsState,
-                            NotificationTaskType.NotifyIOChanged,
-                            IOBinaryReadType.Inputs,
-                            OutgoingEventType.InputsStateChanged
-                        ));
-                queue.EnqueueAsync(
-                        new ActualStateBinaryIOReadTask(
-                            Constants.Store.OutputsState,
-                            NotificationTaskType.NotifyIOChanged,
-                            IOBinaryReadType.Outputs,
-                            OutgoingEventType.OutputsStateChanged
-                        ));
-                queue.EnqueueAsync(
-                    new ActualStateBinaryIOReadTask(
-                        Constants.Store.ArmedPartitions,
-                        NotificationTaskType.NotifyArmedPartitionsChanged,
-                        IOBinaryReadType.ArmedPartitions,
-                        OutgoingEventType.ArmedPartitionsStateChanged));
-                
-            }
+namespace Sod.Model.Processing;
 
-            return Task.CompletedTask;
+public class TaskPlanner : LoggingCapability, ITaskPlanner
+{
+    public Task Plan(ITaskQueue queue, int iteration)
+    {
+        if (iteration == 0)
+        {
+            queue.EnqueueAsync(
+                new ActualStateBinaryIOReadTask(
+                    Constants.Store.InputsState,
+                    NotificationTaskType.NotifyIOChanged,
+                    IOBinaryReadType.Inputs,
+                    OutgoingEventType.InputsStateChanged
+                ));
+            queue.EnqueueAsync(
+                new ActualStateBinaryIOReadTask(
+                    Constants.Store.OutputsState,
+                    NotificationTaskType.NotifyIOChanged,
+                    IOBinaryReadType.Outputs,
+                    OutgoingEventType.OutputsStateChanged
+                ));
+            queue.EnqueueAsync(
+                new ActualStateBinaryIOReadTask(
+                    Constants.Store.ArmedPartitions,
+                    NotificationTaskType.NotifyArmedPartitionsChanged,
+                    IOBinaryReadType.ArmedPartitions,
+                    OutgoingEventType.ArmedPartitionsStateChanged));
+                
         }
+
+        return Task.CompletedTask;
     }
 }
