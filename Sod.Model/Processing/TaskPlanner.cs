@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Sod.Infrastructure.Capabilities;
+﻿using Sod.Infrastructure.Capabilities;
 using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
 using Sod.Model.Events.Outgoing;

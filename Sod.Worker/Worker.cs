@@ -3,22 +3,19 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Sod.Model.Processing;
 
-namespace Sod.Worker
+namespace Sod.Worker;
+
+public class Worker : BackgroundService
 {
-    public class Worker : BackgroundService
+    private readonly ILoop _loop;
+
+    public Worker(ILoop loop)
     {
-        private readonly Loop _loop;
-
-        public Worker(Loop loop)
-        {
-            _loop = loop;
-        }
+        _loop = loop;
+    }
         
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            await _loop.ExecuteAsync(stoppingToken);
-        }
-
-        
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        await _loop.ExecuteAsync(stoppingToken);
     }
 }

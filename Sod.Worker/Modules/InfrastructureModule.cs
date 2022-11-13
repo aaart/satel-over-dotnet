@@ -73,7 +73,7 @@ namespace Sod.Worker.Modules
                             X509Certificate2 caCrt = new X509Certificate2(File.ReadAllBytes(cfg.CrtPath));
                             x.UseTls = true;
                             x.SslProtocol = System.Security.Authentication.SslProtocols.Tls12;
-                            x.CertificateValidationHandler = (certContext) =>
+                            x.CertificateValidationHandler = certContext =>
                             {
                                 X509Chain chain = new X509Chain();
                                 chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
@@ -137,7 +137,9 @@ namespace Sod.Worker.Modules
             builder.RegisterTypes(typeof(BaseHandler<>).Assembly.GetTypes().Where(x => x.IsAssignableTo<ITaskHandler>()).ToArray()).AsSelf().SingleInstance();
             
             builder.RegisterType<QueueProcessor>().As<IQueueProcessor>().SingleInstance();
-            builder.RegisterType<Loop>().AsSelf();
+            builder.RegisterType<Loop>().As<ILoop>().SingleInstance();
+            builder.RegisterType<LoopIteration>().As<ILoopIteration>().SingleInstance();
+            builder.RegisterType<LoopIterationExceptionHandlingPolicy>().As<ILoopIterationExceptionHandlingPolicy>().SingleInstance();
         }
     }
 }

@@ -1,47 +1,51 @@
-﻿using Microsoft.Extensions.Logging;
-using Sod.Infrastructure.Capabilities;
+﻿using Sod.Infrastructure.Capabilities;
 using Sod.Model.DataStructures;
+using Sod.Model.Processing.Exceptions;
 
 namespace Sod.Model.Processing;
 
-public class Loop : LoggingCapability
+public class Loop : LoggingCapability, ILoop
 {
-    private readonly IQueueProcessor _processor;
-    private readonly ITaskPlanner _planner;
+    private readonly ILoopIteration _loopIteration;
     private readonly ITaskQueue _queue;
     private readonly LoopOptions _options;
+    private readonly ILoopIterationExceptionHandlingPolicy _loopIterationExceptionHandlingPolicy;
 
     public Loop(
-        IQueueProcessor processor,
-        ITaskPlanner planner,
-        ITaskQueue queue,
-        LoopOptions opt)
+        ITaskQueue queue, 
+        LoopOptions options,
+        ILoopIteration loopIteration,
+        ILoopIterationExceptionHandlingPolicy loopIterationExceptionHandlingPolicy)
     {
-        _processor = processor;
-        _planner = planner;
         _queue = queue;
-        _options = opt;
+        _options = options;
+        _loopIteration = loopIteration;
+        _loopIterationExceptionHandlingPolicy = loopIterationExceptionHandlingPolicy;
     }
 
     public async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var iteration = 0;
-        while (!stoppingToken.IsCancellationRequested)
+        do
         {
             try
             {
-                await _planner.Plan(_queue, iteration);
-                await _processor.Process(_queue);
-                await Task.Delay(_options.Interval, stoppingToken);
-                if (iteration == _options.IterationCount)
+                await _loopIteration.IterationAsync(stoppingToken, _queue, iteration);
+                iteration = iteration < _options.IterationCount ? iteration + 1 : 0;
+
+                // just a safe-switch. if everything fails, and the app goes to abnormal state report it. It is expected that Iteration handling policy will report it.
+                if (iteration >= _options.IterationCount)
                 {
-                    iteration = 0;
+                    throw new SodCriticalException(SodCriticalExceptionReason.IterationExceededExpectedLimit);
                 }
+                
+                await Task.Delay(_options.Interval, stoppingToken);
             }
             catch (Exception e)
             {
-                Logger.LogError(e, e.Message);
+                iteration = await _loopIterationExceptionHandlingPolicy.HandleExceptionAsync(e, _queue);
             }
-        }
+        } while (!stoppingToken.IsCancellationRequested);
     }
+
 }
