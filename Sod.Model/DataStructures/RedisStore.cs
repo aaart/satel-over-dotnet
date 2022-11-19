@@ -18,7 +18,7 @@ public class RedisStore : IStore
     public async Task SetAsync(string key, object value)
     {
         var serializeObject = JsonConvert.SerializeObject(value);
-        if (!await _database.StringSetAsync(new RedisKey(key), new RedisValue(serializeObject))) throw new ValueNotUpdatedException();
+        if (!await _database.StringSetAsync(new RedisKey(key), new RedisValue(serializeObject))) throw new ValueNotUpdatedSodException();
     }
 
     public async Task<T> GetAsync<T>(string key)
