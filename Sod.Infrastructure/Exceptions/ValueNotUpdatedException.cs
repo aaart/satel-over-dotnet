@@ -1,6 +1,5 @@
-﻿namespace Sod.Infrastructure.Exceptions
+﻿namespace Sod.Infrastructure.Exceptions;
+
+public class ValueNotUpdatedException : SodException
 {
-    public class ValueNotUpdatedException : SodException
-    {
-    }
 }

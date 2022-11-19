@@ -1,7 +1,6 @@
-﻿namespace Sod.Model.Processing
+﻿namespace Sod.Model.Processing.Exceptions;
+
+public enum SodCriticalExceptionReason
 {
-    public enum SodCriticalExceptionReason
-    {
-        IterationExceededExpectedLimit
-    }
+    IterationExceededExpectedLimit
 }

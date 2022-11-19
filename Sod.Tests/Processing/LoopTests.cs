@@ -17,7 +17,7 @@ public class LoopTests
         var handled = false;
         var loop = new Loop(
             new Mock<ITaskQueue>().Object,
-            new Mock<LoopOptions>().Object,
+            new LoopOptions { Interval = 1, IterationCount = 1, OnErrorDelayMiliseconds = 100 },
             new TestLoopIteration(new Mock<IQueueProcessor>().Object, new Mock<ITaskPlanner>().Object, () => throw new Exception()),
             new TestLoopIterationExceptionHandlingPolicy(() => handled = true));
 

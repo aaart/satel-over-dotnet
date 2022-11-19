@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Sod.Infrastructure.Satel.Socket
+namespace Sod.Infrastructure.Satel.Socket;
+
+public interface ISocketReceiver
 {
-    public interface ISocketReceiver
-    {
-        Task<(int byteCount, ArraySegment<byte> receivedBinaryData)> ReceiveAsync();
-    }
+    Task<(int byteCount, ArraySegment<byte> receivedBinaryData)> ReceiveAsync();
 }

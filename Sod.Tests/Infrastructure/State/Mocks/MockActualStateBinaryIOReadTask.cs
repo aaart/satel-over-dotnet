@@ -2,13 +2,12 @@
 using Sod.Model.Events.Outgoing;
 using Sod.Model.Tasks.Types;
 
-namespace Sod.Tests.Infrastructure.State.Mocks
+namespace Sod.Tests.Infrastructure.State.Mocks;
+
+public class MockActualStateBinaryIOReadTask : ActualStateBinaryIOReadTask
 {
-    public class MockActualStateBinaryIOReadTask : ActualStateBinaryIOReadTask
+    public MockActualStateBinaryIOReadTask()
+        : base(string.Empty, NotificationTaskType.NotifyIOChanged, IOBinaryReadType.Inputs, OutgoingEventType.InputsStateChanged)
     {
-        public MockActualStateBinaryIOReadTask() 
-            : base(string.Empty, NotificationTaskType.NotifyIOChanged, IOBinaryReadType.Inputs, OutgoingEventType.InputsStateChanged)
-        {
-        }
     }
 }

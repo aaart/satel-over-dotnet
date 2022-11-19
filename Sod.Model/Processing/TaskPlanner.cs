@@ -32,7 +32,6 @@ public class TaskPlanner : LoggingCapability, ITaskPlanner
                     NotificationTaskType.NotifyArmedPartitionsChanged,
                     IOBinaryReadType.ArmedPartitions,
                     OutgoingEventType.ArmedPartitionsStateChanged));
-                
         }
 
         return Task.CompletedTask;

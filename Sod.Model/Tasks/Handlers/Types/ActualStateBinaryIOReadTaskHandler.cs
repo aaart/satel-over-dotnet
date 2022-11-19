@@ -4,73 +4,66 @@ using Sod.Model.DataStructures;
 using Sod.Model.Tasks.Types;
 using Sod.Model.Tools;
 
-namespace Sod.Model.Tasks.Handlers.Types
+namespace Sod.Model.Tasks.Handlers.Types;
+
+public class ActualStateBinaryIOReadTaskHandler : BaseHandler<ActualStateBinaryIOReadTask>
 {
-    public class ActualStateBinaryIOReadTaskHandler : BaseHandler<ActualStateBinaryIOReadTask>
+    private readonly IStore _store;
+    private readonly IManipulator _manipulator;
+
+    public ActualStateBinaryIOReadTaskHandler(IStore store, IManipulator manipulator)
     {
-        private readonly IStore _store;
-        private readonly IManipulator _manipulator;
+        _store = store;
+        _manipulator = manipulator;
+    }
 
-        public ActualStateBinaryIOReadTaskHandler(IStore store, IManipulator manipulator)
+    protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOReadTask data)
+    {
+        var (status, actualState) = await ManipulatorMethod(data.Method);
+        ValidateStatus(status);
+
+        var persistedState = await _store.GetAsync<bool[]>(data.PersistedStateKey);
+        ValidateState(persistedState, actualState);
+
+        var changes = IO.ExtractIOChanges(persistedState, actualState);
+
+        switch (data.Method)
         {
-            _store = store;
-            _manipulator = manipulator;
+            case IOBinaryReadType.Inputs:
+            case IOBinaryReadType.Outputs:
+                return new[] { new ActualStateBinaryIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
+            case IOBinaryReadType.ArmedPartitions:
+            case IOBinaryReadType.AlarmTriggered:
+                return new[] { new ActualStateAlarmIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
+            default:
+                throw new ArgumentOutOfRangeException();
         }
+    }
 
-        protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOReadTask data)
+    private async Task<(CommandStatus, bool[])> ManipulatorMethod(IOBinaryReadType method)
+    {
+        switch (method)
         {
-            var (status, actualState) = await ManipulatorMethod(data.Method);
-            ValidateStatus(status);
-
-            var persistedState = await _store.GetAsync<bool[]>(data.PersistedStateKey);
-            ValidateState(persistedState, actualState);
-
-            var changes = IO.ExtractIOChanges(persistedState, actualState);
-
-            switch (data.Method)
-            {
-                case IOBinaryReadType.Inputs:
-                case IOBinaryReadType.Outputs:
-                    return new[] { new ActualStateBinaryIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
-                case IOBinaryReadType.ArmedPartitions:
-                case IOBinaryReadType.AlarmTriggered:
-                    return new[] { new ActualStateAlarmIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            case IOBinaryReadType.Inputs:
+                return await _manipulator.ReadInputs();
+            case IOBinaryReadType.Outputs:
+                return await _manipulator.ReadOutputs();
+            case IOBinaryReadType.ArmedPartitions:
+                return await _manipulator.ReadArmedPartitions();
+            case IOBinaryReadType.AlarmTriggered:
+                return await _manipulator.ReadAlarmTriggered();
+            default:
+                throw new ArgumentOutOfRangeException(nameof(method), method, null);
         }
+    }
 
-        private async Task<(CommandStatus, bool[])> ManipulatorMethod(IOBinaryReadType method)
-        {
-            switch (method)
-            {
-                case IOBinaryReadType.Inputs:
-                    return await _manipulator.ReadInputs();
-                case IOBinaryReadType.Outputs:
-                    return await _manipulator.ReadOutputs();
-                case IOBinaryReadType.ArmedPartitions:
-                    return await _manipulator.ReadArmedPartitions();
-                case IOBinaryReadType.AlarmTriggered:
-                    return await _manipulator.ReadAlarmTriggered();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(method), method, null);
-            }
-        }
+    private void ValidateStatus(CommandStatus status)
+    {
+        if (status != CommandStatus.Processed) throw new InvalidOperationException($"{status} status cannot be processed.");
+    }
 
-        private void ValidateStatus(CommandStatus status)
-        {
-            if (status != CommandStatus.Processed)
-            {
-                throw new InvalidOperationException($"{status} status cannot be processed.");
-            }
-        }
-
-        private void ValidateState(bool[] persistedState, bool[] satelState)
-        {
-            if (persistedState.Length != satelState.Length)
-            {
-                throw new InvalidOperationException($"Current satel state and persisted state have different lengths!");
-            }
-        }
+    private void ValidateState(bool[] persistedState, bool[] satelState)
+    {
+        if (persistedState.Length != satelState.Length) throw new InvalidOperationException($"Current satel state and persisted state have different lengths!");
     }
 }

@@ -15,17 +15,16 @@ public class RedisTaskQueue : ITaskQueue
         _database = database;
     }
 
-    public async Task EnqueueAsync(SatelTask satelTask) => 
+    public async Task EnqueueAsync(SatelTask satelTask)
+    {
         await _database.ListRightPushAsync(_key, new RedisValue(JsonConvert.SerializeObject(new { Type = satelTask.GetType().FullName, Object = satelTask })));
+    }
 
     public async Task<(bool exists, SatelTask? value)> DequeueAsync()
     {
         var head = await _database.ListLeftPopAsync(_key);
-        if (!head.HasValue)
-        {
-            return (false, null);
-        }
-            
+        if (!head.HasValue) return (false, null);
+
         var persistedValue = (JObject)JsonConvert.DeserializeObject(head.ToString())!;
         var typeName = persistedValue.Value<string>("Type")!;
         var type = Type.GetType(typeName)!;

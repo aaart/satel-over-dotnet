@@ -6,7 +6,7 @@ namespace Sod.Model.Processing;
 
 public class LoopIterationExceptionHandlingPolicy : LoggingCapability, ILoopIterationExceptionHandlingPolicy
 {
-    public async Task<int> HandleExceptionAsync(Exception exception, ITaskQueue queue)
+    public virtual async Task<int> HandleExceptionAsync(Exception exception, ITaskQueue queue)
     {
         await queue.Clear();
         Logger.LogError(exception, exception.Message);

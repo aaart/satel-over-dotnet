@@ -13,8 +13,13 @@ public class InMemoryTaskQueue : ITaskQueue
         return Task.CompletedTask;
     }
 
-    public Task<(bool exists, SatelTask? value)> DequeueAsync() => 
-        _queue.TryPeek(out SatelTask? value) ? Task.FromResult((true, (SatelTask?)value)) : Task.FromResult((false, (SatelTask?)null));
+    public Task<(bool exists, SatelTask? value)> DequeueAsync()
+    {
+        return _queue.TryPeek(out var value) ? Task.FromResult((true, (SatelTask?)value)) : Task.FromResult((false, (SatelTask?)null));
+    }
 
-    public Task Clear() => Task.Run(() => _queue.Clear());
+    public Task Clear()
+    {
+        return Task.Run(() => _queue.Clear());
+    }
 }

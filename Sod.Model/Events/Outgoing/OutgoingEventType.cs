@@ -1,10 +1,9 @@
-﻿namespace Sod.Model.Events.Outgoing
+﻿namespace Sod.Model.Events.Outgoing;
+
+public enum OutgoingEventType
 {
-    public enum OutgoingEventType
-    {
-        InputsStateChanged,
-        OutputsStateChanged,
-        ArmedPartitionsStateChanged,
-        AlarmTriggered
-    }
+    InputsStateChanged,
+    OutputsStateChanged,
+    ArmedPartitionsStateChanged,
+    AlarmTriggered
 }

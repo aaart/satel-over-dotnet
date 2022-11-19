@@ -14,7 +14,7 @@ public class ActualStateAlarmIOPostReadTask : SatelTask
     }
 
     public IList<BinaryIOState> Changes { get; }
-    public string PersistedStateKey { get; } 
-    public bool[] ActualState { get; } 
+    public string PersistedStateKey { get; }
+    public bool[] ActualState { get; }
     public OutgoingEventType OutgoingEventType { get; }
 }

@@ -1,10 +1,9 @@
-﻿namespace Sod.Model.Events.Outgoing.Mqtt
+﻿namespace Sod.Model.Events.Outgoing.Mqtt;
+
+public enum DeviceType
 {
-    public enum DeviceType
-    {
-        Input,
-        Output,
-        ArmedPartition,
-        TriggeredAlarm
-    }
+    Input,
+    Output,
+    ArmedPartition,
+    TriggeredAlarm
 }

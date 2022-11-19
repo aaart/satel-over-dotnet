@@ -13,7 +13,7 @@ public class TestLoopIterationExceptionHandlingPolicy : ILoopIterationExceptionH
     {
         _action = action;
     }
-    
+
     public Task<int> HandleExceptionAsync(Exception exception, ITaskQueue queue)
     {
         _action();

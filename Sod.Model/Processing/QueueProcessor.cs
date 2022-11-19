@@ -19,10 +19,7 @@ public class QueueProcessor : IQueueProcessor
         {
             var handler = _handlerFactory.CreateHandler(task!);
             var tasks = await handler.Handle(task!);
-            foreach (var newTask in tasks)
-            {
-                await queue.EnqueueAsync(newTask);
-            }
+            foreach (var newTask in tasks) await queue.EnqueueAsync(newTask);
 
             (exists, task) = await queue.DequeueAsync();
         }

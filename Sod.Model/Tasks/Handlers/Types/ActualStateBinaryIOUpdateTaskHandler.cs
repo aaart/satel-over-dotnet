@@ -37,12 +37,12 @@ public class ActualStateBinaryIOUpdateTaskHandler : BaseHandler<ActualStateBinar
                 disableOutputs[index] = true;
                 anyDisabled = true;
             }
+
             notifications.Add(state);
         }
 
         var tasks = new List<SatelTask>();
         if (anyEnabled)
-        {
             switch (data.Method)
             {
                 case IOBinaryUpdateType.Outputs:
@@ -54,10 +54,8 @@ public class ActualStateBinaryIOUpdateTaskHandler : BaseHandler<ActualStateBinar
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
 
         if (anyDisabled)
-        {
             switch (data.Method)
             {
                 case IOBinaryUpdateType.Outputs:
@@ -69,12 +67,8 @@ public class ActualStateBinaryIOUpdateTaskHandler : BaseHandler<ActualStateBinar
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
 
-        if (notifications.Any() && data.NotifyChanged)
-        {
-            tasks.Add(new ActualStateChangedNotificationTask(notifications, data.EventType));
-        }
+        if (notifications.Any() && data.NotifyChanged) tasks.Add(new ActualStateChangedNotificationTask(notifications, data.EventType));
 
         return tasks;
     }

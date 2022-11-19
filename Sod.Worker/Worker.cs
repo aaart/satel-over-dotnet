@@ -13,7 +13,7 @@ public class Worker : BackgroundService
     {
         _loop = loop;
     }
-        
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await _loop.ExecuteAsync(stoppingToken);

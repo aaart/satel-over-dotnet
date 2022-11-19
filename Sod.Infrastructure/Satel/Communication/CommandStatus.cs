@@ -1,12 +1,11 @@
-﻿namespace Sod.Infrastructure.Satel.Communication
+﻿namespace Sod.Infrastructure.Satel.Communication;
+
+public enum CommandStatus
 {
-    public enum CommandStatus
-    { 
-        Processed,
-        NotSupportedCommand,
-        InvalidFrame,
-        InvalidCrc,
-        InvalidCommandReceived,
-        NotSent
-    }
+    Processed,
+    NotSupportedCommand,
+    InvalidFrame,
+    InvalidCrc,
+    InvalidCommandReceived,
+    NotSent
 }

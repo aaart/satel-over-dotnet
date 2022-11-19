@@ -41,7 +41,7 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
+
         var task = new ActualStateBinaryIOUpdateTask(new List<BinaryIOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } }, updateType, _notify, outgoingEventType);
         await _queue.EnqueueAsync(task);
     }

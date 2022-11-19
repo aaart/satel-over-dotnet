@@ -1,6 +1,5 @@
-﻿namespace Sod.Infrastructure.Exceptions
+﻿namespace Sod.Infrastructure.Exceptions;
+
+public class KeyNotFoundSodException : SodException
 {
-    public class KeyNotFoundSodException : SodException
-    {
-    }
 }

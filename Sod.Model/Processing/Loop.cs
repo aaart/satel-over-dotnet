@@ -12,7 +12,7 @@ public class Loop : LoggingCapability, ILoop
     private readonly ILoopIterationExceptionHandlingPolicy _loopIterationExceptionHandlingPolicy;
 
     public Loop(
-        ITaskQueue queue, 
+        ITaskQueue queue,
         LoopOptions options,
         ILoopIteration loopIteration,
         ILoopIterationExceptionHandlingPolicy loopIterationExceptionHandlingPolicy)
@@ -34,18 +34,15 @@ public class Loop : LoggingCapability, ILoop
                 iteration = iteration < _options.IterationCount ? iteration + 1 : 0;
 
                 // just a safe-switch. if everything fails, and the app goes to abnormal state report it. It is expected that Iteration handling policy will report it.
-                if (iteration >= _options.IterationCount)
-                {
-                    throw new SodCriticalException(SodCriticalExceptionReason.IterationExceededExpectedLimit);
-                }
-                
+                if (iteration > _options.IterationCount) throw new SodCriticalException(SodCriticalExceptionReason.IterationExceededExpectedLimit);
+
                 await Task.Delay(_options.Interval, stoppingToken);
             }
             catch (Exception e)
             {
+                await Task.Delay(_options.OnErrorDelayMiliseconds);
                 iteration = await _loopIterationExceptionHandlingPolicy.HandleExceptionAsync(e, _queue);
             }
         } while (!stoppingToken.IsCancellationRequested);
     }
-
 }

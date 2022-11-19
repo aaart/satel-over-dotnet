@@ -49,10 +49,11 @@ public class ReadStateHandlerTests
             .ThrowAsync<InvalidOperationException>();
     }
 
-        
-    public static IEnumerable<object[]> CreateNotSuccessfulStatuses() =>
-        Enum.GetNames<CommandStatus>()
+
+    public static IEnumerable<object[]> CreateNotSuccessfulStatuses()
+    {
+        return Enum.GetNames<CommandStatus>()
             .Where(x => x != Enum.GetName(CommandStatus.Processed))
             .Select(x => new object[] { x });
-
+    }
 }

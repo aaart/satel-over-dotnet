@@ -21,7 +21,7 @@ public class ActualStateChangedNotificationTaskHandler : BaseHandler<ActualState
             Logger.LogInformation($"index: {state.Index}, value: {state.Value}");
             await _eventPublisher.PublishAsync(new OutgoingEvent(data.OutgoingEventType, state.Index, state.Value));
         }
-            
+
         return Enumerable.Empty<SatelTask>();
     }
 }

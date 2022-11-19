@@ -1,7 +1,6 @@
-﻿namespace Sod.Infrastructure.Satel.Communication
+﻿namespace Sod.Infrastructure.Satel.Communication;
+
+public class SatelUserCodeOptions
 {
-    public class SatelUserCodeOptions
-    {
-        public string UserCode { get; set; } = null!;
-    }
+    public string UserCode { get; set; } = null!;
 }

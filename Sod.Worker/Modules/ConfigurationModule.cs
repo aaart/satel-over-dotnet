@@ -19,12 +19,12 @@ public class ConfigurationModule : Module
         builder.Register(_ => new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.local.json", optional: true)
+                .AddJsonFile("appsettings.local.json", true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
                 .Build())
             .As<IConfigurationRoot>()
             .SingleInstance();
-            
+
         builder.RegisterConfiguration<LoopOptions>("Loop");
         builder.RegisterConfiguration<MqttOptions>("Mqtt");
         builder.RegisterConfiguration<SatelConnectionOptions>("Satel");
@@ -34,7 +34,7 @@ public class ConfigurationModule : Module
             .Register(ctx =>
             {
                 var cfg = ctx.Resolve<IConfigurationRoot>();
-                var mappings = 
+                var mappings =
                     cfg
                         .GetSection("Satel:OutgoingEventMappings")
                         .GetChildren()
