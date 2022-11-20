@@ -79,7 +79,7 @@ public class Manipulator : LoggingCapability, IManipulator
     {
         return await _genericCommunicationInterface.Execute(
             new CommunicationMessage(Command.PartitionsAlarm, Array.Empty<byte>(), Array.Empty<byte>()),
-            new CommunicationDefaultResponse<bool[]>(Array.Empty<bool>(), Command.ArmedPartitionsReally),
+            new CommunicationDefaultResponse<bool[]>(Array.Empty<bool>(), Command.PartitionsAlarm),
             Translation.ToBooleanArray);
     }
 

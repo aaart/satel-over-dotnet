@@ -5,17 +5,17 @@ namespace Sod.Model.DataStructures;
 
 public class InMemoryTaskQueue : ITaskQueue
 {
-    private readonly ConcurrentStack<SatelTask> _queue = new();
+    private readonly ConcurrentQueue<SatelTask> _queue = new();
 
     public Task EnqueueAsync(SatelTask satelTask)
     {
-        _queue.Push(satelTask);
+        _queue.Enqueue(satelTask);
         return Task.CompletedTask;
     }
 
     public Task<(bool exists, SatelTask? value)> DequeueAsync()
     {
-        return _queue.TryPeek(out var value) ? Task.FromResult((true, (SatelTask?)value)) : Task.FromResult((false, (SatelTask?)null));
+        return _queue.TryDequeue(out var value) ? Task.FromResult((true, (SatelTask?)value)) : Task.FromResult((false, (SatelTask?)null));
     }
 
     public Task Clear()
