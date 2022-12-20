@@ -125,5 +125,3 @@ This section contains needed to connect MQTT Broker. CrtPath is not required (if
 - User - integration user's PIN
 - OutgoingEventMapping - configuration of entities that send state change signals to outer world
 - IncomingEventMapping - configuration of entities that can receiver signals from outer world.
-
-# Sample condiguration with comments
