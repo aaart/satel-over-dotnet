@@ -45,7 +45,7 @@ Not supported (yet).
 
 ## App to MQTT encrytption
 
-The App supports ca self-signed certificates. Just add **ca.crt** file to directory containing binaries (with Sod.Worker.dll).
+The App supports ca self-signed certificates. Read the documentation below to see how to use a custom certificate.
 
 # Configuration
 
@@ -55,6 +55,8 @@ Application reads its configuration from these 2 files
 
 - appsettings.json
 - appsettings.local.json
+
+Files should deployed to the same folder where Sod.Worker.dll is.
 
 ## Configuration blocks
 
@@ -74,5 +76,54 @@ As it has been described above, the app works on background worker, that checks 
 - OnErrorDelayMilisecnds - defines how long the app should wait to reconnect/restart when a critical error comes (for example when the connectivity to ETHM-1 Plus has been lost)
 
 Tip: Leave it default.
+
+### MQTT 
+```json
+"Mqtt": {
+    "Host": "",
+    "Port": 0,
+    "User": "",
+    "Password": "",
+    "CrtPath": null
+  }
+```
+
+This section contains needed to connect MQTT Broker. CrtPath is not required (if you accept that your trafic will not be encrypted).
+
+### Satel
+
+```json
+"Satel": {
+    "Address": "",
+    "Port": 0,
+    "UserCode": "",
+    "OutgoingEventMappings": [{
+      {
+        "Type": "Output",
+        "IOIndex": 121,
+        "Topic": "satel/outputs/<output-name>/state"
+      },
+      {
+        "Type": "Input",
+        "IOIndex": 10,
+        "Topic": "satel/inputs/<input-name>/state"
+      },
+    }],
+    "IncomingEventMappings": [
+      {
+        "Type": "BinaryOutput",
+        "Notify": false,
+        "IOIndex": 121,
+        "Topic": "satel/outputs/<output-name>/update"
+      }
+    ]
+  },
+```
+
+- Address - this is IP Address that belongs to ETHM-1 Plus interface.
+- Port - port that ETHM-1 Plus interface uses to integrate with 3rd party devices
+- User - integration user's PIN
+- OutgoingEventMapping - configuration of entities that send state change signals to outer world
+- IncomingEventMapping - configuration of entities that can receiver signals from outer world.
 
 # Sample condiguration with comments
