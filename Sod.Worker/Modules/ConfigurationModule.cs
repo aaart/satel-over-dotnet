@@ -18,8 +18,6 @@ public class ConfigurationModule : Module
         base.Load(builder);
         builder.Register(_ => new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.local.json", true)
                 .Build())
             .As<IConfigurationRoot>()
             .SingleInstance();

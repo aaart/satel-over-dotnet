@@ -24,40 +24,22 @@ The following read/write operations are currently supported:
 - Read if alarm is armed
 - Read if alarm is triggered
 
-# Incoming
-
-To be defined.
 
 # NOT IN SCOPE / NOT SUPPORTED
 
 This tool is not planned to deliver any sophisticated logic. It does simple work: it maps ETHM-1 Plus state to MQTT.
 If you'd like to create some scenarios based on Integra's state, you can always create some piece of automation on your own (e.g. using Node-Red). 
 
-# How Does It Work?
-
-Loops.
-
-# Encryption
 
 ## App to SATEL encryption
 
-Not supported (yet).
+Satel ETHM-1 Plus support encryption, however this feature is not supported yet.
 
 ## App to MQTT encrytption
 
 The App supports ca self-signed certificates. Read the documentation below to see how to use a custom certificate.
 
 # Configuration
-
-## Configuration Files
-
-Application reads its configuration from these 2 files
-
-- appsettings.json
-- appsettings.local.json
-
-Files should deployed to the same folder where Sod.Worker.dll is.
-
 ## Configuration blocks
 
 ### Loop
