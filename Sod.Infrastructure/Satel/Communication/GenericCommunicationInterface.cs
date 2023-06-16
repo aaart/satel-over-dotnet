@@ -32,6 +32,10 @@ public class GenericCommunicationInterface : LoggingCapability
 
         var (status, data) = await ReceiveAsync(_socketReceiver, defaultResponse.ExpectedCommand);
         Logger.LogDebug($"{message.Command.ToString()} executed with {status.ToString()} status.");
+        if (status != CommandStatus.Processed)
+        {
+            Logger.LogWarning($"{message.Command} command execution done with {status} status.");
+        }
         return
             status != CommandStatus.Processed
                 ? (status, defaultResponse.Value)

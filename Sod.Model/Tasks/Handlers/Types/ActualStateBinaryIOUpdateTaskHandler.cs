@@ -18,8 +18,8 @@ public class ActualStateBinaryIOUpdateTaskHandler : BaseHandler<ActualStateBinar
 
     protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOUpdateTask data)
     {
-        var disableOutputs = new bool[128];
-        var enableOutputs = new bool[128];
+        var disableOutputs = new bool[data.OutputCount];
+        var enableOutputs = new bool[data.OutputCount];
         var notifications = new List<BinaryIOState>();
         var anyEnabled = false;
         var anyDisabled = false;

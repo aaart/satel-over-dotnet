@@ -28,21 +28,24 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
         Logger.LogInformation($"Event received for IOIndex = {_ioIndex} and event type = {_incomingEventType.ToString()}. Payload: {payload}");
         IOBinaryUpdateType updateType;
         OutgoingEventType outgoingEventType;
+        int outputCount;
         switch (_incomingEventType)
         {
             case IncomingEventType.BinaryOutput:
                 updateType = IOBinaryUpdateType.Outputs;
                 outgoingEventType = OutgoingEventType.OutputsStateChanged;
+                outputCount = 128;
                 break;
             case IncomingEventType.AlarmPartition:
                 updateType = IOBinaryUpdateType.Partitions;
                 outgoingEventType = OutgoingEventType.ArmedPartitionsStateChanged;
+                outputCount = 32;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        var task = new ActualStateBinaryIOUpdateTask(new List<BinaryIOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } }, updateType, _notify, outgoingEventType);
+        var task = new ActualStateBinaryIOUpdateTask(new List<BinaryIOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } }, updateType, _notify, outgoingEventType, outputCount);
         await _queue.EnqueueAsync(task);
     }
 }

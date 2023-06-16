@@ -18,7 +18,7 @@ public static class OnOffParse
             case "OFF":
                 return false;
             default:
-                throw new ArgumentOutOfRangeException($"Must be YES/NO. Was: {val}");
+                throw new ArgumentOutOfRangeException($"Must be ON/OFF. Was: {val}");
         }
     }
 }

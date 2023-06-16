@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Sod.Infrastructure.Capabilities;
-using Sod.Infrastructure.Satel.Socket;
 
 namespace Sod.Infrastructure.Satel.Communication;
 
