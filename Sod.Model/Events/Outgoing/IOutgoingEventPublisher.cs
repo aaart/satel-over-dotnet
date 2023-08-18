@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 using Sod.Model.CommonTypes;
 
-namespace Sod.Model.Events.Outgoing
+namespace Sod.Model.Events.Outgoing;
+
+public interface IOutgoingEventPublisher
 {
-    public interface IOutgoingEventPublisher
-    {
-        Task<IEnumerable<FailedOutgoingEvent>> PublishAsync(OutgoingEvent evnt);
-    }
+    Task<IEnumerable<FailedOutgoingEvent>> PublishAsync(OutgoingEvent evnt);
 }

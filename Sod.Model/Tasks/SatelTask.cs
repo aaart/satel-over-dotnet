@@ -1,6 +1,5 @@
-﻿namespace Sod.Model.Tasks
+﻿namespace Sod.Model.Tasks;
+
+public class SatelTask
 {
-    public class SatelTask
-    {
-    }
 }

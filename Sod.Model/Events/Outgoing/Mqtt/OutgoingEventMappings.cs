@@ -4,42 +4,50 @@ using System.Collections.Generic;
 using System.Linq;
 using Sod.Model.CommonTypes;
 
-namespace Sod.Model.Events.Outgoing.Mqtt
+namespace Sod.Model.Events.Outgoing.Mqtt;
+
+public class OutgoingEventMappings : IEnumerable<OutgoingEventMapping>
 {
-    public class OutgoingEventMappings : IEnumerable<OutgoingEventMapping>
+    private readonly IEnumerable<OutgoingEventMapping> _mappings;
+
+    public OutgoingEventMappings(IEnumerable<OutgoingEventMapping> mappings)
     {
-        private readonly IEnumerable<OutgoingEventMapping> _mappings;
+        _mappings = mappings;
+    }
 
-        public OutgoingEventMappings(IEnumerable<OutgoingEventMapping> mappings)
+    public IEnumerator<OutgoingEventMapping> GetEnumerator()
+    {
+        return _mappings.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public IEnumerable<string> GetTopics(OutgoingEvent evnt)
+    {
+        DeviceType deviceType;
+        switch (evnt.Type)
         {
-            _mappings = mappings;
+            case OutgoingEventType.InputsStateChanged:
+                deviceType = DeviceType.Input;
+                break;
+            case OutgoingEventType.OutputsStateChanged:
+                deviceType = DeviceType.Output;
+                break;
+            case OutgoingEventType.ArmedPartitionsStateChanged:
+                deviceType = DeviceType.ArmedPartition;
+                break;
+            case OutgoingEventType.AlarmTriggered:
+                deviceType = DeviceType.TriggeredAlarm;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(evnt.Type), evnt.Type, "Type is out of the expected range!");
         }
 
-        public IEnumerator<OutgoingEventMapping> GetEnumerator() => _mappings.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        
-        public IEnumerable<string> GetTopics(OutgoingEvent evnt)
-        {
-            DeviceType deviceType;
-            switch (evnt.Type)
-            {
-                case OutgoingEventType.InputsStateChanged:
-                    deviceType = DeviceType.Input;
-                    break;
-                case OutgoingEventType.OutputsStateChanged:
-                    deviceType = DeviceType.Output;
-                    break;
-                case OutgoingEventType.ArmedPartitionsStateChanged:
-                    deviceType = DeviceType.ArmedPartition;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            return _mappings
-                .Where(x => x.Type == deviceType && x.IOIndex == evnt.Reference)
-                .Select(x => x.Topic);
-        }
+        return _mappings
+            .Where(x => x.Type == deviceType && x.IOIndex == evnt.Reference)
+            .Select(x => x.Topic);
     }
 }

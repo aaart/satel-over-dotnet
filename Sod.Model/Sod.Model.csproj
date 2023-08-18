@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Sod.Infrastructure\Sod.Infrastructure.csproj" />
+        <ProjectReference Include="..\Sod.Infrastructure\Sod.Infrastructure.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Events" />
+        <Folder Include="Events"/>
     </ItemGroup>
 
 </Project>

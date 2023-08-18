@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace Sod.Model.Tasks.Handlers;
 
-namespace Sod.Model.Tasks.Handlers
+public interface ITaskHandler
 {
-    public interface ITaskHandler
-    {
-        Task<IEnumerable<SatelTask>> Handle(SatelTask data);
+    Task<IEnumerable<SatelTask>> Handle(SatelTask data);
 
-        object Prop => new object();
-    }
+    object Prop => new();
 }

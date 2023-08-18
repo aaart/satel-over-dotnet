@@ -1,8 +1,7 @@
-﻿namespace Sod.Model.Events.Outgoing
+﻿namespace Sod.Model.Events.Outgoing;
+
+public enum FailedOutgoingEventReason
 {
-    public enum FailedOutgoingEventReason
-    {
-        TopicNotFound,
-        CommunicationError
-    }
+    TopicNotFound,
+    CommunicationError
 }

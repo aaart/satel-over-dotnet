@@ -1,9 +1,8 @@
-﻿namespace Sod.Model.Events.Outgoing.Mqtt
+﻿namespace Sod.Model.Events.Outgoing.Mqtt;
+
+public record OutgoingEventMapping
 {
-    public record OutgoingEventMapping
-    {
-        public DeviceType Type { get; init; }
-        public int IOIndex { get; init; }
-        public string Topic { get; init; } = string.Empty;
-    }
+    public DeviceType Type { get; init; }
+    public int IOIndex { get; init; }
+    public string Topic { get; init; } = string.Empty;
 }

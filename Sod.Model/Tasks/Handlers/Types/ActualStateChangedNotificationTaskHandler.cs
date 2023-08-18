@@ -1,31 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Sod.Model.Events.Outgoing;
 using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Tasks.Handlers.Types
+namespace Sod.Model.Tasks.Handlers.Types;
+
+public class ActualStateChangedNotificationTaskHandler : BaseHandler<ActualStateChangedNotificationTask>
 {
-    public class ActualStateChangedNotificationTaskHandler : BaseHandler<ActualStateChangedNotificationTask>
+    private readonly IOutgoingEventPublisher _eventPublisher;
+
+    public ActualStateChangedNotificationTaskHandler(IOutgoingEventPublisher eventPublisher)
     {
-        private readonly IOutgoingEventPublisher _eventPublisher;
+        _eventPublisher = eventPublisher;
+    }
 
-        public ActualStateChangedNotificationTaskHandler(IOutgoingEventPublisher eventPublisher)
+    protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateChangedNotificationTask data)
+    {
+        Logger.LogInformation($"Outgoing event type is {data.OutgoingEventType.ToString()}");
+        foreach (var state in data.Notifications)
         {
-            _eventPublisher = eventPublisher;
+            Logger.LogInformation($"index: {state.Index}, value: {state.Value}");
+            await _eventPublisher.PublishAsync(new OutgoingEvent(data.OutgoingEventType, state.Index, state.Value));
         }
 
-        protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateChangedNotificationTask data)
-        {
-            Logger.LogInformation($"Outgoing event type is {data.OutgoingEventType.ToString()}");
-            foreach (var state in data.Notifications)
-            {
-                Logger.LogInformation($"index: {state.Index}, value: {state.Value}");
-                await _eventPublisher.PublishAsync(new OutgoingEvent(data.OutgoingEventType, state.Index, state.Value));
-            }
-            
-            return Enumerable.Empty<SatelTask>();
-        }
+        return Enumerable.Empty<SatelTask>();
     }
 }

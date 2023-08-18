@@ -356,3 +356,4 @@ MigrationBackup/
 appsettings.local.json
 ca.crt
 log/
+.vscode/

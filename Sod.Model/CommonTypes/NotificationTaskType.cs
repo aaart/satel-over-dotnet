@@ -1,8 +1,8 @@
-﻿namespace Sod.Model.CommonTypes
+﻿namespace Sod.Model.CommonTypes;
+
+public enum NotificationTaskType
 {
-    public enum NotificationTaskType
-    {
-        NotifyIOChanged,
-        NotifyArmedPartitionsChanged
-    }
+    NotifyIOChanged,
+    NotifyArmedPartitionsChanged,
+    NotifyAlarmTriggeredChanged
 }

@@ -1,20 +1,25 @@
 ﻿using System.Collections.Concurrent;
-using System.Threading.Tasks;
 using Sod.Model.Tasks;
 
-namespace Sod.Model.DataStructures
+namespace Sod.Model.DataStructures;
+
+public class InMemoryTaskQueue : ITaskQueue
 {
-    public class InMemoryTaskQueue : ITaskQueue
+    private readonly ConcurrentQueue<SatelTask> _queue = new();
+
+    public Task EnqueueAsync(SatelTask satelTask)
     {
-        private readonly ConcurrentQueue<SatelTask> _queue = new();
+        _queue.Enqueue(satelTask);
+        return Task.CompletedTask;
+    }
 
-        public Task EnqueueAsync(SatelTask satelTask)
-        {
-            _queue.Enqueue(satelTask);
-            return Task.CompletedTask;
-        }
+    public Task<(bool exists, SatelTask? value)> DequeueAsync()
+    {
+        return _queue.TryDequeue(out var value) ? Task.FromResult((true, (SatelTask?)value)) : Task.FromResult((false, (SatelTask?)null));
+    }
 
-        public Task<(bool exists, SatelTask? value)> DequeueAsync() => 
-            _queue.TryDequeue(out SatelTask? value) ? Task.FromResult((true, (SatelTask?)value)) : Task.FromResult((false, (SatelTask?)null));
+    public Task Clear()
+    {
+        return Task.Run(() => _queue.Clear());
     }
 }

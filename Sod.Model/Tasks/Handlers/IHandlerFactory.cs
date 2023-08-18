@@ -1,7 +1,6 @@
-﻿namespace Sod.Model.Tasks.Handlers
+﻿namespace Sod.Model.Tasks.Handlers;
+
+public interface IHandlerFactory
 {
-    public interface IHandlerFactory
-    {
-        ITaskHandler CreateHandler(SatelTask task);
-    }
+    ITaskHandler CreateHandler(SatelTask task);
 }

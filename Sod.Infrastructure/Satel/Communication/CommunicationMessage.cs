@@ -1,16 +1,3 @@
-﻿namespace Sod.Infrastructure.Satel.Communication
-{
-    public record CommunicationMessage
-    {
-        public CommunicationMessage(Command command, byte[] newState, byte[] userCode)
-        {
-            Command = command;
-            NewState = newState;
-            UserCode = userCode;
-        }
+﻿namespace Sod.Infrastructure.Satel.Communication;
 
-        public Command Command { get; } 
-        public byte[] NewState { get; }
-        public byte[] UserCode { get; }
-    }
-}
+public record CommunicationMessage(Command Command, byte[] NewState, byte[] UserCode);

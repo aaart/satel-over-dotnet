@@ -1,8 +1,8 @@
-﻿namespace Sod.Model.Processing
+﻿namespace Sod.Model.Processing;
+
+public class LoopOptions
 {
-    public class LoopOptions
-    {
-        public int Interval { get; set; }
-        public int IterationCount { get; set; }
-    }
+    public int Interval { get; set; }
+    public int IterationCount { get; set; }
+    public int OnErrorDelayMiliseconds { get; set; }
 }

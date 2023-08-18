@@ -1,15 +1,12 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
-namespace Sod.Worker.Modules
+namespace Sod.Worker.Modules;
+
+public static class Extensions
 {
-    public static class Extensions
+    public static void RegisterConfiguration<T>(this ContainerBuilder builder, string section) where T : class
     {
-        public static void RegisterConfiguration<T>(this ContainerBuilder builder, string section) where T : class
-        {
-            builder.Register(ctx => ctx.Resolve<IConfigurationRoot>().GetSection(section).Get<T>());
-        }
+        builder.Register(ctx => ctx.Resolve<IConfigurationRoot>().GetSection(section).Get<T>());
     }
 }
