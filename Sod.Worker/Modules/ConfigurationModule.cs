@@ -17,7 +17,7 @@ public class ConfigurationModule : Module
     {
         base.Load(builder);
         builder.Register(_ => new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(Directory.Exists("/workspace") ? "/workspace" : Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile("appsettings.local.json", optional: true)
                 .Build())
