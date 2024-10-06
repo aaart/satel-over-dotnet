@@ -99,7 +99,7 @@ public class InfrastructureModule : Module
 
         builder
             .Register(_ => new MqttFactory().CreateManagedMqttClient())
-            .As<IMqttClient>()
+            .As<IManagedMqttClient>()
             .SingleInstance()
             .OnActivated(async activatedEventArgs =>
             {
@@ -107,6 +107,8 @@ public class InfrastructureModule : Module
                 var mappings = activatedEventArgs.Context.Resolve<EventHandlerMappings>();
                 foreach (var topic in mappings.Topics) await client.SubscribeAsync(topic);
                 await client.StartAsync(activatedEventArgs.Context.Resolve<ManagedMqttClientOptions>());
+                var broker = activatedEventArgs.Context.Resolve<IBroker>();
+                client.ApplicationMessageReceivedAsync += args => broker.Process(args.ApplicationMessage.Topic, Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment));
             });
 
         builder
