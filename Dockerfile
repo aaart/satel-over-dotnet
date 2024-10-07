@@ -15,4 +15,6 @@ FROM mcr.microsoft.com/dotnet/runtime:6.0 AS runtime
 WORKDIR /app
 COPY --from=build /src/bin .
 
-ENTRYPOINT ["dotnet", "Sod.Worker.dll"]
+WORKDIR /workspace
+
+ENTRYPOINT ["dotnet", "/app/Sod.Worker.dll"]
