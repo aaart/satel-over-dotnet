@@ -111,6 +111,11 @@ public class InfrastructureModule : Module
                 client.ApplicationMessageReceivedAsync += args => broker.Process(args.ApplicationMessage.Topic, Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment));
             });
 
+        builder
+            .Register(ctx => ctx.Resolve<IManagedMqttClient>().InternalClient)
+            .As<IMqttClient>()
+            .SingleInstance();
+
         builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
 
         builder.RegisterType<InMemoryTaskQueue>().As<ITaskQueue>().SingleInstance();
