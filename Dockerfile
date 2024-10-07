@@ -11,7 +11,7 @@ RUN dotnet restore Sod.Worker/Sod.Worker.csproj
 
 RUN dotnet build Sod.Worker/Sod.Worker.csproj -c Release -o bin
 
-FROM mcr.microsoft.com/dotnet/runtime:6.0 AS runtime
+FROM mcr.microsoft.com/dotnet/runtime:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /src/bin .
 
