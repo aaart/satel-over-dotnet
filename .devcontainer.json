@@ -1,0 +1,14 @@
+{
+    "name": "satel-over-dotnet",
+    "image": "ghcr.io/linuxcontainers/debian-slim:latest",
+    "features": {},
+    "mounts": [
+         "source=${localEnv:HOME},target=/root,type=bind,consistency=cached"
+    ],
+    "postCreateCommand": "/bin/bash ./.devcontainer.sh",
+    "containerEnv": {
+        "GIT_USER_NAME": "${localEnv:GIT_USER_NAME}",
+        "GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL}",
+        "TEST_ENV": "VALUE"
+    }
+}
