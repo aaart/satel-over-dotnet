@@ -1,6 +1,6 @@
 {
     "name": "satel-over-dotnet",
-    "image": "ghcr.io/linuxcontainers/debian-slim:latest",
+    "image": "debian:bookworm-slim",
     "features": {},
     "mounts": [
          "source=${localEnv:HOME},target=/root,type=bind,consistency=cached"
