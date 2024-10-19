@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client.Publishing;
+using MQTTnet.Protocol;
 using Sod.Infrastructure.Capabilities;
 using Sod.Model.CommonTypes;
 
@@ -14,6 +15,8 @@ public class MqttOutgoingEventPublisher : LoggingCapability, IOutgoingEventPubli
 {
     private readonly IApplicationMessagePublisher _publisher;
     private readonly OutgoingEventMappings _mappings;
+    private bool _retain = false;
+    private int _qos = 1;
 
     public MqttOutgoingEventPublisher(IApplicationMessagePublisher publisher, OutgoingEventMappings mappings)
     {
@@ -21,6 +24,18 @@ public class MqttOutgoingEventPublisher : LoggingCapability, IOutgoingEventPubli
         _mappings = mappings;
     }
 
+    public MqttOutgoingEventPublisher Retain(bool retain)
+    {
+        _retain = retain;
+        return this;
+    }
+
+    public MqttOutgoingEventPublisher QoS(int qos)
+    {
+        _qos = qos;
+        return this;
+    }
+    
     public async Task<IEnumerable<FailedOutgoingEvent>> PublishAsync(OutgoingEvent evnt)
     {
         var failed = new List<FailedOutgoingEvent>();
@@ -30,6 +45,8 @@ public class MqttOutgoingEventPublisher : LoggingCapability, IOutgoingEventPubli
             var msg = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)
                 .WithPayload(evnt.Value)
+                .WithRetainFlag(_retain)
+                .WithQualityOfServiceLevel((MqttQualityOfServiceLevel)_qos)
                 .Build();
             var publishResult = await _publisher.PublishAsync(msg, CancellationToken.None);
             if (publishResult.ReasonCode != MqttClientPublishReasonCode.Success) failed.Add(new FailedOutgoingEvent(evnt, FailedOutgoingEventReason.CommunicationError));

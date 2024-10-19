@@ -7,4 +7,6 @@ public class MqttOptions
     public string User { get; init; } = null!;
     public string Password { get; init; } = null!;
     public string? CrtPath { get; init; } = null;
+    public bool Retain { get; init; } = true;
+    public int QoS { get; init; } = 1;
 }
