@@ -112,7 +112,15 @@ public class InfrastructureModule : Module
                 client.UseApplicationMessageReceivedHandler(x => { broker.Process(x.ApplicationMessage.Topic, Encoding.UTF8.GetString(x.ApplicationMessage.Payload)); });
             });
 
-        builder.RegisterType<MqttOutgoingEventPublisher>().As<IOutgoingEventPublisher>().SingleInstance();
+        builder
+            .RegisterType<MqttOutgoingEventPublisher>()
+            .OnActivated(activatedEventArgs =>
+            {
+                var opt = activatedEventArgs.Context.Resolve<MqttOptions>();
+                activatedEventArgs.Instance.Retain(opt.Retain).QoS(opt.QoS);
+            })
+            .As<IOutgoingEventPublisher>()
+            .SingleInstance();
 
         builder.RegisterType<InMemoryTaskQueue>().As<ITaskQueue>().SingleInstance();
         builder.RegisterType<TaskPlanner>().As<ITaskPlanner>().SingleInstance();
