@@ -112,13 +112,18 @@ public class InfrastructureModule : Module
             });
 
         builder
+            .Register(ctx => ctx.Resolve<IManagedMqttClient>().InternalClient)
+            .As<IMqttClient>()
+            .SingleInstance();
+        
+        builder
             .RegisterType<MqttOutgoingEventPublisher>()
+            .As<IOutgoingEventPublisher>()
             .OnActivated(activatedEventArgs =>
             {
                 var opt = activatedEventArgs.Context.Resolve<MqttOptions>();
                 activatedEventArgs.Instance.Retain(opt.Retain).QoS(opt.QoS);
             })
-            .As<IOutgoingEventPublisher>()
             .SingleInstance();
 
         builder.RegisterType<InMemoryTaskQueue>().As<ITaskQueue>().SingleInstance();
