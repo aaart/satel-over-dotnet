@@ -31,10 +31,10 @@ public class ActualStateBinaryIOReadTaskHandler : BaseHandler<ActualStateBinaryI
         {
             case IOBinaryReadType.Inputs:
             case IOBinaryReadType.Outputs:
-                return new[] { new ActualStateBinaryIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
+                return [new ActualStateBinaryIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType)];
             case IOBinaryReadType.ArmedPartitions:
             case IOBinaryReadType.AlarmTriggered:
-                return new[] { new ActualStateAlarmIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType) };
+                return [new ActualStateAlarmIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType)];
             default:
                 throw new ArgumentOutOfRangeException();
         }
