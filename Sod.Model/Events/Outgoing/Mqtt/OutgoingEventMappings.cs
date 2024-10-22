@@ -39,8 +39,8 @@ public class OutgoingEventMappings : IEnumerable<OutgoingEventMapping>
             case OutgoingEventType.ArmedPartitionsStateChanged:
                 deviceType = DeviceType.ArmedPartition;
                 break;
-            case OutgoingEventType.AlarmTriggered:
-                deviceType = DeviceType.TriggeredAlarm;
+            case OutgoingEventType.PartitionTriggered:
+                deviceType = DeviceType.TriggeredPartition;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(evnt.Type), evnt.Type, "Type is out of the expected range!");
