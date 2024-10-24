@@ -15,10 +15,9 @@ public class ActualStateChangedNotificationTaskHandler : BaseHandler<ActualState
 
     protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateChangedNotificationTask data)
     {
-        Logger.LogInformation($"Outgoing event type is {data.OutgoingEventType.ToString()}");
         foreach (var state in data.Notifications)
         {
-            Logger.LogInformation($"index: {state.Index}, value: {state.Value}");
+            Logger.LogInformation($"Outgoing event type is {data.OutgoingEventType.ToString()}. index: {state.Index}, value: {state.Value}");
             await _eventPublisher.PublishAsync(new OutgoingEvent(data.OutgoingEventType, state.Index, state.Value));
         }
 

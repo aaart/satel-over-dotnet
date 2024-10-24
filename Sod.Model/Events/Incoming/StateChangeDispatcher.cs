@@ -36,7 +36,7 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
                 outgoingEventType = OutgoingEventType.OutputsStateChanged;
                 outputCount = 128;
                 break;
-            case IncomingEventType.AlarmPartition:
+            case IncomingEventType.ArmPartition:
                 updateType = IOBinaryUpdateType.Partitions;
                 outgoingEventType = OutgoingEventType.ArmedPartitionsStateChanged;
                 outputCount = 32;

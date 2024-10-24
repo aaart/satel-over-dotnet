@@ -5,5 +5,5 @@ public enum DeviceType
     Input,
     Output,
     ArmedPartition,
-    TriggeredAlarm
+    TriggeredPartition
 }

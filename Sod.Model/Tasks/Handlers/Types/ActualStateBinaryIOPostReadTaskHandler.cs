@@ -9,7 +9,7 @@ public class ActualStateBinaryIOPostReadTaskHandler : BaseHandler<ActualStateBin
     {
         if (data.Changes.Any())
         {
-            Logger.LogInformation($"{data.Changes.Count} changes found. {data.OutgoingEventType} event will be send.");
+            Logger.LogInformation($"{data.Changes.Count} change(s) found. {data.OutgoingEventType} event will be send.");
             var t1 = new PersistedStateUpdateTask(data.PersistedStateKey, data.ActualState);
             var t2 = new ActualStateChangedNotificationTask(data.Changes, data.OutgoingEventType);
             return Task.FromResult(new SatelTask[] { t1, t2 }.AsEnumerable());

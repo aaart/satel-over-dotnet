@@ -12,7 +12,7 @@ namespace Sod.Tests.Infrastructure.Satel;
 public class SatelDataSenderTests
 {
     [Fact]
-    public async void GivenStateArray_WhenAllSuccess_ThenTrue()
+    public async Task GivenStateArray_WhenAllSuccess_ThenTrue()
     {
         var socketSender = new MockSocketSender(data => Task.FromResult(7));
         var success = await SendAsync(socketSender, Command.NewData, Array.Empty<byte>(), Array.Empty<byte>());
@@ -20,7 +20,7 @@ public class SatelDataSenderTests
     }
 
     [Fact]
-    public async void GivenStateArray_WhenNotAllSuccess_ThenFalse()
+    public async Task GivenStateArray_WhenNotAllSuccess_ThenFalse()
     {
         var socketSender = new MockSocketSender(data => Task.FromResult(22));
         var success = await SendAsync(socketSender, Command.NewData, Array.Empty<byte>(), Array.Empty<byte>());
