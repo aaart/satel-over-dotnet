@@ -32,7 +32,7 @@ public class InfrastructureModule : Module
             {
                 args.Instance.SetAsync(Constants.Store.InputsState, Enumerable.Repeat(false, 128).ToArray());
                 args.Instance.SetAsync(Constants.Store.OutputsState, Enumerable.Repeat(false, 128).ToArray());
-                args.Instance.SetAsync(Constants.Store.ArmedPartitions, Enumerable.Repeat(true, 32).ToArray());
+                args.Instance.SetAsync(Constants.Store.ArmedPartitions, Enumerable.Repeat(true, 32).ToArray()); // most probably will be set to false after start
                 args.Instance.SetAsync(Constants.Store.TriggeredPartitions, Enumerable.Repeat(true, 32).ToArray());
             })
             .SingleInstance();
@@ -104,9 +104,9 @@ public class InfrastructureModule : Module
             .OnActivated(async activatedEventArgs =>
             {
                 var client = activatedEventArgs.Instance;
-                await client.StartAsync(activatedEventArgs.Context.Resolve<ManagedMqttClientOptions>());
                 var mappings = activatedEventArgs.Context.Resolve<EventHandlerMappings>();
                 foreach (var topic in mappings.Topics) await client.SubscribeAsync(topic);
+                await client.StartAsync(activatedEventArgs.Context.Resolve<ManagedMqttClientOptions>());
                 var broker = activatedEventArgs.Context.Resolve<IBroker>();
                 client.ApplicationMessageReceivedAsync += args => broker.Process(args.ApplicationMessage.Topic, Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment));
             });
