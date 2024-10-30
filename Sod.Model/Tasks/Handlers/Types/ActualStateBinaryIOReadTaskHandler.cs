@@ -31,6 +31,7 @@ public class ActualStateBinaryIOReadTaskHandler : BaseHandler<ActualStateBinaryI
         {
             case IOBinaryReadType.Inputs:
             case IOBinaryReadType.Outputs:
+            case IOBinaryReadType.SuppressedPartitions:
                 return [new ActualStateBinaryIOPostReadTask(changes, data.PersistedStateKey, actualState, data.OutgoingEventType)];
             case IOBinaryReadType.ArmedPartitions:
             case IOBinaryReadType.AlarmTriggered:
@@ -52,6 +53,8 @@ public class ActualStateBinaryIOReadTaskHandler : BaseHandler<ActualStateBinaryI
                 return await _manipulator.ReadArmedPartitions();
             case IOBinaryReadType.AlarmTriggered:
                 return await _manipulator.ReadAlarmTriggered();
+            case IOBinaryReadType.SuppressedPartitions:
+                return await _manipulator.ReadSuppressedPartitions();
             default:
                 throw new ArgumentOutOfRangeException(nameof(method), method, null);
         }

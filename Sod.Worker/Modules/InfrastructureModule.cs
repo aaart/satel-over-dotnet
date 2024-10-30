@@ -33,7 +33,8 @@ public class InfrastructureModule : Module
                 args.Instance.SetAsync(Constants.Store.InputsState, Enumerable.Repeat(false, 128).ToArray());
                 args.Instance.SetAsync(Constants.Store.OutputsState, Enumerable.Repeat(false, 128).ToArray());
                 args.Instance.SetAsync(Constants.Store.ArmedPartitions, Enumerable.Repeat(true, 32).ToArray()); // most probably will be set to false after start
-                args.Instance.SetAsync(Constants.Store.TriggeredPartitions, Enumerable.Repeat(true, 32).ToArray());
+                args.Instance.SetAsync(Constants.Store.TriggeredPartitions, Enumerable.Repeat(true, 32).ToArray()); // most probably will be set to false after start
+                args.Instance.SetAsync(Constants.Store.SuppressedPartitions, Enumerable.Repeat(true, 32).ToArray()); // most probably will be set to false after start
             })
             .SingleInstance();
 

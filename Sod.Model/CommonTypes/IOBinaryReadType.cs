@@ -5,5 +5,6 @@ public enum IOBinaryReadType
     Inputs,
     Outputs,
     ArmedPartitions,
+    SuppressedPartitions,
     AlarmTriggered
 }

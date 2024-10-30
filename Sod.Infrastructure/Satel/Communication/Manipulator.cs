@@ -80,6 +80,14 @@ public class Manipulator : LoggingCapability, IManipulator
             Translation.ToBooleanArray);
     }
 
+    public async Task<(CommandStatus, bool[])> ReadSuppressedPartitions()
+    {
+        return await _genericCommunicationInterface.Execute(
+            new CommunicationMessage(Command.ArmedPartitionsSuppressed, Array.Empty<byte>(), Array.Empty<byte>()),
+            new CommunicationDefaultResponse<bool[]>(Array.Empty<bool>(), Command.ArmedPartitionsSuppressed),
+            Translation.ToBooleanArray);
+    }
+
     public async Task<(CommandStatus status, IntegraResponse response)> ArmInMode0(bool[] partitions)
     {
         return await _genericCommunicationInterface.Execute(

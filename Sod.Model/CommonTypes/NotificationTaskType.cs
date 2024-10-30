@@ -4,5 +4,6 @@ public enum NotificationTaskType
 {
     NotifyIOChanged,
     NotifyArmedPartitionsChanged,
-    NotifyAlarmTriggeredChanged
+    NotifyAlarmTriggeredChanged,
+    NotifySuppressedPartitionsChanged
 }

@@ -39,6 +39,9 @@ public class OutgoingEventMappings : IEnumerable<OutgoingEventMapping>
             case OutgoingEventType.ArmedPartitionsStateChanged:
                 deviceType = DeviceType.ArmedPartition;
                 break;
+            case OutgoingEventType.SuppressedPartitionsStateChanged:
+                deviceType = DeviceType.SuppressedPartition;
+                break;
             case OutgoingEventType.PartitionTriggered:
                 deviceType = DeviceType.TriggeredPartition;
                 break;
