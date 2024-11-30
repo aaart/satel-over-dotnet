@@ -8,5 +8,6 @@ public static partial class Constants
         public const string OutputsState = nameof(OutputsState);
         public const string ArmedPartitions = nameof(ArmedPartitions);
         public const string TriggeredPartitions = nameof(TriggeredPartitions);
+        public const string SuppressedPartitions = nameof(SuppressedPartitions);
     }
 }

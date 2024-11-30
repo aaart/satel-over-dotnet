@@ -13,4 +13,5 @@ public interface IManipulator
     Task<(CommandStatus status, IntegraResponse response)> DisableOutputs(bool[] outputs);
     Task<(CommandStatus status, IntegraResponse response)> EnableOutputs(bool[] outputs);
     Task<(CommandStatus status, bool[] triggeredZones)> ReadAlarmTriggered();
+    Task<(CommandStatus, bool[])> ReadSuppressedPartitions();
 }

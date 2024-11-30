@@ -10,10 +10,7 @@ public class InMemoryStore : IStore
 
     public Task SetAsync(string key, object value)
     {
-        if (_store.ContainsKey(key))
-            _store[key] = value;
-        else
-            _store.Add(key, value);
+        _store[key] = value;
 
         return Task.CompletedTask;
     }

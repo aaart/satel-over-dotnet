@@ -14,6 +14,9 @@ public enum Command
 
     // write
     ArmInMode0 = 0x80,
+    ArmInMode1 = 0x81,
+    ArmInMode2 = 0x82,
+    ArmInMode3 = 0x83,
     DisArm = 0x84,
     ForceArmInMode0 = 0xA0,
     OutputsOn = 0x88,

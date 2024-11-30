@@ -5,5 +5,6 @@ public enum OutgoingEventType
     InputsStateChanged,
     OutputsStateChanged,
     ArmedPartitionsStateChanged,
-    AlarmTriggered
+    SuppressedPartitionsStateChanged,
+    PartitionTriggered
 }
