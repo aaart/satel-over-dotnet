@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using Autofac;
+using Autofac.Core;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Extensions.ManagedClient;
@@ -11,6 +12,7 @@ using Sod.Infrastructure.Satel.Communication;
 using Sod.Infrastructure.Satel.Socket;
 using Sod.Model;
 using Sod.Model.DataStructures;
+using Sod.Model.Events.Incoming;
 using Sod.Model.Events.Outgoing;
 using Sod.Model.Events.Outgoing.Mqtt;
 using Sod.Model.Processing;
@@ -96,20 +98,16 @@ public class InfrastructureModule : Module
 
         if (config.CrtPath != null)
         {
-            optionsBuilder.WithTlsOptions(opt => ConfigureTlsOptions(opt, config.CrtPath));
+            var caCertificate = X509CertificateLoader.LoadCertificate(File.ReadAllBytes(config.CrtPath));
+            optionsBuilder.WithTlsOptions(opt =>
+            {
+                opt.UseTls();
+                opt.WithSslProtocols(SslProtocols.Tls12 | SslProtocols.Tls13);
+                opt.WithCertificateValidationHandler(context => ValidateCertificate(context, caCertificate));
+            });
         }
 
         return optionsBuilder.Build();
-    }
-
-    private static void ConfigureTlsOptions(MqttClientTlsOptions tlsOptions, string certificatePath)
-    {
-        var caCertificate = X509CertificateLoader.LoadCertificate(File.ReadAllBytes(certificatePath));
-        
-        tlsOptions
-            .UseTls()
-            .WithSslProtocols(SslProtocols.Tls12 | SslProtocols.Tls13)
-            .WithCertificateValidationHandler(context => ValidateCertificate(context, caCertificate));
     }
 
     private static bool ValidateCertificate(
