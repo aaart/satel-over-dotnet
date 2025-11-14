@@ -4,9 +4,8 @@ using Sod.Infrastructure.Satel.Communication;
 
 namespace Sod.Worker;
 
-public class SocketConnection : ISocketConnection, IDisposable
+public class SocketConnection(SatelConnectionOptions options) : ISocketConnection, IDisposable
 {
-    private readonly SatelConnectionOptions _options;
     private Socket _socket;
     private object _lock = new();
 
@@ -25,17 +24,12 @@ public class SocketConnection : ISocketConnection, IDisposable
         return connection._socket;
     }
 
-    public SocketConnection(SatelConnectionOptions options)
-    {
-        _options = options;
-    }
-
     public Socket Instance => _onSocketPropertyCalled(this);
 
     public void Connect()
     {
         _socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-        _socket.Connect(_options.Address, _options.Port);
+        _socket.Connect(options.Address, options.Port);
     }
 
     public void Reconnect()
