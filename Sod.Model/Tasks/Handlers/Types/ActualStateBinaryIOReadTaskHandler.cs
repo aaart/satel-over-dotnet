@@ -6,23 +6,15 @@ using Sod.Model.Tools;
 
 namespace Sod.Model.Tasks.Handlers.Types;
 
-public class ActualStateBinaryIOReadTaskHandler : BaseHandler<ActualStateBinaryIOReadTask>
+public class ActualStateBinaryIOReadTaskHandler(IStore store, IManipulator manipulator)
+    : BaseHandler<ActualStateBinaryIOReadTask>
 {
-    private readonly IStore _store;
-    private readonly IManipulator _manipulator;
-
-    public ActualStateBinaryIOReadTaskHandler(IStore store, IManipulator manipulator)
-    {
-        _store = store;
-        _manipulator = manipulator;
-    }
-
     protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOReadTask data)
     {
         var (status, actualState) = await ManipulatorMethod(data.Method);
         ValidateStatus(status);
 
-        var persistedState = await _store.GetAsync<bool[]>(data.PersistedStateKey);
+        var persistedState = await store.GetAsync<bool[]>(data.PersistedStateKey);
         ValidateState(persistedState, actualState);
 
         var changes = IO.ExtractIOChanges(persistedState, actualState);
@@ -46,15 +38,15 @@ public class ActualStateBinaryIOReadTaskHandler : BaseHandler<ActualStateBinaryI
         switch (method)
         {
             case IOBinaryReadType.Inputs:
-                return await _manipulator.ReadInputs();
+                return await manipulator.ReadInputs();
             case IOBinaryReadType.Outputs:
-                return await _manipulator.ReadOutputs();
+                return await manipulator.ReadOutputs();
             case IOBinaryReadType.ArmedPartitions:
-                return await _manipulator.ReadArmedPartitions();
+                return await manipulator.ReadArmedPartitions();
             case IOBinaryReadType.AlarmTriggered:
-                return await _manipulator.ReadAlarmTriggered();
+                return await manipulator.ReadAlarmTriggered();
             case IOBinaryReadType.SuppressedPartitions:
-                return await _manipulator.ReadSuppressedPartitions();
+                return await manipulator.ReadSuppressedPartitions();
             default:
                 throw new ArgumentOutOfRangeException(nameof(method), method, null);
         }

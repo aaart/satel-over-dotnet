@@ -4,20 +4,13 @@ using Sod.Model.Tasks.Types;
 
 namespace Sod.Model.Tasks.Handlers.Types;
 
-public class PersistedStateUpdateTaskHandler : BaseHandler<PersistedStateUpdateTask>
+public class PersistedStateUpdateTaskHandler(IStore store) : BaseHandler<PersistedStateUpdateTask>
 {
-    private readonly IStore _store;
-
-    public PersistedStateUpdateTaskHandler(IStore store)
-    {
-        _store = store;
-    }
-
     protected override async Task<IEnumerable<SatelTask>> Handle(PersistedStateUpdateTask data)
     {
         try
         {
-            await _store.SetAsync(data.StorageKey, data.Values);
+            await store.SetAsync(data.StorageKey, data.Values);
         }
         catch (Exception e)
         {
