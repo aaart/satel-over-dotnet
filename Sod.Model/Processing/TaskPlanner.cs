@@ -2,7 +2,7 @@
 using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
 using Sod.Model.Events.Outgoing;
-using Sod.Model.Tasks.Types;
+using Sod.Model.Tasks;
 
 namespace Sod.Model.Processing;
 

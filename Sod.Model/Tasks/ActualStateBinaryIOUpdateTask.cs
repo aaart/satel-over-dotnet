@@ -1,7 +1,7 @@
 ﻿using Sod.Model.CommonTypes;
 using Sod.Model.Events.Outgoing;
 
-namespace Sod.Model.Tasks.Types;
+namespace Sod.Model.Tasks;
 
 public class ActualStateBinaryIOUpdateTask(
     IEnumerable<BinaryIOState> updates,
@@ -9,7 +9,7 @@ public class ActualStateBinaryIOUpdateTask(
     bool notifyChanged,
     OutgoingEventType eventType,
     int outputCount)
-    : SatelTask
+    : BaseSatelTask
 {
     public IEnumerable<BinaryIOState> Updates { get; } = updates;
     public IOBinaryUpdateType Method { get; } = method;

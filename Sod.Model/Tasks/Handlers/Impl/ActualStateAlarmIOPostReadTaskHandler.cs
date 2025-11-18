@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using Sod.Model.CommonTypes;
 using Sod.Model.Events.Outgoing;
-using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Tasks.Handlers.Types;
+namespace Sod.Model.Tasks.Handlers.Impl;
 
 public class ActualStateAlarmIOPostReadTaskHandler : BaseHandler<ActualStateAlarmIOPostReadTask>
 {
-    protected override Task<IEnumerable<SatelTask>> Handle(ActualStateAlarmIOPostReadTask data)
+    protected override Task<IEnumerable<BaseSatelTask>> Handle(ActualStateAlarmIOPostReadTask data)
     {
-        var tasks = new List<SatelTask>();
+        var tasks = new List<BaseSatelTask>();
         var anyPartitionArmed = data.ActualState.Any(x => x);
 
         if (data.Changes.Any())

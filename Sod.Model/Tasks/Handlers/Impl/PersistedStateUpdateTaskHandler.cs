@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Sod.Model.DataStructures;
-using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Tasks.Handlers.Types;
+namespace Sod.Model.Tasks.Handlers.Impl;
 
 public class PersistedStateUpdateTaskHandler(IStore store) : BaseHandler<PersistedStateUpdateTask>
 {
-    protected override async Task<IEnumerable<SatelTask>> Handle(PersistedStateUpdateTask data)
+    protected override async Task<IEnumerable<BaseSatelTask>> Handle(PersistedStateUpdateTask data)
     {
         try
         {
@@ -17,6 +16,6 @@ public class PersistedStateUpdateTaskHandler(IStore store) : BaseHandler<Persist
             Logger.LogError(e, e.Message);
         }
 
-        return Enumerable.Empty<SatelTask>();
+        return Enumerable.Empty<BaseSatelTask>();
     }
 }

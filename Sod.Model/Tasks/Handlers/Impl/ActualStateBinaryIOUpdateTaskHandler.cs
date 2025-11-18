@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.CommonTypes;
-using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Tasks.Handlers.Types;
+namespace Sod.Model.Tasks.Handlers.Impl;
 
 public class ActualStateBinaryIOUpdateTaskHandler(IManipulator manipulator) : BaseHandler<ActualStateBinaryIOUpdateTask>
 {
-    protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOUpdateTask data)
+    protected override async Task<IEnumerable<BaseSatelTask>> Handle(ActualStateBinaryIOUpdateTask data)
     {
         Logger.LogDebug($"{nameof(ActualStateBinaryIOUpdateTaskHandler)} is executing.");
         var disableOutputs = new bool[data.OutputCount];
@@ -33,7 +32,7 @@ public class ActualStateBinaryIOUpdateTaskHandler(IManipulator manipulator) : Ba
             notifications.Add(state);
         }
 
-        var tasks = new List<SatelTask>();
+        var tasks = new List<BaseSatelTask>();
         if (anyEnabled)
             switch (data.Method)
             {

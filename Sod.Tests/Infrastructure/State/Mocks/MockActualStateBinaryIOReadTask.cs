@@ -1,6 +1,6 @@
 ﻿using Sod.Model.CommonTypes;
 using Sod.Model.Events.Outgoing;
-using Sod.Model.Tasks.Types;
+using Sod.Model.Tasks;
 
 namespace Sod.Tests.Infrastructure.State.Mocks;
 

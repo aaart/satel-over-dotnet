@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Sod.Model.Events.Outgoing;
-using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Tasks.Handlers.Types;
+namespace Sod.Model.Tasks.Handlers.Impl;
 
 public class ActualStateChangedNotificationTaskHandler(IOutgoingEventPublisher eventPublisher)
     : BaseHandler<ActualStateChangedNotificationTask>
 {
-    protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateChangedNotificationTask data)
+    protected override async Task<IEnumerable<BaseSatelTask>> Handle(ActualStateChangedNotificationTask data)
     {
         foreach (var state in data.Notifications)
         {
@@ -15,6 +14,6 @@ public class ActualStateChangedNotificationTaskHandler(IOutgoingEventPublisher e
             await eventPublisher.PublishAsync(new OutgoingEvent(data.OutgoingEventType, state.Index, state.Value));
         }
 
-        return Enumerable.Empty<SatelTask>();
+        return Enumerable.Empty<BaseSatelTask>();
     }
 }

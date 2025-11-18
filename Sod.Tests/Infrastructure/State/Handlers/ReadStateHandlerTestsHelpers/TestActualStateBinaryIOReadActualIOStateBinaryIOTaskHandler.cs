@@ -1,6 +1,6 @@
 ﻿using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.DataStructures;
-using Sod.Model.Tasks.Handlers.Types;
+using Sod.Model.Tasks.Handlers.Impl;
 
 namespace Sod.Tests.Infrastructure.State.Handlers.ReadStateHandlerTestsHelpers;
 

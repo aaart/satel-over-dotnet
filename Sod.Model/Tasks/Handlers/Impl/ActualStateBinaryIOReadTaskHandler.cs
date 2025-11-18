@@ -1,15 +1,14 @@
 ﻿using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
-using Sod.Model.Tasks.Types;
 using Sod.Model.Tools;
 
-namespace Sod.Model.Tasks.Handlers.Types;
+namespace Sod.Model.Tasks.Handlers.Impl;
 
 public class ActualStateBinaryIOReadTaskHandler(IStore store, IManipulator manipulator)
     : BaseHandler<ActualStateBinaryIOReadTask>
 {
-    protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOReadTask data)
+    protected override async Task<IEnumerable<BaseSatelTask>> Handle(ActualStateBinaryIOReadTask data)
     {
         var (status, actualState) = await ManipulatorMethod(data.Method);
         ValidateStatus(status);

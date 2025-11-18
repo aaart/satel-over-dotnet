@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using Autofac;
 using Sod.Model.Tasks;
 using Sod.Model.Tasks.Handlers;
-using Sod.Model.Tasks.Handlers.Types;
-using Sod.Model.Tasks.Types;
+using Sod.Model.Tasks.Handlers.Impl;
 
 namespace Sod.Worker;
 
@@ -20,7 +19,7 @@ public class HandlerFactory(IComponentContext context) : IHandlerFactory
             { typeof(ActualStateBinaryIOPostReadTask), typeof(ActualStateBinaryIOPostReadTaskHandler) }
         };
 
-    public ITaskHandler CreateHandler(SatelTask task)
+    public ITaskHandler CreateHandler(BaseSatelTask task)
     {
         var taskType = task.GetType();
         

@@ -1,13 +1,13 @@
 ﻿using Sod.Model.CommonTypes;
 using Sod.Model.Events.Outgoing;
 
-namespace Sod.Model.Tasks.Types;
+namespace Sod.Model.Tasks;
 
 public class ActualStateBinaryIOReadTask(
     string persistedStateKey,
     IOBinaryReadType method,
     OutgoingEventType outgoingEventType)
-    : SatelTask
+    : BaseSatelTask
 {
     public string PersistedStateKey { get; } = persistedStateKey;
     public IOBinaryReadType Method { get; } = method;
