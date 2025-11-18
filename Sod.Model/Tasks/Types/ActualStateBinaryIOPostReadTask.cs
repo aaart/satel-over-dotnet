@@ -3,18 +3,15 @@ using Sod.Model.Events.Outgoing;
 
 namespace Sod.Model.Tasks.Types;
 
-public class ActualStateBinaryIOPostReadTask : SatelTask
+public class ActualStateBinaryIOPostReadTask(
+    IList<BinaryIOState> changes,
+    string persistedStateKey,
+    bool[] actualState,
+    OutgoingEventType outgoingEventType)
+    : SatelTask
 {
-    public ActualStateBinaryIOPostReadTask(IList<BinaryIOState> changes, string persistedStateKey, bool[] actualState, OutgoingEventType outgoingEventType)
-    {
-        Changes = changes;
-        PersistedStateKey = persistedStateKey;
-        ActualState = actualState;
-        OutgoingEventType = outgoingEventType;
-    }
-
-    public IList<BinaryIOState> Changes { get; }
-    public string PersistedStateKey { get; }
-    public bool[] ActualState { get; }
-    public OutgoingEventType OutgoingEventType { get; }
+    public IList<BinaryIOState> Changes { get; } = changes;
+    public string PersistedStateKey { get; } = persistedStateKey;
+    public bool[] ActualState { get; } = actualState;
+    public OutgoingEventType OutgoingEventType { get; } = outgoingEventType;
 }

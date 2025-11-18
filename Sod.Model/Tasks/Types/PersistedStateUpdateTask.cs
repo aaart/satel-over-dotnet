@@ -1,14 +1,7 @@
 ﻿namespace Sod.Model.Tasks.Types;
 
-public class PersistedStateUpdateTask : SatelTask
+public class PersistedStateUpdateTask(string storageKey, bool[] values) : SatelTask
 {
-    public PersistedStateUpdateTask(string storageKey, bool[] values)
-    {
-        StorageKey = storageKey;
-        Values = values;
-    }
-
-
-    public string StorageKey { get; }
-    public bool[] Values { get; }
+    public string StorageKey { get; } = storageKey;
+    public bool[] Values { get; } = values;
 }

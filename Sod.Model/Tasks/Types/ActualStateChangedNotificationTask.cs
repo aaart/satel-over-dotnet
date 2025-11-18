@@ -4,14 +4,11 @@ using Sod.Model.Events.Outgoing;
 
 namespace Sod.Model.Tasks.Types;
 
-public class ActualStateChangedNotificationTask : SatelTask
+public class ActualStateChangedNotificationTask(
+    IEnumerable<BinaryIOState> notifications,
+    OutgoingEventType outgoingEventType)
+    : SatelTask
 {
-    public ActualStateChangedNotificationTask(IEnumerable<BinaryIOState> notifications, OutgoingEventType outgoingEventType)
-    {
-        Notifications = notifications;
-        OutgoingEventType = outgoingEventType;
-    }
-
-    public IEnumerable<BinaryIOState> Notifications { get; }
-    public OutgoingEventType OutgoingEventType { get; }
+    public IEnumerable<BinaryIOState> Notifications { get; } = notifications;
+    public OutgoingEventType OutgoingEventType { get; } = outgoingEventType;
 }
