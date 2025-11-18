@@ -7,7 +7,7 @@ namespace Sod.Tests.Infrastructure.State.Mocks;
 public class MockActualStateBinaryIOReadTask : ActualStateBinaryIOReadTask
 {
     public MockActualStateBinaryIOReadTask()
-        : base(string.Empty, NotificationTaskType.NotifyIOChanged, IOBinaryReadType.Inputs, OutgoingEventType.InputsStateChanged)
+        : base(string.Empty, IOBinaryReadType.Inputs, OutgoingEventType.InputsStateChanged)
     {
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Sod.Model.CommonTypes;
+﻿using Sod.Model.CommonTypes;
 using Sod.Model.Events.Outgoing;
 
 namespace Sod.Model.Tasks.Types;
