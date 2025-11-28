@@ -26,6 +26,6 @@ public class Program
                             .RegisterModule<ConfigurationModule>()
                             .RegisterModule<LoggingModule>()
                             .RegisterModule<InfrastructureModule>()))
-            .ConfigureServices((hostContext, services) => services.AddHostedService<Worker>());
+            .ConfigureServices((_, services) => services.AddHostedService<Worker>());
     }
 }
