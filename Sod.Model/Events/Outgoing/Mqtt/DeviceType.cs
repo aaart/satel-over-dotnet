@@ -6,5 +6,6 @@ public enum DeviceType
     Output,
     ArmedPartition,
     SuppressedPartition,
-    TriggeredPartition
+    TriggeredPartition,
+    GlobalBroadcast
 }

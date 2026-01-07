@@ -41,6 +41,9 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
                 outgoingEventType = OutgoingEventType.ArmedPartitionsStateChanged;
                 outputCount = 32;
                 break;
+            case IncomingEventType.GlobalBroadcast:
+                await _queue.EnqueueAsync(new ActualStateGlobalBroadcastTask(payload));
+                return;
             default:
                 throw new ArgumentOutOfRangeException();
         }
