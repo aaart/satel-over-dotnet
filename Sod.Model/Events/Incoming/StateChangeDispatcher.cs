@@ -27,17 +27,16 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
     {
         Logger.LogInformation($"Event received for IOIndex = {_ioIndex} and event type = {_incomingEventType.ToString()}. Payload: {payload}");
 
-        if (_incomingEventType == IncomingEventType.GlobalBroadcastRequest)
-        {
-            await _queue.EnqueueAsync(new ActualStateGlobalBroadcastTask(payload));
-            return;
-        }
-
+        SatelTask task;
         IOBinaryUpdateType updateType;
         OutgoingEventType outgoingEventType;
         int outputCount;
         switch (_incomingEventType)
         {
+            case IncomingEventType.GlobalBroadcastRequest:
+                task = new ActualStateGlobalBroadcastTask(payload);
+                await _queue.EnqueueAsync(task);
+                return;
             case IncomingEventType.BinaryOutput:
                 updateType = IOBinaryUpdateType.Outputs;
                 outgoingEventType = OutgoingEventType.OutputsStateChanged;
@@ -52,7 +51,7 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
                 throw new ArgumentOutOfRangeException();
         }
 
-        var task = new ActualStateBinaryIOUpdateTask(new List<BinaryIOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } }, updateType, _notify, outgoingEventType, outputCount);
+        task = new ActualStateBinaryIOUpdateTask(new List<BinaryIOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } }, updateType, _notify, outgoingEventType, outputCount);
         await _queue.EnqueueAsync(task);
     }
 }
