@@ -1,8 +1,8 @@
 using Sod.Model.Events.Outgoing;
 
-namespace Sod.Model.Tasks.Types;
+namespace Sod.Model.Tasks;
 
-public class GlobalStateNotificationTask : SatelTask
+public class GlobalStateNotificationTask : BaseSatelTask
 {
     public GlobalStateNotificationTask(string jsonPayload, OutgoingEventType outgoingEventType)
     {

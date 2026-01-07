@@ -1,8 +1,8 @@
 using Sod.Model.Events.Outgoing;
 
-namespace Sod.Model.Tasks.Types;
+namespace Sod.Model.Tasks;
 
-public class ActualStateGlobalBroadcastTask : SatelTask
+public class ActualStateGlobalBroadcastTask : BaseSatelTask
 {
     public ActualStateGlobalBroadcastTask(string invokedTimestamp)
     {

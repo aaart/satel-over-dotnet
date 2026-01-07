@@ -4,25 +4,13 @@ using Sod.Model.Processing.Exceptions;
 
 namespace Sod.Model.Processing;
 
-public class Loop : LoggingCapability, ILoop
+public class Loop(
+    ITaskQueue queue,
+    LoopOptions options,
+    ILoopIteration loopIteration,
+    ILoopIterationExceptionHandlingPolicy loopIterationExceptionHandlingPolicy)
+    : LoggingCapability, ILoop
 {
-    private readonly ILoopIteration _loopIteration;
-    private readonly ITaskQueue _queue;
-    private readonly LoopOptions _options;
-    private readonly ILoopIterationExceptionHandlingPolicy _loopIterationExceptionHandlingPolicy;
-
-    public Loop(
-        ITaskQueue queue,
-        LoopOptions options,
-        ILoopIteration loopIteration,
-        ILoopIterationExceptionHandlingPolicy loopIterationExceptionHandlingPolicy)
-    {
-        _queue = queue;
-        _options = options;
-        _loopIteration = loopIteration;
-        _loopIterationExceptionHandlingPolicy = loopIterationExceptionHandlingPolicy;
-    }
-
     public async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var iteration = 0;
@@ -30,18 +18,18 @@ public class Loop : LoggingCapability, ILoop
         {
             try
             {
-                await _loopIteration.IterationAsync(stoppingToken, _queue, iteration);
-                iteration = iteration < _options.IterationCount ? iteration + 1 : 0;
+                await loopIteration.IterationAsync(stoppingToken, queue, iteration);
+                iteration = iteration < options.IterationCount ? iteration + 1 : 0;
 
                 // just a safe-switch. if everything fails, and the app goes to abnormal state report it. It is expected that Iteration handling policy will report it.
-                if (iteration > _options.IterationCount) throw new SodCriticalException(SodCriticalExceptionReason.IterationExceededExpectedLimit);
+                if (iteration > options.IterationCount) throw new SodCriticalException(SodCriticalExceptionReason.IterationExceededExpectedLimit);
 
-                await Task.Delay(_options.Interval, stoppingToken);
+                await Task.Delay(options.Interval, stoppingToken);
             }
             catch (Exception e)
             {
-                await Task.Delay(_options.OnErrorDelayMiliseconds);
-                iteration = await _loopIterationExceptionHandlingPolicy.HandleExceptionAsync(e, _queue);
+                await Task.Delay(options.OnErrorDelayMiliseconds);
+                iteration = await loopIterationExceptionHandlingPolicy.HandleExceptionAsync(e, queue);
             }
         } while (!stoppingToken.IsCancellationRequested);
     }

@@ -1,0 +1,17 @@
+﻿using Sod.Model.CommonTypes;
+using Sod.Model.Events.Outgoing;
+
+namespace Sod.Model.Tasks;
+
+public class ActualStateAlarmIOPostReadTask(
+    IList<BinaryIOState> changes,
+    string persistedStateKey,
+    bool[] actualState,
+    OutgoingEventType outgoingEventType)
+    : BaseSatelTask
+{
+    public IList<BinaryIOState> Changes { get; } = changes;
+    public string PersistedStateKey { get; } = persistedStateKey;
+    public bool[] ActualState { get; } = actualState;
+    public OutgoingEventType OutgoingEventType { get; } = outgoingEventType;
+}

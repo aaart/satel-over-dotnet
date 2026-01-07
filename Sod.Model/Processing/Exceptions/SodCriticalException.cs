@@ -1,14 +1,9 @@
 ﻿namespace Sod.Model.Processing.Exceptions;
 
-public class SodCriticalException : Exception
+public class SodCriticalException(
+    SodCriticalExceptionReason reason,
+    Exception? inner = null)
+    : Exception($"Critical Exception Reason: {reason}", inner)
 {
-    public SodCriticalExceptionReason Reason { get; }
-
-    public SodCriticalException(
-        SodCriticalExceptionReason reason,
-        Exception? inner = null)
-        : base($"Critical Exception Reason: {reason}", inner)
-    {
-        Reason = reason;
-    }
+    public SodCriticalExceptionReason Reason { get; } = reason;
 }

@@ -1,8 +1,8 @@
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.Events.Outgoing;
-using Sod.Model.Tasks.Types;
+using Sod.Model.Tasks;
 
-namespace Sod.Model.Tasks.Handlers.Types;
+namespace Sod.Model.Tasks.Handlers.Impl;
 
 public class ActualStateGlobalBroadcastTaskHandler : BaseHandler<ActualStateGlobalBroadcastTask>
 {
@@ -13,7 +13,7 @@ public class ActualStateGlobalBroadcastTaskHandler : BaseHandler<ActualStateGlob
         _manipulator = manipulator;
     }
 
-    protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateGlobalBroadcastTask data)
+    protected override async Task<IEnumerable<BaseSatelTask>> Handle(ActualStateGlobalBroadcastTask data)
     {
         var (_, inputs) = await _manipulator.ReadInputs();
         var (_, outputs) = await _manipulator.ReadOutputs();

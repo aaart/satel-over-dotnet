@@ -4,7 +4,7 @@ using Sod.Infrastructure.Satel;
 using Sod.Model.CommonTypes;
 using Sod.Model.DataStructures;
 using Sod.Model.Events.Outgoing;
-using Sod.Model.Tasks.Types;
+using Sod.Model.Tasks;
 
 namespace Sod.Model.Events.Incoming;
 
@@ -27,7 +27,7 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
     {
         Logger.LogInformation($"Event received for IOIndex = {_ioIndex} and event type = {_incomingEventType.ToString()}. Payload: {payload}");
 
-        SatelTask task;
+        BaseSatelTask task;
         IOBinaryUpdateType updateType;
         OutgoingEventType outgoingEventType;
         int outputCount;

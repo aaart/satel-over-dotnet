@@ -16,49 +16,113 @@ public class ConfigurationModule : Module
     protected override void Load(ContainerBuilder builder)
     {
         base.Load(builder);
-        builder.Register(_ => new ConfigurationBuilder()
-                .SetBasePath(Directory.Exists("/workspace") ? "/workspace" : Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.local.json", optional: true)
-                .Build())
+
+        RegisterConfigurationRoot(builder);
+        RegisterOptions(builder);
+        RegisterOutgoingEventMappings(builder);
+        RegisterIncomingEventMappings(builder);
+    }
+
+    private static void RegisterConfigurationRoot(ContainerBuilder builder)
+    {
+        builder.Register(_ => BuildConfiguration())
             .As<IConfigurationRoot>()
             .SingleInstance();
+    }
 
+    private static IConfigurationRoot BuildConfiguration()
+    {
+        var basePath = Directory.Exists("/workspace")
+            ? "/workspace"
+            : Directory.GetCurrentDirectory();
+
+        return new ConfigurationBuilder()
+            .SetBasePath(basePath)
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.local.json", optional: true)
+            .Build();
+    }
+
+    private static void RegisterOptions(ContainerBuilder builder)
+    {
         builder.RegisterConfiguration<LoopOptions>("Loop");
         builder.RegisterConfiguration<MqttOptions>("Mqtt");
         builder.RegisterConfiguration<SatelConnectionOptions>("Satel");
         builder.RegisterConfiguration<SatelUserCodeOptions>("Satel");
+    }
 
-        builder
-            .Register(ctx =>
+    private static void RegisterOutgoingEventMappings(ContainerBuilder builder)
+    {
+        builder.Register(ctx =>
             {
-                var cfg = ctx.Resolve<IConfigurationRoot>();
-                var mappings =
-                    cfg
-                        .GetSection("Satel:OutgoingEventMappings")
-                        .GetChildren()
-                        .Select(x => x.Get<OutgoingEventMapping>());
+                var configuration = ctx.Resolve<IConfigurationRoot>();
+                var mappings = GetOutgoingEventMappings(configuration);
                 return new OutgoingEventMappings(mappings);
             })
             .As<OutgoingEventMappings>()
             .SingleInstance();
+    }
 
-        builder.RegisterType<StateChangeDispatcher>().AsSelf().InstancePerDependency();
+    private static IEnumerable<OutgoingEventMapping> GetOutgoingEventMappings(IConfiguration configuration)
+    {
+        return configuration
+            .GetSection("Satel:OutgoingEventMappings")
+            .GetChildren()
+            .Select(section => section.Get<OutgoingEventMapping>());
+    }
 
-        builder
-            .Register(ctx =>
+    private static void RegisterIncomingEventMappings(ContainerBuilder builder)
+    {
+        builder.RegisterType<StateChangeDispatcher>()
+            .AsSelf()
+            .InstancePerDependency();
+
+        builder.Register(ctx =>
             {
-                var cfg = ctx.Resolve<IConfigurationRoot>();
-                IEnumerable<(IncomingEventType incomingEventType, string topic, bool notify, int ioIndex)> mappings =
-                    cfg
-                        .GetSection("Satel:IncomingEventMappings")
-                        .GetChildren()
-                        .Select(x => (Enum.Parse<IncomingEventType>(x["Type"]), x["Topic"], bool.Parse(x["Notify"]), int.Parse(x["IOIndex"])));
-
-                return new EventHandlerMappings(
-                    mappings.Select(x => (x.topic, (IStateChangeDispatcher)ctx.Resolve<StateChangeDispatcher>(new NamedParameter("incomingEventType", x.incomingEventType), new NamedParameter("ioIndex", x.ioIndex), new NamedParameter("notify", x.notify)))));
+                var configuration = ctx.Resolve<IConfigurationRoot>();
+                var mappings = GetIncomingEventMappings(configuration);
+                var handlers = CreateStateChangeDispatchers(ctx, mappings);
+                return new EventHandlerMappings(handlers);
             })
             .As<EventHandlerMappings>()
             .SingleInstance();
     }
+
+    private static IEnumerable<IncomingEventMappingConfig> GetIncomingEventMappings(IConfiguration configuration)
+    {
+        return configuration
+            .GetSection("Satel:IncomingEventMappings")
+            .GetChildren()
+            .Select(section => new IncomingEventMappingConfig(
+                Enum.Parse<IncomingEventType>(section["Type"]!),
+                section["Topic"]!,
+                bool.Parse(section["Notify"]!),
+                int.Parse(section["IOIndex"]!)));
+    }
+
+    private static IEnumerable<(string topic, IStateChangeDispatcher dispatcher)> CreateStateChangeDispatchers(
+        IComponentContext context,
+        IEnumerable<IncomingEventMappingConfig> mappings)
+    {
+        return mappings.Select(mapping => (
+            mapping.Topic,
+            CreateStateChangeDispatcher(context, mapping)
+        ));
+    }
+
+    private static IStateChangeDispatcher CreateStateChangeDispatcher(
+        IComponentContext context,
+        IncomingEventMappingConfig mapping)
+    {
+        return context.Resolve<StateChangeDispatcher>(
+            new NamedParameter("incomingEventType", mapping.EventType),
+            new NamedParameter("ioIndex", mapping.IoIndex),
+            new NamedParameter("notify", mapping.Notify));
+    }
+
+    private record IncomingEventMappingConfig(
+        IncomingEventType EventType,
+        string Topic,
+        bool Notify,
+        int IoIndex);
 }

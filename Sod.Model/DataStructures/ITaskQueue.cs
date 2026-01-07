@@ -4,7 +4,7 @@ namespace Sod.Model.DataStructures;
 
 public interface ITaskQueue
 {
-    Task EnqueueAsync(SatelTask satelTask);
-    Task<(bool exists, SatelTask? value)> DequeueAsync();
+    Task EnqueueAsync(BaseSatelTask satelTask);
+    Task<(bool exists, BaseSatelTask? value)> DequeueAsync();
     Task Clear();
 }
