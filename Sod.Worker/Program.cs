@@ -2,6 +2,8 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Sod.Worker.Modules;
 
 namespace Sod.Worker;
@@ -11,6 +13,11 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+
         CreateHostBuilder(args).Build().Run();
     }
 
