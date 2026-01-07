@@ -23,6 +23,7 @@ The following read/write operations are currently supported:
 - Change binary output state
 - Read if alarm is armed
 - Read if alarm is triggered
+- Global Broadcast (request full state of IOs and partitions via MQTT)
 
 
 # NOT IN SCOPE / NOT SUPPORTED
@@ -107,3 +108,32 @@ This section contains needed to connect MQTT Broker. CrtPath is not required (if
 - User - integration user's PIN
 - OutgoingEventMapping - configuration of entities that send state change signals to outer world
 - IncomingEventMapping - configuration of entities that can receiver signals from outer world.
+
+### Global Broadcast Configuration
+
+You can configure a special event type `GlobalBroadcast` to request the full state of the system on demand.
+
+**Incoming Event (Trigger):**
+Send a JSON string containing a timestamp (e.g., `"2023-10-27T10:00:00Z"`) to the configured topic.
+
+```json
+{
+  "Type": "GlobalBroadcast",
+  "Topic": "satel/request/state",
+  "Notify": false,
+  "IOIndex": 0
+}
+```
+*Note: `IOIndex` must be `0`.*
+
+**Outgoing Event (Response):**
+The system will respond with a JSON object containing the timestamp and full state arrays (inputs, outputs, partitions).
+
+```json
+{
+  "Type": "GlobalBroadcast",
+  "Topic": "satel/response/state",
+  "IOIndex": 0
+}
+```
+*Note: `IOIndex` must be `0`.*
