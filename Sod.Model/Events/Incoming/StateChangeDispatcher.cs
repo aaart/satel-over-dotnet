@@ -26,6 +26,13 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
     public async Task HandleAsync(string payload)
     {
         Logger.LogInformation($"Event received for IOIndex = {_ioIndex} and event type = {_incomingEventType.ToString()}. Payload: {payload}");
+
+        if (_incomingEventType == IncomingEventType.GlobalBroadcastRequest)
+        {
+            await _queue.EnqueueAsync(new ActualStateGlobalBroadcastTask(payload));
+            return;
+        }
+
         IOBinaryUpdateType updateType;
         OutgoingEventType outgoingEventType;
         int outputCount;

@@ -32,6 +32,10 @@ public class HandlerFactory : IHandlerFactory
                 return _context.Resolve<ActualStateAlarmIOPostReadTaskHandler>();
             case ActualStateBinaryIOPostReadTask:
                 return _context.Resolve<ActualStateBinaryIOPostReadTaskHandler>();
+            case ActualStateGlobalBroadcastTask:
+                return _context.Resolve<ActualStateGlobalBroadcastTaskHandler>();
+            case GlobalStateNotificationTask:
+                return _context.Resolve<GlobalStateNotificationTaskHandler>();
             default:
                 throw new ArgumentOutOfRangeException(nameof(task), task.GetType(), "Not supported type.");
         }

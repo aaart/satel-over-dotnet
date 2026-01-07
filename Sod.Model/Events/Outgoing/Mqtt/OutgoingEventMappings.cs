@@ -45,8 +45,18 @@ public class OutgoingEventMappings : IEnumerable<OutgoingEventMapping>
             case OutgoingEventType.PartitionTriggered:
                 deviceType = DeviceType.TriggeredPartition;
                 break;
+            case OutgoingEventType.GlobalStateBroadcast:
+                deviceType = DeviceType.Global;
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(evnt.Type), evnt.Type, "Type is out of the expected range!");
+        }
+
+        if (deviceType == DeviceType.Global)
+        {
+            return _mappings
+                .Where(x => x.Type == deviceType)
+                .Select(x => x.Topic);
         }
 
         return _mappings
