@@ -1,7 +1,7 @@
-﻿namespace Sod.Model.CommonTypes;
+namespace Sod.Model.CommonTypes;
 
-public class BinaryIOState
+public record BinaryIOState
 {
-    public int Index { get; set; }
-    public bool Value { get; set; }
+    public int Index { get; init; }
+    public bool Value { get; init; }
 }

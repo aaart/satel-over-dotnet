@@ -1,11 +1,11 @@
 namespace Sod.Model.DataStructures;
 
-public class GlobalState
+public record GlobalState
 {
-    public string Timestamp { get; set; } = string.Empty;
-    public bool[] Inputs { get; set; } = Array.Empty<bool>();
-    public bool[] Outputs { get; set; } = Array.Empty<bool>();
-    public bool[] ArmedPartitions { get; set; } = Array.Empty<bool>();
-    public bool[] TriggeredPartitions { get; set; } = Array.Empty<bool>();
-    public bool[] SuppressedPartitions { get; set; } = Array.Empty<bool>();
+    public string Timestamp { get; init; } = string.Empty;
+    public bool[] Inputs { get; init; } = Array.Empty<bool>();
+    public bool[] Outputs { get; init; } = Array.Empty<bool>();
+    public bool[] ArmedPartitions { get; init; } = Array.Empty<bool>();
+    public bool[] TriggeredPartitions { get; init; } = Array.Empty<bool>();
+    public bool[] SuppressedPartitions { get; init; } = Array.Empty<bool>();
 }
