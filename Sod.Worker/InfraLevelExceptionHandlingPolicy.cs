@@ -7,21 +7,15 @@ using Sod.Model.Processing;
 
 namespace Sod.Worker;
 
-public class InfraLevelExceptionHandlingPolicy : LoopIterationExceptionHandlingPolicy
+public class InfraLevelExceptionHandlingPolicy(ISocketConnection socketConnection) : LoopIterationExceptionHandlingPolicy
 {
-    private readonly ISocketConnection _socketConnection;
-
-    public InfraLevelExceptionHandlingPolicy(ISocketConnection socketConnection)
-    {
-        _socketConnection = socketConnection;
-    }
 
     public override Task<int> HandleExceptionAsync(Exception exception, ITaskQueue queue)
     {
         var result = base.HandleExceptionAsync(exception, queue);
         try
         {
-            _socketConnection.Reconnect();
+            socketConnection.Reconnect();
         }
         catch (Exception e)
         {

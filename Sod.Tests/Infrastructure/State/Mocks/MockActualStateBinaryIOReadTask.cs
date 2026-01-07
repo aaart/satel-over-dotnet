@@ -1,13 +1,13 @@
 ﻿using Sod.Model.CommonTypes;
 using Sod.Model.Events.Outgoing;
-using Sod.Model.Tasks.Types;
+using Sod.Model.Tasks;
 
 namespace Sod.Tests.Infrastructure.State.Mocks;
 
 public class MockActualStateBinaryIOReadTask : ActualStateBinaryIOReadTask
 {
     public MockActualStateBinaryIOReadTask()
-        : base(string.Empty, NotificationTaskType.NotifyIOChanged, IOBinaryReadType.Inputs, OutgoingEventType.InputsStateChanged)
+        : base(string.Empty, IOBinaryReadType.Inputs, OutgoingEventType.InputsStateChanged)
     {
     }
 }

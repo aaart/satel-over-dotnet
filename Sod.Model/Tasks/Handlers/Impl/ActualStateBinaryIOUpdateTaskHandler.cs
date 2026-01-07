@@ -1,23 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.CommonTypes;
-using Sod.Model.Tasks.Types;
 
-namespace Sod.Model.Tasks.Handlers.Types;
+namespace Sod.Model.Tasks.Handlers.Impl;
 
-public class ActualStateBinaryIOUpdateTaskHandler : BaseHandler<ActualStateBinaryIOUpdateTask>
+public class ActualStateBinaryIOUpdateTaskHandler(IManipulator manipulator) : BaseHandler<ActualStateBinaryIOUpdateTask>
 {
-    private readonly IManipulator _manipulator;
-
-    public ActualStateBinaryIOUpdateTaskHandler(IManipulator manipulator)
+    protected override async Task<IEnumerable<BaseSatelTask>> Handle(ActualStateBinaryIOUpdateTask data)
     {
         Logger.LogDebug($"{nameof(ActualStateBinaryIOUpdateTaskHandler)} is executing.");
-        _manipulator = manipulator;
-    }
-
-
-    protected override async Task<IEnumerable<SatelTask>> Handle(ActualStateBinaryIOUpdateTask data)
-    {
         var disableOutputs = new bool[data.OutputCount];
         var enableOutputs = new bool[data.OutputCount];
         var notifications = new List<BinaryIOState>();
@@ -41,15 +32,15 @@ public class ActualStateBinaryIOUpdateTaskHandler : BaseHandler<ActualStateBinar
             notifications.Add(state);
         }
 
-        var tasks = new List<SatelTask>();
+        var tasks = new List<BaseSatelTask>();
         if (anyEnabled)
             switch (data.Method)
             {
                 case IOBinaryUpdateType.Outputs:
-                    await _manipulator.EnableOutputs(enableOutputs);
+                    await manipulator.EnableOutputs(enableOutputs);
                     break;
                 case IOBinaryUpdateType.Partitions:
-                    await _manipulator.ArmInMode0(enableOutputs);
+                    await manipulator.ArmInMode0(enableOutputs);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -59,10 +50,10 @@ public class ActualStateBinaryIOUpdateTaskHandler : BaseHandler<ActualStateBinar
             switch (data.Method)
             {
                 case IOBinaryUpdateType.Outputs:
-                    await _manipulator.DisableOutputs(disableOutputs);
+                    await manipulator.DisableOutputs(disableOutputs);
                     break;
                 case IOBinaryUpdateType.Partitions:
-                    await _manipulator.DisArm(disableOutputs);
+                    await manipulator.DisArm(disableOutputs);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

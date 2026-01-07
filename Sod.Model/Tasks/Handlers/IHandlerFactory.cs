@@ -2,5 +2,5 @@
 
 public interface IHandlerFactory
 {
-    ITaskHandler CreateHandler(SatelTask task);
+    ITaskHandler CreateHandler(BaseSatelTask task);
 }
