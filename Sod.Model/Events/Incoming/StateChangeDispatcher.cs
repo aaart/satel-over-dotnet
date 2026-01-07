@@ -35,23 +35,23 @@ public class StateChangeDispatcher : LoggingCapability, IStateChangeDispatcher
         {
             case IncomingEventType.GlobalBroadcastRequest:
                 task = new ActualStateGlobalBroadcastTask(payload);
-                await _queue.EnqueueAsync(task);
-                return;
+                break;
             case IncomingEventType.BinaryOutput:
                 updateType = IOBinaryUpdateType.Outputs;
                 outgoingEventType = OutgoingEventType.OutputsStateChanged;
                 outputCount = 128;
+                task = new ActualStateBinaryIOUpdateTask(new List<BinaryIOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } }, updateType, _notify, outgoingEventType, outputCount);
                 break;
             case IncomingEventType.ArmPartition:
                 updateType = IOBinaryUpdateType.Partitions;
                 outgoingEventType = OutgoingEventType.ArmedPartitionsStateChanged;
                 outputCount = 32;
+                task = new ActualStateBinaryIOUpdateTask(new List<BinaryIOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } }, updateType, _notify, outgoingEventType, outputCount);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        task = new ActualStateBinaryIOUpdateTask(new List<BinaryIOState> { new() { Index = _ioIndex, Value = OnOffParse.ToBoolean(payload) } }, updateType, _notify, outgoingEventType, outputCount);
         await _queue.EnqueueAsync(task);
     }
 }
