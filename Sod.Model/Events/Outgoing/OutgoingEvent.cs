@@ -1,24 +1,11 @@
-﻿using Sod.Infrastructure.Satel;
+using Sod.Infrastructure.Satel;
 
 namespace Sod.Model.Events.Outgoing;
 
-public class OutgoingEvent
+public record OutgoingEvent(OutgoingEventType Type, int Reference, string Value)
 {
-    public OutgoingEvent(OutgoingEventType type, int reference, string value)
-    {
-        Type = type;
-        Reference = reference;
-        Value = value;
-    }
-
     public OutgoingEvent(OutgoingEventType type, int reference, bool value)
+        : this(type, reference, OnOffParse.ToString(value))
     {
-        Type = type;
-        Reference = reference;
-        Value = OnOffParse.ToString(value);
     }
-
-    public OutgoingEventType Type { get; }
-    public int Reference { get; }
-    public string Value { get; }
 }

@@ -16,7 +16,8 @@ public class HandlerFactory(IComponentContext context) : IHandlerFactory
             { typeof(ActualStateChangedNotificationTask), typeof(ActualStateChangedNotificationTaskHandler) },
             { typeof(PersistedStateUpdateTask), typeof(PersistedStateUpdateTaskHandler) },
             { typeof(ActualStateAlarmIOPostReadTask), typeof(ActualStateAlarmIOPostReadTaskHandler) },
-            { typeof(ActualStateBinaryIOPostReadTask), typeof(ActualStateBinaryIOPostReadTaskHandler) }
+            { typeof(ActualStateBinaryIOPostReadTask), typeof(ActualStateBinaryIOPostReadTaskHandler) },
+            { typeof(ActualStateGlobalBroadcastTask), typeof(ActualStateGlobalBroadcastTaskHandler) }
         };
 
     public ITaskHandler CreateHandler(BaseSatelTask task)

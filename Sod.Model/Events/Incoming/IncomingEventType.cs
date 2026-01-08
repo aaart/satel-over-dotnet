@@ -3,5 +3,6 @@
 public enum IncomingEventType
 {
     BinaryOutput,
-    ArmPartition
+    ArmPartition,
+    GlobalBroadcast
 }

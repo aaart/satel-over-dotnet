@@ -1,7 +1,7 @@
-﻿namespace Sod.Infrastructure.Satel.Communication;
+namespace Sod.Infrastructure.Satel.Communication;
 
-public class SatelConnectionOptions
+public record SatelConnectionOptions
 {
-    public string Address { get; set; } = null!;
-    public int Port { get; set; }
+    public string Address { get; init; } = null!;
+    public int Port { get; init; }
 }

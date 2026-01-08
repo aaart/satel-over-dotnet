@@ -1,6 +1,6 @@
-﻿namespace Sod.Model.Events.Outgoing.Mqtt;
+namespace Sod.Model.Events.Outgoing.Mqtt;
 
-public class MqttOptions
+public record MqttOptions
 {
     public string Host { get; init; } = null!;
     public int Port { get; init; }

@@ -6,5 +6,6 @@ public enum OutgoingEventType
     OutputsStateChanged,
     ArmedPartitionsStateChanged,
     SuppressedPartitionsStateChanged,
-    PartitionTriggered
+    PartitionTriggered,
+    GlobalBroadcast
 }
