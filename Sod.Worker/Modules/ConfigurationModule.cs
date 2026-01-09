@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +6,7 @@ using Autofac;
 using Microsoft.Extensions.Configuration;
 using Sod.Infrastructure.Satel.Communication;
 using Sod.Model.Events.Incoming;
+using Sod.Model.Events.Incoming.Factories;
 using Sod.Model.Events.Outgoing.Mqtt;
 using Sod.Model.Processing;
 
@@ -77,6 +78,10 @@ public class ConfigurationModule : Module
             .AsSelf()
             .InstancePerDependency();
 
+        builder.RegisterType<BinaryOutputTaskFactory>().Keyed<ISatelTaskFactory>(IncomingEventType.BinaryOutput);
+        builder.RegisterType<ArmPartitionTaskFactory>().Keyed<ISatelTaskFactory>(IncomingEventType.ArmPartition);
+        builder.RegisterType<GlobalBroadcastTaskFactory>().Keyed<ISatelTaskFactory>(IncomingEventType.GlobalBroadcast);
+
         builder.Register(ctx =>
             {
                 var configuration = ctx.Resolve<IConfigurationRoot>();
@@ -114,8 +119,10 @@ public class ConfigurationModule : Module
         IComponentContext context,
         IncomingEventMappingConfig mapping)
     {
+        var factory = context.ResolveKeyed<ISatelTaskFactory>(mapping.EventType);
+
         return context.Resolve<StateChangeDispatcher>(
-            new NamedParameter("incomingEventType", mapping.EventType),
+            new TypedParameter(typeof(ISatelTaskFactory), factory),
             new NamedParameter("ioIndex", mapping.IoIndex),
             new NamedParameter("notify", mapping.Notify));
     }
